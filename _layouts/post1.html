@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script> -->
 {% include post-head.html %}
 
 <body>
@@ -8,10 +10,10 @@
 <![endif]-->
   <input id="nm-switch" type="hidden" value="{{ site.nightMode }}"> {% include header.html %}
 
-  <header
+    <header
     class="g-banner post-header {{ site.postPatterns | prepend: 'post-pattern-' }} {{ site.theme-color | prepend: 'bgcolor-' }} {% unless page.cover %}post-no-cover{% endunless %}"
     data-theme="{{ site.theme-color }}"
-  >
+	>
     <div class="post-wrapper">
       <div class="post-tags">
         {% if page.tags.size > 0 %}
@@ -22,7 +24,7 @@
       </div>
       <h1>{{ page.title }}</h1>
       <div class="post-meta">
-        <span class="post-meta-item"><i class="iconfont icon-author"></i>{% if page.author %}{{ page.author }}{% else %}{{ site.author }}{% endif %}</span>
+        <span class="post-meta-item"><i class="iconfont icon-author"></i><a href="{{ site.url }}" target="_blank" rel="author">{% if page.author %}{{ page.author }}{% else %}{{ site.author }}{% endif %}</a></></span>
         <time class="post-meta-item" datetime="{{ page.date | date:"%y-%m-%d" }}"><i class="iconfont icon-date"></i>{{ page.date | date_to_string }}</time>
       </div>
     </div>
@@ -98,12 +100,35 @@
       </div>
       {% endif %}
     </section>
-    {% if site.comments.disqus %}
     <section class="post-footer-item comment">
-        <div id="disqus_thread"></div>
+    <!-- <div id="disqus_thread"></div> -->
+    <!-- <div id="gitalk_container"></div> -->
     </section>
-    {% endif %}
   </section>
+
+
+<div id="gitmentContainer"></div>
+{% if site.comment_gitment_repo %}
+
+<link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
+<script src="https://billts.site/js/gitment.js"></script>
+<!-- <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css"> -->
+<!-- <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> -->
+<script>
+    var gitment = new Gitment({
+        id: window.location.pathname,
+        owner: 'co0ontty',
+        repo: '{{site.comment_gitment_repo}}',
+        oauth: {
+            client_id: '{{site.comment_gitment_clientId}}',
+            client_secret: '{{site.comment_gitment_clientSecret}}',
+        },
+    });
+    gitment.render('gitmentContainer')
+</script>
+
+{% endif %}
+
 
 {% if site.comment_gitment_repo %}
 <div id="gitmentContainer"></div>
@@ -111,12 +136,12 @@
 <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
     var gitment = new Gitment({
-        id: window.location.pathname,
-        owner: 'CHINA-JARY',
-        repo: 'clouddisk',
+        id: '<%= page.date %>',
+        owner: '{{site.github_username}}',
+        repo: '{{site.comment_gitment_repo}}',
         oauth: {
-            client_id: 'e689910fcdc9ca009924',
-            client_secret: '4e663bde8d0fc95ab202b63f42a22974dc3d00fc',
+            client_id: '{{site.comment_gitment_clientId}}',
+            client_secret: '{{site.comment_gitment_clientSecret}}',
         },
     });
     gitment.render('gitmentContainer')
@@ -126,6 +151,8 @@
   {% include footer.html %}
 
   <script src="/assets/js/social-share.min.js"></script>
+<!--   <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+  <script src="/assets/js/md5.min.js"></script> -->
   <script>
     socialShare('.social-share', {
       sites: [
@@ -140,6 +167,8 @@
     });
   </script>
 
+
+
 <!--   {% if site.comments.disqus %}
   <script>
     /**
@@ -152,14 +181,33 @@
     };
     */
     (function() { // DON'T EDIT BELOW THIS LINE
-      var d = document, s = d.createElement('script');
+      var d = document,
+        s = d.createElement('script');
       s.src = '{{ site.comments.disqus_url }}';
       s.setAttribute('data-timestamp', +new Date());
       (d.head || d.body).appendChild(s);
     })();
   </script>
   {% endif %} -->
+  
+  <!-- {% if site.comments.gitalk %}
+	<script>
+		var gitalk = new Gitalk({
+			  clientID: '{{ site.comments.gitalk_clientID }}',
+			  clientSecret: '{{ site.comments.gitalk_Secret }}',
+			  repo: '{{ site.comments.gitalk_repo }}',
+			  owner: '{{ site.comments.gitalk_owner }}',
+			  admin: '{{ site.comments.gitalk_admin }}',
+			  id: md5(window.location.pathname),     // Ensure uniqueness and length less than 50{{ page.title }}
+			  distractionFreeMode: '{{ site.comments.distractionFreeMode }}'  // Facebook-like distraction free mode
+			})
 
+			gitalk.render('disqus_thread')
+	</script>
+  {% endif %} -->
+
+
+	
   <script src="/assets/js/prism.js"></script>
   <script src="/assets/js/index.min.js"></script>
 </body>
