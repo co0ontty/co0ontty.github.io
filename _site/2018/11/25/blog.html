@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>博客搭建教程 - co0ontty</title>
+    <meta name="author"  content="co0ontty">
+    <meta name="description" content="博客搭建教程">
+    <meta name="keywords"  content="Tools, 运维, ALL">
+    <!-- Open Graph -->
+    <meta property="og:title" content="博客搭建教程 - co0ontty">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2018/11/25/blog.html">
+    <meta property="og:description" content="Share my leaning。">
+    <meta property="og:site_name" content="co0ontty">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">首页</a></li>
+            
+            <li><a href="/tags.html">标签</a></li>
+            
+            <li><a href="/links.html">友链</a></li>
+            
+            <li><a href="/about.html">关于我</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+
+  <header
+    class="g-banner post-header post-pattern-circuitBoard bgcolor-default "
+    data-theme="default"
+  >
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+          
+            <a href="http://localhost:4000/tags#Tools" class="post-tag">Tools</a>
+          
+            <a href="http://localhost:4000/tags#%E8%BF%90%E7%BB%B4" class="post-tag">运维</a>
+          
+            <a href="http://localhost:4000/tags#ALL" class="post-tag">ALL</a>
+          
+        
+      </div>
+      <h1>博客搭建教程</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i class="iconfont icon-author"></i>co0ontty</span>
+        <time class="post-meta-item" datetime="18-11-25"><i class="iconfont icon-date"></i>25 Nov 2018</time>
+      </div>
+    </div>
+    
+    <div class="filter"></div>
+      <div class="post-cover" style="background: url('/assets/img/posts/blog-6.png') center no-repeat; background-size: cover;"></div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+
+    <article class="markdown-body">
+      <h2 id="环境">环境：</h2>
+
+<p>Github pages、Jekyll框架</p>
+
+<h2 id="不选择hexo的原因">不选择hexo的原因：</h2>
+
+<p>上传和新建博客十分麻烦，而且容易崩溃（个人观点）<br />
+安装的依赖太多了，搞得我有点强迫症</p>
+
+<h2 id="使用jekyll的原因">使用Jekyll的原因：</h2>
+
+<p>确实挺好用的<br />
+比较容易上手，可以说是直接上传博客就行，不用什么依赖的配置</p>
+
+<h2 id="搭建">搭建：</h2>
+
+<h2 id="思路">思路：</h2>
+
+<p>整体搭建的思路大致上分为三个环节：<br />
+1、找到自己喜欢的主题； 
+2、clone到本地；<br />
+3、修改配置，上传到自己的Github pages；</p>
+
+<h2 id="动手搭建">动手搭建：</h2>
+
+<p>1、在Jekyll官网（ http://jekyllthemes.org/ ）找到自己喜欢的主题<br />
+2、点击自己喜欢的主题，选择homepage
+<img src="/assets/img/posts/blog-1.png" alt="avatar" /><br />
+3、在该主题的Git项目中可以选择使用git clone 保存到本地或者直接在右上角点击fork复制到自己的Git中（在这里我选择的是直接fork）<br />
+<img src="/assets/img/posts/blog-2.png" alt="avatar" /><br />
+4、回到自己的Git库中，选择右侧的clone or download，选择open in desktop<br />
+<img src="/assets/img/posts/blog-4.png" alt="avatar" /> <br />
+5、在Github的桌面端将会打开一个窗口，在左侧选择你的博客项目，右键选择open in Finder 即可在本地编辑博客<br />
+<img src="/assets/img/posts/blog-3.png" alt="avatar" /></p>
+
+<p>至此博客已经搭建完成，可以使用yourname.github.io访问你的博客（初次配置可能会有一段时间的缓冲，请耐心等待）</p>
+
+<h2 id="个性化修改">个性化修改</h2>
+
+<h2 id="发布博客">发布博客</h2>
+
+<p>1、在博客的本地文件中找到_posts文件夹，新建MarkDown文件，命名格式为 2018-11-25-博客搭建教程（根据不同的主题可能会存在偏差，详细的命名规则可以参照项目原始文件夹中的命名规则） 
+2、当你编辑好并保存一个新的博客以后，github的桌面客户端中便会显示出文件的变化，在左下角对变化的文件作出说明后依次点击左下角的commit to master 和右上角的Push origin即可上传到git库中<br />
+3、博客中的图片全部保存在static文件夹中</p>
+
+<h2 id="更改配置信息">更改配置信息</h2>
+
+<p>更改配置信息需要具有一定的HTML功底<br />
+基本的信息可以通过修改本地项目文件夹中的_config.yml和_layouts文件夹来修改 <br />
+网站中的图标也可以在 /assets/img 文件夹中通过替换来实现个性化修改</p>
+
+<h2 id="评论系统">评论系统</h2>
+
+<p>Jekyll中默认使用的disqus评论功能在天朝被和谐，无奈只好使用第三方评论系统</p>
+<h3 id="棒子的来必力评论系统">棒子的来必力评论系统。</h3>
+<p>打开_layouts文件夹下的post.html<br />
+注释掉最下方的disqus-comments部分
+<img src="/assets/img/posts/blog-5.png" alt="avatar" /><br />
+添加来必力提供的代码<br />
+<img src="/assets/img/posts/blog-6.png" alt="avatar" /><br />
+这样便可使用来必力的评论功能了</p>
+<h3 id="gitment">Gitment</h3>
+<p>详细配置方式参考：https://blog.csdn.net/qq_42595443/article/details/82466442 
+注意的是 owner需要修改为你github的Id这里默认使用博客的名字</p>
+<h2 id="网站访问人数统计">网站访问人数统计</h2>
+<p>参考文章：https://sunbossrs.github.io/2019/01/11/Self_WebsiteTotal.html</p>
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <img src="http://localhost:4000/assets/img/profile.png" alt="">
+      </div>
+      <div class="author-name" rel="author">co0ontty</div>
+      <div class="bio">
+        <p>山东科技大学（泰安）啄木鸟安全实验室创始成员</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/5792988237" target="_blank">
+                    <i class="iconfont icon-weibo"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="mailto:co0ontty@aliyin.com" target="_blank">
+                    <i class="iconfont icon-email"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//facebook.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-facebook"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-github"></i>
+                </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+      <div class="read-next-item">
+        <a href="/2018/11/26/ivre.html" class="read-next-link"></a>
+        <section>
+          <span>基于ivre的资产识别雷达搭建教程</span>
+          <p>环境：基于docker的vagrant$co0ontty mkdir ivre  $co0ontty cd ivr...</p>
+        </section>
+        
+        <div class="filter"></div>
+        <img src="/assets/img/posts/ivre-st.png" alt="">
+        
+     </div>
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2018/11/24/Frp.html" class="read-next-link"></a>
+          <section>
+            <span>frp内网穿透工具使用说明</span>
+            <p></p>
+          </section>
+          
+          <div class="filter"></div>
+          <img src="/assets/img/posts/frp1111.png" alt="">
+          
+      </div>
+      
+    </section>
+    
+  </section>
+
+<!-- LiveRe City install code -->
+<div id="lv-container" data-id="city" data-uid="Mi8xLzM=">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>Please activate JavaScript for write a comment in LiveRe</noscript>
+</div>
+<!-- completed City install code -->
+
+<!-- <div id="gitmentContainer"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    var gitment = new Gitment({
+        id: window.location.pathname,
+        owner: 'co0ontty',
+        repo: 'clouddisk',
+        oauth: {
+            client_id: '303a0c4d64e25977696c',
+            client_secret: '52428e99c40d3d8bb29692209d2d88791c8dc325',
+        },
+    });
+    gitment.render('gitmentContainer')
+</script> -->
+
+
+  <footer class="g-footer">
+  <!-- <section><a href="javascript:scroll(50,50)">回到顶端</a></section> -->
+<!-- 网站计数器 -->
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="site_pv_count" title="总点击量"><img src="/assets/vendor/octicons/svg/eye.svg" width=16 height=16> <span id="busuanzi_value_site_pv"></span></span> &nbsp; &nbsp; | &nbsp; &nbsp; <span id="site_uv_count" title="总访客量"> <img src="/assets/vendor/octicons/svg/person.svg" width=10 height=16> <span id="busuanzi_value_site_uv"></span></span>
+<!-- 到此为止 -->
+  <section>co0ontty ©
+  
+  
+    2018
+    -
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+
+
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+  <script>
+    socialShare('.social-share', {
+      sites: [
+        
+          'wechat'
+          ,
+          
+        
+          'weibo'
+          ,
+          
+        
+          'douban'
+          ,
+          
+        
+          'twitter'
+          
+        
+      ],
+      wechatQrcodeTitle: "分享到微信朋友圈",
+      wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+    });
+  </script>
+
+<!--    -->
+
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+</body>
+
+</html>

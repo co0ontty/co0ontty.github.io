@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uplode-Labs通关笔记 - co0ontty</title>
+    <meta name="author"  content="co0ontty">
+    <meta name="description" content="Uplode-Labs通关笔记">
+    <meta name="keywords"  content="CTF, WEB, ALL">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Uplode-Labs通关笔记 - co0ontty">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2019/04/09/uplodelabs.html">
+    <meta property="og:description" content="Share my leaning。">
+    <meta property="og:site_name" content="co0ontty">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">首页</a></li>
+            
+            <li><a href="/tags.html">标签</a></li>
+            
+            <li><a href="/links.html">友链</a></li>
+            
+            <li><a href="/about.html">关于我</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+
+  <header
+    class="g-banner post-header post-pattern-circuitBoard bgcolor-default "
+    data-theme="default"
+  >
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+          
+            <a href="http://localhost:4000/tags#CTF" class="post-tag">CTF</a>
+          
+            <a href="http://localhost:4000/tags#WEB" class="post-tag">WEB</a>
+          
+            <a href="http://localhost:4000/tags#ALL" class="post-tag">ALL</a>
+          
+        
+      </div>
+      <h1>Uplode-Labs通关笔记</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i class="iconfont icon-author"></i>co0ontty</span>
+        <time class="post-meta-item" datetime="19-04-09"><i class="iconfont icon-date"></i>09 Apr 2019</time>
+      </div>
+    </div>
+    
+    <div class="filter"></div>
+      <div class="post-cover" style="background: url('https://i.loli.net/2019/04/08/5cab11a102167.png') center no-repeat; background-size: cover;"></div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+
+    <article class="markdown-body">
+      <h2 id="漏洞类型分析">漏洞类型分析</h2>
+<p><img src="https://i.loli.net/2019/04/08/5caafd2f23ed2.png" alt="漏洞类型分析" /></p>
+<h2 id="漏洞类型判断">漏洞类型判断</h2>
+<p><img src="https://i.loli.net/2019/04/08/5caafa634c7f7.png" alt="思路图" /></p>
+<h2 id="简单shell制作">简单shell制作</h2>
+<p>shell.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span> <span class="nb">assert</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s2">"cmd"</span><span class="p">])</span><span class="cp">?&gt;</span>
+</code></pre></div></div>
+<p>使用方法：<br />
+http://104.36.68.99/upload/shell.php?cmd=phpinfo();</p>
+<h2 id="pass-1--前端js判断">Pass-1  （前端JS判断）</h2>
+<p>使用burp进行抓包直接上传webshell，发现在没有数据传输的情况下判定为不合规文件这说明在客户端通过JS进行判断</p>
+
+<p><a href="https://i.loli.net/2019/04/08/5cab0e218624d.png"><img src="https://i.loli.net/2019/04/08/5cab0e218624d.png" alt="屏幕快照 2019-04-08 16.58.50.png" /></a>
+<a href="https://i.loli.net/2019/04/08/5cab0e2234de6.png"><img src="https://i.loli.net/2019/04/08/5cab0e2234de6.png" alt="屏幕快照 2019-04-08 16.59.04.png" /></a>
+<a href="https://i.loli.net/2019/04/08/5cab0e22e9b1e.png"><img src="https://i.loli.net/2019/04/08/5cab0e22e9b1e.png" alt="屏幕快照 2019-04-08 16.59.06.png" /></a></p>
+
+<p>将图中标红色的1.php改为1.png</p>
+
+<p><a href="https://i.loli.net/2019/04/08/5cab0e1fc6cfd.png"><img src="https://i.loli.net/2019/04/08/5cab0e1fc6cfd.png" alt="屏幕快照 2019-04-08 17.00.48.png" /></a></p>
+
+<p>成功上传，执行shell</p>
+
+<p><a href="https://i.loli.net/2019/04/08/5cab108972e22.png"><img src="https://i.loli.net/2019/04/08/5cab108972e22.png" alt="屏幕快照 2019-04-08 17.12.25.png" /></a></p>
+
+<h3 id="大佬教的骚操作">大佬教的骚操作：</h3>
+<p>禁用本页JS，直接上传 <br />
+<a href="https://i.loli.net/2019/04/09/5cabf54fdd3de.png"><img src="https://i.loli.net/2019/04/09/5cabf54fdd3de.png" alt="01-1.png" /></a></p>
+
+<h2 id="pass-2--服务器端端后缀判断">Pass-2  （服务器端端后缀判断）</h2>
+
+<p>使用burp抓包上传1.php，网页发送数据，burp获得流量，可以判断为服务器端响应。<br />
+①将文件后缀修改为jpg后上传，再将1.png修改为1.php,成功上传  <br />
+②上传1.php，将包文件中的 Content-Type: 修改为 image/jpeg 成功上传 <br />
+最终达到的效果为：
+<a href="https://i.loli.net/2019/04/09/5cabece6799fe.png"><img src="https://i.loli.net/2019/04/09/5cabece6799fe.png" alt="屏幕快照 2019-04-09 08.52.37.png" /></a><br />
+可以判断为服务器端检查文件类型</p>
+<h2 id="pass-3白名单-phtmlphp5">Pass-3（白名单-.phtml、.php5）</h2>
+<p>将1.php的后缀修改为jpg进行上传，抓包修改后缀上传提示错误 <br />
+<a href="https://i.loli.net/2019/04/09/5cabef6455bba.png"><img src="https://i.loli.net/2019/04/09/5cabef6455bba.png" alt="屏幕快照 2019-04-09 09.02.22.png" /></a>
+证明服务器端检查后缀 <br />
+尝试上传任意后缀文件（php语言除了可以解析以php为后缀的文件，还可以解析phtml、php2，php3、php4、php5这些后缀的文件。）</p>
+
+<p>上传成功，证明使用的检查模式为黑名单检查。</p>
+
+<h2 id="pass-4-白名单-htaccess">Pass-4 （白名单-.htaccess)</h2>
+<p>本题目为JS前端判断后缀，服务端黑名单过滤数据。<br />
+后端未过滤”.htaccess”文件，上传”.htaccess”文件，文件内容为</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;FilesMatch</span> <span class="err">"</span><span class="na">03</span><span class="err">.</span><span class="na">jpg</span><span class="err">"</span><span class="nt">&gt;</span>
+SetHandler application/x-httpd-php
+<span class="nt">&lt;/FilesMatch&gt;</span>
+</code></pre></div></div>
+<p>该代码文件将03.jpg解析为php文件<br />
+<a href="https://i.loli.net/2019/04/09/5cac893e518c1.png"><img src="https://i.loli.net/2019/04/09/5cac893e518c1.png" alt="屏幕快照 2019-04-09 19.53.36.png" /></a>
+上传成功后，上传图片马03.jpg ，运行成功  <br />
+<a href="https://i.loli.net/2019/04/09/5cac8971e083b.png"><img src="https://i.loli.net/2019/04/09/5cac8971e083b.png" alt="屏幕快照 2019-04-09 19.55.50.png" /></a></p>
+<h2 id="pass-5-未区分大小写">Pass-5 （未区分大小写）</h2>
+<p>Pass-4中存在以下代码：</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nv">$file_ext</span> <span class="o">=</span> <span class="nb">strtolower</span><span class="p">(</span><span class="nv">$file_ext</span><span class="p">);</span> <span class="c1">//转换为小写</span>
+</code></pre></div></div>
+<p>而Pass-5中没有，说明Pass-5虽然过滤了所有的文件后缀，但是没有区分大小写。
+上传shell.PHP即可绕过</p>
+<h2 id="pass-6">Pass-6</h2>
+<p>相比于第五关的过滤条件缺少了</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nv">$file_ext</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="nv">$file_ext</span><span class="p">);</span> <span class="c1">//首尾去空</span>
+</code></pre></div></div>
+<p>所以通过构造文件名+后缀+空格进行绕过，即”shell.php “</p>
+<h2 id="pass-7">Pass-7</h2>
+<p>缺少”.”过滤代码：</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$file_name</span> <span class="o">=</span> <span class="nx">deldot</span><span class="p">(</span><span class="nv">$file_name</span><span class="p">);</span><span class="c1">//删除文件名末尾的点</span>
+</code></pre></div></div>
+<p>所以通过构造shell.php.进行绕过</p>
+<h2 id="pass-8">Pass-8</h2>
+
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <img src="http://localhost:4000/assets/img/profile.png" alt="">
+      </div>
+      <div class="author-name" rel="author">co0ontty</div>
+      <div class="bio">
+        <p>山东科技大学（泰安）啄木鸟安全实验室创始成员</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/5792988237" target="_blank">
+                    <i class="iconfont icon-weibo"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="mailto:co0ontty@aliyin.com" target="_blank">
+                    <i class="iconfont icon-email"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//facebook.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-facebook"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-github"></i>
+                </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2019/04/06/miscnote.html" class="read-next-link"></a>
+          <section>
+            <span>CTF 杂项题目总结（持续更新）</span>
+            <p>图片隐写</p>
+          </section>
+          
+          <div class="filter"></div>
+          <img src="/assets/img/posts/ada.png" alt="">
+          
+      </div>
+      
+    </section>
+    
+  </section>
+
+<!-- LiveRe City install code -->
+<div id="lv-container" data-id="city" data-uid="Mi8xLzM=">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>Please activate JavaScript for write a comment in LiveRe</noscript>
+</div>
+<!-- completed City install code -->
+
+<!-- <div id="gitmentContainer"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    var gitment = new Gitment({
+        id: window.location.pathname,
+        owner: 'co0ontty',
+        repo: 'clouddisk',
+        oauth: {
+            client_id: '303a0c4d64e25977696c',
+            client_secret: '52428e99c40d3d8bb29692209d2d88791c8dc325',
+        },
+    });
+    gitment.render('gitmentContainer')
+</script> -->
+
+
+  <footer class="g-footer">
+  <!-- <section><a href="javascript:scroll(50,50)">回到顶端</a></section> -->
+<!-- 网站计数器 -->
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="site_pv_count" title="总点击量"><img src="/assets/vendor/octicons/svg/eye.svg" width=16 height=16> <span id="busuanzi_value_site_pv"></span></span> &nbsp; &nbsp; | &nbsp; &nbsp; <span id="site_uv_count" title="总访客量"> <img src="/assets/vendor/octicons/svg/person.svg" width=10 height=16> <span id="busuanzi_value_site_uv"></span></span>
+<!-- 到此为止 -->
+  <section>co0ontty ©
+  
+  
+    2018
+    -
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+
+
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+  <script>
+    socialShare('.social-share', {
+      sites: [
+        
+          'wechat'
+          ,
+          
+        
+          'weibo'
+          ,
+          
+        
+          'douban'
+          ,
+          
+        
+          'twitter'
+          
+        
+      ],
+      wechatQrcodeTitle: "分享到微信朋友圈",
+      wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+    });
+  </script>
+
+<!--    -->
+
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+</body>
+
+</html>

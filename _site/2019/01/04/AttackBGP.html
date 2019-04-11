@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>记一次测试BGP服务器的全过程 - co0ontty</title>
+    <meta name="author"  content="co0ontty">
+    <meta name="description" content="记一次测试BGP服务器的全过程">
+    <meta name="keywords"  content="漏洞, ALL">
+    <!-- Open Graph -->
+    <meta property="og:title" content="记一次测试BGP服务器的全过程 - co0ontty">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2019/01/04/AttackBGP.html">
+    <meta property="og:description" content="Share my leaning。">
+    <meta property="og:site_name" content="co0ontty">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">首页</a></li>
+            
+            <li><a href="/tags.html">标签</a></li>
+            
+            <li><a href="/links.html">友链</a></li>
+            
+            <li><a href="/about.html">关于我</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+
+  <header
+    class="g-banner post-header post-pattern-circuitBoard bgcolor-default "
+    data-theme="default"
+  >
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+          
+            <a href="http://localhost:4000/tags#%E6%BC%8F%E6%B4%9E" class="post-tag">漏洞</a>
+          
+            <a href="http://localhost:4000/tags#ALL" class="post-tag">ALL</a>
+          
+        
+      </div>
+      <h1>记一次测试BGP服务器的全过程</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i class="iconfont icon-author"></i>co0ontty</span>
+        <time class="post-meta-item" datetime="19-01-04"><i class="iconfont icon-date"></i>04 Jan 2019</time>
+      </div>
+    </div>
+    
+    <div class="filter"></div>
+      <div class="post-cover" style="background: url('/assets/img/posts/BGP-7.png') center no-repeat; background-size: cover;"></div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+
+    <article class="markdown-body">
+      <h3 id="测试入口浙江草苗有限公司httpwwwgrasssprigcom">测试入口：浙江草苗有限公司（http://www.grasssprig.com）</h3>
+<p>·测试时候发现该网站没有明显的漏洞，所以打算从旁站入手。<br />
+·使用旁站发现工具（http://tools.hexlt.org/getdomain）发现，该网站存在大量的旁站。
+·从旁站入手，在其中的一个旁站中发现了后台管理员的登陆链接，使用该链接可以登录到后台管理员界面。将链接复制到其他的网站中发现，该类网站使用的为同一模版，后台管理员页面使用的链接相同。以此为突破口，获取到了该网站及其旁站的管理员登陆链接。<br />
+·分析管理员登陆界面发现，使用该模版的网站普遍存在一个问题：后台管理员登陆是没有验证码等防爆破措施，所以对管理员用户名和密码进行爆破。但是浙江草苗有限公司后台管理员账号和密码为非弱口令的账号和密码。因此，依旧选择从旁站入手。<br />
+·在一个名为威海渔具平升的网站的后台管理员界面使用弱口令成功进入后台管理界面。<br />
+·尝试上传大马发现，网站使用安全狗，无法成功上传大马，因此尝试上传小马并进行绕过。</p>
+<h3 id="一句话木马上传及绕过00截断">一句话木马上传及绕过（00截断）</h3>
+<p>·在新闻上传的界面发现可以对新闻中的图片进行修改。<br />
+·尝试上传一句话木马，发现被拦截。<br />
+·使用00截断上传<br />
+上传时用burp进行抓包，发现文件名为根据时间戳随机生成的一串数字。<br />
+<img src="/assets/img/posts/BGP-1.png" alt="avatar" /><br />
+在数字的后边加上asp的后缀，并在asp的后面加上一个空格。<br />
+<img src="/assets/img/posts/BGP-2.png" alt="avatar" /><br />
+在上面的hex标签中找到刚才修改后缀的地方，并将空格的20替换为00。<br />
+<img src="/assets/img/posts/BGP-3.png" alt="avatar" />     <br />
+修改上传文件的后缀为图片后缀。<br />
+<img src="/assets/img/posts/BGP-4.png" alt="avatar" /><br />
+上传，在上传成功的网页中获取文件的链接。<br />
+<img src="/assets/img/posts/BGP-5.png" alt="avatar" /></p>
+<h3 id="后续工作">后续工作</h3>
+<p>·至此就可以使用菜刀链接一句话木马。<br />
+·连接后发现，该服务器使用的是虚拟机，仅有权利访问D和F盘。<br />
+·审计目录文件发现，网站文件中存在mdb文件。<br />
+<img src="/assets/img/posts/BGP-6.png" alt="avatar" /><br />
+·打开mdb文件发现，其中包含网站的登陆用户名和密码。<br />
+<img src="/assets/img/posts/BGP-7.png" alt="avatar" /><br />
+·在F盘中存放着其余所有旁站的源码，分析源码即可发现所有旁站网站的后台用户名和密码。</p>
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <img src="http://localhost:4000/assets/img/profile.png" alt="">
+      </div>
+      <div class="author-name" rel="author">co0ontty</div>
+      <div class="bio">
+        <p>山东科技大学（泰安）啄木鸟安全实验室创始成员</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/5792988237" target="_blank">
+                    <i class="iconfont icon-weibo"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="mailto:co0ontty@aliyin.com" target="_blank">
+                    <i class="iconfont icon-email"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//facebook.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-facebook"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-github"></i>
+                </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+      <div class="read-next-item">
+        <a href="/2019/01/06/ctfd.html" class="read-next-link"></a>
+        <section>
+          <span>CTFd搭建及优化教程</span>
+          <p>依赖环境安装</p>
+        </section>
+        
+        <div class="filter"></div>
+        <img src="https://ctfd.io/static/img/ctfd.svg" alt="">
+        
+     </div>
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2018/12/26/transmission_daemon.html" class="read-next-link"></a>
+          <section>
+            <span>VPS BT远程下载</span>
+            <p>使用transmission实现BT任务远程下载#####安装：apt-get install transmiss...</p>
+          </section>
+          
+          <div class="filter"></div>
+          <img src="/assets/img/posts/tran-1.png" alt="">
+          
+      </div>
+      
+    </section>
+    
+  </section>
+
+<!-- LiveRe City install code -->
+<div id="lv-container" data-id="city" data-uid="Mi8xLzM=">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>Please activate JavaScript for write a comment in LiveRe</noscript>
+</div>
+<!-- completed City install code -->
+
+<!-- <div id="gitmentContainer"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    var gitment = new Gitment({
+        id: window.location.pathname,
+        owner: 'co0ontty',
+        repo: 'clouddisk',
+        oauth: {
+            client_id: '303a0c4d64e25977696c',
+            client_secret: '52428e99c40d3d8bb29692209d2d88791c8dc325',
+        },
+    });
+    gitment.render('gitmentContainer')
+</script> -->
+
+
+  <footer class="g-footer">
+  <!-- <section><a href="javascript:scroll(50,50)">回到顶端</a></section> -->
+<!-- 网站计数器 -->
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="site_pv_count" title="总点击量"><img src="/assets/vendor/octicons/svg/eye.svg" width=16 height=16> <span id="busuanzi_value_site_pv"></span></span> &nbsp; &nbsp; | &nbsp; &nbsp; <span id="site_uv_count" title="总访客量"> <img src="/assets/vendor/octicons/svg/person.svg" width=10 height=16> <span id="busuanzi_value_site_uv"></span></span>
+<!-- 到此为止 -->
+  <section>co0ontty ©
+  
+  
+    2018
+    -
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+
+
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+  <script>
+    socialShare('.social-share', {
+      sites: [
+        
+          'wechat'
+          ,
+          
+        
+          'weibo'
+          ,
+          
+        
+          'douban'
+          ,
+          
+        
+          'twitter'
+          
+        
+      ],
+      wechatQrcodeTitle: "分享到微信朋友圈",
+      wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+    });
+  </script>
+
+<!--    -->
+
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+</body>
+
+</html>
