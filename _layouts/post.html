@@ -105,7 +105,30 @@
     <!-- <div id="gitalk_container"></div> -->
     </section>
   </section>
-  
+
+{% if site.comment_gitment_repo %}
+
+<div id="gitmentContainer"></div>
+
+<link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
+<script src="https://billts.site/js/gitment.js"></script>
+<!-- <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css"> -->
+<!-- <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> -->
+<script>
+    var gitment = new Gitment({
+    id: '<%= page.date %>',
+        owner: 'co0ontty',
+        repo: '{{site.comment_gitment_repo}}',
+        oauth: {
+            client_id: '{{site.comment_gitment_clientId}}',
+            client_secret: '{{site.comment_gitment_clientSecret}}',
+        },
+    });
+    gitment.render('gitmentContainer')
+</script>
+
+{% endif %}
+
   {% include footer.html %}
 
   <script src="/assets/js/social-share.min.js"></script>
@@ -125,26 +148,7 @@
     });
   </script>
 
-{% if site.comment_gitment_repo %}
-<div id="gitmentContainer"></div>
 
-<link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
-<script src="https://billts.site/js/gitment.js"></script>
-<!-- <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css"> -->
-<!-- <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> -->
-<script>
-    var gitment = new Gitment({
-    id: '<%= page.date %>',
-        owner: 'co0ontty',
-        repo: '{{site.comment_gitment_repo}}',
-        oauth: {
-            client_id: '{{site.comment_gitment_clientId}}',
-            client_secret: '{{site.comment_gitment_clientSecret}}',
-        },
-    });
-    gitment.render('gitmentContainer')
-</script>
-{% endif %}
 
 <!--   {% if site.comments.disqus %}
   <script>
