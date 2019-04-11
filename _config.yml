@@ -45,7 +45,7 @@ comments:
   # gitalk_admin: 'co0ontty'
   # distractionFreeMode: true
 #gitment
-comment_gitment_repo: co0ontty.github.io
+comment_gitment_repo: clouddisk
 comment_gitment_clientId: 303a0c4d64e25977696c
 comment_gitment_clientSecret: 52428e99c40d3d8bb29692209d2d88791c8dc325
 
