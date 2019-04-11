@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script> -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xctf练习题 - co0ontty</title>
+    <meta name="author"  content="co0ontty">
+    <meta name="description" content="Xctf练习题">
+    <meta name="keywords"  content="CTF, ALL">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Xctf练习题 - co0ontty">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2019/04/04/xctfeasy.html">
+    <meta property="og:description" content="Share my leaning。">
+    <meta property="og:site_name" content="co0ontty">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">首页</a></li>
+            
+            <li><a href="/tags.html">标签</a></li>
+            
+            <li><a href="/links.html">友链</a></li>
+            
+            <li><a href="/about.html">关于我</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+
+    <header
+    class="g-banner post-header post-pattern-circuitBoard bgcolor-default "
+    data-theme="default"
+	>
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+          
+            <a href="http://localhost:4000/tags#CTF" class="post-tag">CTF</a>
+          
+            <a href="http://localhost:4000/tags#ALL" class="post-tag">ALL</a>
+          
+        
+      </div>
+      <h1>Xctf练习题</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i class="iconfont icon-author"></i><a href="http://localhost:4000" target="_blank" rel="author">co0ontty</a></></span>
+        <time class="post-meta-item" datetime="19-04-04"><i class="iconfont icon-date"></i>04 Apr 2019</time>
+      </div>
+    </div>
+    
+    <div class="filter"></div>
+      <div class="post-cover" style="background: url('https://i.loli.net/2019/04/04/5ca5717a1a74b.png') center no-repeat; background-size: cover;"></div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+
+    <article class="markdown-body">
+      <h2 id="1view_source">1.view_source</h2>
+
+<p>无法使用右键查看代码，所以使用<br />
+view-source:URL</p>
+
+<h2 id="2get_post">2.get_post</h2>
+
+<p>url?a=1传递get值，使用hackbar传递b的值得到flag</p>
+
+<h2 id="3robots">3.robots</h2>
+
+<p>访问网站url/robots.txt发现网页包含f1ag_1s_h3re.php文件，访问得到flag</p>
+
+<h2 id="4backup">4.backup</h2>
+
+<p>访问网站index.php的备份文件index.php.bak得到flag</p>
+
+<h2 id="5cookie">5.cookie</h2>
+
+<p>使用burp抓包看响应头</p>
+
+<h2 id="6disable_button">6.disable_button</h2>
+
+<p>①可以将代码中的disable=”“标签删除 <br />
+②可以使用hackbar传递post的值</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">""</span> <span class="na">method=</span><span class="s">"post"</span> <span class="nt">&gt;</span> <span class="nt">&lt;input</span> <span class="na">disabled</span> <span class="na">class=</span><span class="s">"btn btn-default"</span><span class="na">style=</span><span class="s">"height:50px;width:200px;"</span><span class="na">type=</span><span class="s">"submit"</span> <span class="na">value=</span><span class="s">"flag"</span><span class="na">name=</span><span class="s">"auth"</span> <span class="nt">/&gt;</span> 
+<span class="nt">&lt;/form&gt;</span>
+</code></pre></div></div>
+
+<p>post传递参数auth=flag</p>
+
+<h2 id="7xff_referer">7.xff_referer</h2>
+
+<p>X-Forwarded-For:简称XFF头，它代表客户端，也就是HTTP的请求端真实的IP，只有在通过了HTTP 代理或者负载均衡服务器时才会添加该项
+HTTP Referer是header的一部分，当浏览器向web服务器发送请求的时候，一般会带上Referer，告诉服务器我是从哪个页面链接过来的，服务器基此可以获得一些信息用于处理
+解题步骤：
+使用burp抓包修改X-Forwarded-For和Referer参数
+<img src="/assets/img/posts/xctf-1.png" alt="avatar" /></p>
+
+<h2 id="8weak_auth">8.weak_auth</h2>
+
+<p>爆破得到flag</p>
+
+<h2 id="9webshell">9.webshell</h2>
+
+<p>链接webshell得到flag</p>
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <img src="http://localhost:4000/assets/img/profile.png" alt="">
+      </div>
+      <div class="author-name" rel="author">co0ontty</div>
+      <div class="bio">
+        <p>山东科技大学（泰安）啄木鸟安全实验室创始成员</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/5792988237" target="_blank">
+                    <i class="iconfont icon-weibo"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="mailto:co0ontty@aliyin.com" target="_blank">
+                    <i class="iconfont icon-email"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//facebook.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-facebook"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-github"></i>
+                </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+      <div class="read-next-item">
+        <a href="/2019/04/06/miscnote.html" class="read-next-link"></a>
+        <section>
+          <span>CTF 杂项题目总结（持续更新）</span>
+          <p>图片隐写</p>
+        </section>
+        
+        <div class="filter"></div>
+        <img src="/assets/img/posts/ada.png" alt="">
+        
+     </div>
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2019/01/17/anheng.html" class="read-next-link"></a>
+          <section>
+            <span>安恒西湖论剑周周练</span>
+            <p>CRYPTO</p>
+          </section>
+          
+          <div class="filter"></div>
+          <img src="https://i.loli.net/2019/04/04/5ca5ada158be8.jpg" alt="">
+          
+      </div>
+      
+    </section>
+    <section class="post-footer-item comment">
+    <!-- <div id="disqus_thread"></div> -->
+    <!-- <div id="gitalk_container"></div> -->
+    </section>
+  </section>
+  
+  <footer class="g-footer">
+  <section><a href="javascript:scroll(50,50)">回到顶端</a></section>
+  <section>co0ontty ©
+  
+  
+    2018
+    -
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+<!--   <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+  <script src="/assets/js/md5.min.js"></script> -->
+  <script>
+    socialShare('.social-share', {
+      sites: [
+        
+          'wechat'
+          ,
+          
+        
+          'weibo'
+          ,
+          
+        
+          'douban'
+          ,
+          
+        
+          'twitter'
+          
+        
+      ],
+      wechatQrcodeTitle: "分享到微信朋友圈",
+      wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+    });
+  </script>
+
+
+<div id="gitmentContainer"></div>
+
+<link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
+<script src="https://billts.site/js/gitment.js"></script>
+<!-- <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css"> -->
+<!-- <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> -->
+<script>
+    var gitment = new Gitment({
+    id: '<%= page.date %>',
+        owner: '',
+        repo: 'co0ontty.github.io',
+        oauth: {
+            client_id: '303a0c4d64e25977696c',
+            client_secret: '52428e99c40d3d8bb29692209d2d88791c8dc325',
+        },
+    });
+    gitment.render('gitmentContainer')
+</script>
+
+
+<!--    -->
+  
+  <!--  -->
+
+
+	
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+</body>
+
+</html>

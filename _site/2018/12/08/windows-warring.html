@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script> -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>evtx-windows系统日志比对系统 - co0ontty</title>
+    <meta name="author"  content="co0ontty">
+    <meta name="description" content="evtx-windows系统日志比对系统">
+    <meta name="keywords"  content="python, windows, ALL">
+    <!-- Open Graph -->
+    <meta property="og:title" content="evtx-windows系统日志比对系统 - co0ontty">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2018/12/08/windows-warring.html">
+    <meta property="og:description" content="Share my leaning。">
+    <meta property="og:site_name" content="co0ontty">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">首页</a></li>
+            
+            <li><a href="/tags.html">标签</a></li>
+            
+            <li><a href="/links.html">友链</a></li>
+            
+            <li><a href="/about.html">关于我</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+
+    <header
+    class="g-banner post-header post-pattern-circuitBoard bgcolor-default post-no-cover"
+    data-theme="default"
+	>
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+          
+            <a href="http://localhost:4000/tags#python" class="post-tag">python</a>
+          
+            <a href="http://localhost:4000/tags#windows" class="post-tag">windows</a>
+          
+            <a href="http://localhost:4000/tags#ALL" class="post-tag">ALL</a>
+          
+        
+      </div>
+      <h1>evtx-windows系统日志比对系统</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i class="iconfont icon-author"></i><a href="http://localhost:4000" target="_blank" rel="author">co0ontty</a></></span>
+        <time class="post-meta-item" datetime="18-12-08"><i class="iconfont icon-date"></i>08 Dec 2018</time>
+      </div>
+    </div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+
+    <article class="markdown-body">
+      <h1 id="windwos系统安全日志监视系统">windwos系统安全日志监视系统</h1>
+<h3 id="思路">思路：</h3>
+<p>该脚本使用python的evtx库，对windwos的系统日志进行读取和比对，当发现系统日志中的信息被删除则出现弹框进行提示</p>
+<h3 id="源代码分享">源代码分享</h3>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#-*-coding:utf-8-*-
+</span><span class="kn">import</span> <span class="nn">mmap</span>
+<span class="kn">import</span> <span class="nn">contextlib</span>
+<span class="kn">import</span> <span class="nn">Tkinter</span>  <span class="c1">#弹窗库
+</span><span class="kn">import</span> <span class="nn">tkMessageBox</span> <span class="c1">#弹窗信息库
+</span><span class="kn">from</span> <span class="nn">Evtx.Evtx</span> <span class="kn">import</span> <span class="n">FileHeader</span>
+<span class="kn">from</span> <span class="nn">Evtx.Views</span> <span class="kn">import</span> <span class="n">evtx_file_xml_view</span>
+<span class="kn">import</span> <span class="nn">ctypes</span> 
+<span class="n">whnd</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">windll</span><span class="o">.</span><span class="n">kernel32</span><span class="o">.</span><span class="n">GetConsoleWindow</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">whnd</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+	<span class="n">ctypes</span><span class="o">.</span><span class="n">windll</span><span class="o">.</span><span class="n">user32</span><span class="o">.</span><span class="n">ShowWindow</span><span class="p">(</span><span class="n">whnd</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+	<span class="n">ctypes</span><span class="o">.</span><span class="n">windll</span><span class="o">.</span><span class="n">kernel32</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">(</span><span class="n">whnd</span><span class="p">)</span>
+<span class="n">output</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">"1.txt"</span><span class="p">,</span><span class="s">"r"</span><span class="p">)</span>
+<span class="n">number</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">output</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">output</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">"1.txt"</span><span class="p">,</span><span class="s">"w"</span><span class="p">)</span>
+<span class="n">count</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">EvtxPath</span> <span class="o">=</span> <span class="s">"security.evtx"</span> 
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">EvtxPath</span><span class="p">,</span><span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">closing</span><span class="p">(</span><span class="n">mmap</span><span class="o">.</span><span class="n">mmap</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span><span class="mi">0</span><span class="p">,</span><span class="n">access</span><span class="o">=</span><span class="n">mmap</span><span class="o">.</span><span class="n">ACCESS_READ</span><span class="p">))</span> <span class="k">as</span> <span class="n">buf</span><span class="p">:</span>
+        <span class="n">fh</span> <span class="o">=</span> <span class="n">FileHeader</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">"Please wating..."</span>
+        <span class="k">for</span> <span class="n">xml</span><span class="p">,</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">evtx_file_xml_view</span><span class="p">(</span><span class="n">fh</span><span class="p">):</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="n">count</span><span class="o">+</span><span class="mi">1</span> 
+<span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">count</span><span class="p">))</span>
+<span class="n">output</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">count</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">number</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">"No change"</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">show</span><span class="p">():</span>
+        <span class="n">tkMessageBox</span><span class="o">.</span><span class="n">showinfo</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">'日志更改提醒'</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s">'日志更改'</span><span class="p">)</span>
+    <span class="n">show</span><span class="p">()</span>
+<span class="nb">exit</span><span class="p">()</span>
+</code></pre></div></div>
+<p>使用vbs脚本在调用py，并隐藏窗口运行</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">set</span> <span class="n">ws</span> <span class="o">=</span> <span class="n">WScript</span><span class="o">.</span><span class="n">CreateObject</span><span class="p">(</span><span class="s">"WScript.Shell"</span><span class="p">)</span>
+<span class="n">ws</span><span class="o">.</span><span class="n">Run</span> <span class="s">"python evtx2.py"</span><span class="p">,</span><span class="mi">0</span>
+</code></pre></div></div>
+<h3 id="后续工作">后续工作</h3>
+<p>使用windows系统计划任务管理器设置定时任务，每隔一段时间运行一次脚本，发现系统日志中的信息被删除则发出报警</p>
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <img src="http://localhost:4000/assets/img/profile.png" alt="">
+      </div>
+      <div class="author-name" rel="author">co0ontty</div>
+      <div class="bio">
+        <p>山东科技大学（泰安）啄木鸟安全实验室创始成员</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/5792988237" target="_blank">
+                    <i class="iconfont icon-weibo"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="mailto:co0ontty@aliyin.com" target="_blank">
+                    <i class="iconfont icon-email"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//facebook.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-facebook"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-github"></i>
+                </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+      <div class="read-next-item">
+        <a href="/2018/12/17/cve-2018-4407.html" class="read-next-link"></a>
+        <section>
+          <span>CVE-2018-4407</span>
+          <p>CVE-2018-4407 POC</p>
+        </section>
+        
+        <div class="filter"></div>
+        <img src="https://i.loli.net/2019/04/10/5cadf731250f4.jpg" alt="">
+        
+     </div>
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2018/12/07/python.html" class="read-next-link"></a>
+          <section>
+            <span>python基础</span>
+            <p>##python3基础用法输入字符串以空格分割inp = input().split(" ")str 转换 lis...</p>
+          </section>
+          
+      </div>
+      
+    </section>
+    <section class="post-footer-item comment">
+    <!-- <div id="disqus_thread"></div> -->
+    <!-- <div id="gitalk_container"></div> -->
+    </section>
+  </section>
+  
+  <footer class="g-footer">
+  <section><a href="javascript:scroll(50,50)">回到顶端</a></section>
+  <section>co0ontty ©
+  
+  
+    2018
+    -
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+<!--   <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+  <script src="/assets/js/md5.min.js"></script> -->
+  <script>
+    socialShare('.social-share', {
+      sites: [
+        
+          'wechat'
+          ,
+          
+        
+          'weibo'
+          ,
+          
+        
+          'douban'
+          ,
+          
+        
+          'twitter'
+          
+        
+      ],
+      wechatQrcodeTitle: "分享到微信朋友圈",
+      wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+    });
+  </script>
+
+
+<div id="gitmentContainer"></div>
+
+<link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
+<script src="https://billts.site/js/gitment.js"></script>
+<!-- <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css"> -->
+<!-- <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> -->
+<script>
+    var gitment = new Gitment({
+    id: '<%= page.date %>',
+        owner: '',
+        repo: 'co0ontty.github.io',
+        oauth: {
+            client_id: '303a0c4d64e25977696c',
+            client_secret: '52428e99c40d3d8bb29692209d2d88791c8dc325',
+        },
+    });
+    gitment.render('gitmentContainer')
+</script>
+
+
+<!--    -->
+  
+  <!--  -->
+
+
+	
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+</body>
+
+</html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
-<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script> -->
 {% include post-head.html %}
 
 <body>
@@ -101,16 +101,16 @@
       {% endif %}
     </section>
     <section class="post-footer-item comment">
-    <div id="disqus_thread"></div>
-    <div id="gitalk_container"></div>
+    <!-- <div id="disqus_thread"></div> -->
+    <!-- <div id="gitalk_container"></div> -->
     </section>
   </section>
   
   {% include footer.html %}
 
   <script src="/assets/js/social-share.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
-  <script src="/assets/js/md5.min.js"></script>
+<!--   <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+  <script src="/assets/js/md5.min.js"></script> -->
   <script>
     socialShare('.social-share', {
       sites: [
@@ -125,7 +125,28 @@
     });
   </script>
 
-  {% if site.comments.disqus %}
+{% if site.comment_gitment_repo %}
+<div id="gitmentContainer"></div>
+
+<link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
+<script src="https://billts.site/js/gitment.js"></script>
+<!-- <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css"> -->
+<!-- <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> -->
+<script>
+    var gitment = new Gitment({
+    id: '<%= page.date %>',
+        owner: '{{site.github_username}}',
+        repo: '{{site.comment_gitment_repo}}',
+        oauth: {
+            client_id: '{{site.comment_gitment_clientId}}',
+            client_secret: '{{site.comment_gitment_clientSecret}}',
+        },
+    });
+    gitment.render('gitmentContainer')
+</script>
+{% endif %}
+
+<!--   {% if site.comments.disqus %}
   <script>
     /**
      *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
@@ -144,9 +165,9 @@
       (d.head || d.body).appendChild(s);
     })();
   </script>
-  {% endif %}
+  {% endif %} -->
   
-  {% if site.comments.gitalk %}
+  <!-- {% if site.comments.gitalk %}
 	<script>
 		var gitalk = new Gitalk({
 			  clientID: '{{ site.comments.gitalk_clientID }}',
@@ -160,7 +181,9 @@
 
 			gitalk.render('disqus_thread')
 	</script>
-  {% endif %}
+  {% endif %} -->
+
+
 	
   <script src="/assets/js/prism.js"></script>
   <script src="/assets/js/index.min.js"></script>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script> -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安恒西湖论剑周周练 - co0ontty</title>
+    <meta name="author"  content="co0ontty">
+    <meta name="description" content="安恒西湖论剑周周练">
+    <meta name="keywords"  content="CTF, ALL">
+    <!-- Open Graph -->
+    <meta property="og:title" content="安恒西湖论剑周周练 - co0ontty">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2019/01/17/anheng.html">
+    <meta property="og:description" content="Share my leaning。">
+    <meta property="og:site_name" content="co0ontty">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">首页</a></li>
+            
+            <li><a href="/tags.html">标签</a></li>
+            
+            <li><a href="/links.html">友链</a></li>
+            
+            <li><a href="/about.html">关于我</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+
+    <header
+    class="g-banner post-header post-pattern-circuitBoard bgcolor-default "
+    data-theme="default"
+	>
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+          
+            <a href="http://localhost:4000/tags#CTF" class="post-tag">CTF</a>
+          
+            <a href="http://localhost:4000/tags#ALL" class="post-tag">ALL</a>
+          
+        
+      </div>
+      <h1>安恒西湖论剑周周练</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i class="iconfont icon-author"></i><a href="http://localhost:4000" target="_blank" rel="author">co0ontty</a></></span>
+        <time class="post-meta-item" datetime="19-01-17"><i class="iconfont icon-date"></i>17 Jan 2019</time>
+      </div>
+    </div>
+    
+    <div class="filter"></div>
+      <div class="post-cover" style="background: url('https://i.loli.net/2019/04/04/5ca5ada158be8.jpg') center no-repeat; background-size: cover;"></div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+
+    <article class="markdown-body">
+      <h2 id="crypto">CRYPTO</h2>
+
+<h3 id="1ordinary-keyboard">1.Ordinary keyboard</h3>
+<p>变形后的凯撒加密 需要加上字符</p>
+
+<h3 id="2rsa">2.RSA</h3>
+<p>工具地址（ https://github.com/Ganapati/RsaCtfTool.git ）
+首先利用  python RsaCtfTool.py –publickey pub.key（公钥） –private 解出私钥，将私钥保存为任意格式文件  <br />
+然后使用  openssl rsautl -decrypt -in flag.enc（密文） -inkey 1.txt（私钥） -out 2.txt（输出答案） 解出flag</p>
+
+<h2 id="misc">MISC</h2>
+<h3 id="1qr">1.qr</h3>
+<p>扫码直接提交答案即可</p>
+
+<h3 id="2wireshark">2.wireshark</h3>
+<p>需要分析登录信息，使用条件”http.request.method==POST”进行过滤得到答案</p>
+
+<h3 id="3百里挑一">3.百里挑一</h3>
+<p>首先使用wireshark导出http文件，发现有一部分图片，使用脚本分理处图片中的flag发现只有一半。<br />
+使用wireshark筛选ftp数据。<br />
+<img src="/assets/img/posts/ah-1.png" alt="avatar" /></p>
+
+<p>发现文件使用的为被动模式传输，传输端口为38x256+111 =  9839（传输文件使用的端口） 
+更改筛选条件为tcp，端口为 9839 
+<img src="/assets/img/posts/ah-2.png" alt="avatar" /></p>
+
+<p>追踪PSH,ACK流，导出原始数据为jpg文件格式（其他流同上步骤）<br />
+<img src="/assets/img/posts/ah-4.png" alt="avatar" /></p>
+
+<p>使用脚本调用exiftool分析得到答案</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#coding=UTF-8
+</span><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">imgs</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s">'.'</span><span class="p">)</span>
+
+<span class="n">imgs</span> <span class="o">=</span> <span class="p">[</span><span class="n">img</span> <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">imgs</span> <span class="k">if</span> <span class="s">'.jpg'</span> <span class="ow">in</span> <span class="n">img</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">imgs</span><span class="p">:</span>
+	<span class="n">exif_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+	<span class="n">exif</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="s">'exiftool '</span> <span class="o">+</span> <span class="n">img</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+	<span class="n">exif</span> <span class="o">=</span> <span class="n">exif</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">ex</span> <span class="ow">in</span> <span class="n">exif</span><span class="p">:</span>
+		<span class="n">ex</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">':'</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+			<span class="n">exif_dict</span><span class="p">[</span><span class="n">ex</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span> <span class="o">=</span> <span class="n">ex</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+	<span class="k">if</span> <span class="s">'XP Comment'</span> <span class="ow">in</span> <span class="n">exif_dict</span><span class="p">:</span>
+		<span class="k">print</span><span class="p">(</span><span class="n">exif_dict</span><span class="p">[</span><span class="s">'XP Comment'</span><span class="p">])</span>
+</code></pre></div></div>
+
+<h2 id="web">WEB</h2>
+<h3 id="1webscan">1.WebScan</h3>
+<p>利用目录遍历漏洞，访问http://101.71.29.5:10009/?act=about&amp;file=/etc/httpd/conf/httpd.conf 即可获得flag</p>
+
+<h3 id="2刀塔">2.刀塔</h3>
+<p>源码泄露：http://101.71.29.5:10010/www.zip</p>
+
+<h3 id="3美男子">3.美男子</h3>
+<p>源码及注释</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cp">&lt;?php</span>
+<span class="k">include</span> <span class="s1">'global.php'</span><span class="p">;</span>
+
+<span class="k">function</span> <span class="nf">AttackFilter</span><span class="p">(</span><span class="nv">$StrKey</span><span class="p">,</span><span class="nv">$StrValue</span><span class="p">,</span><span class="nv">$ArrReq</span><span class="p">){</span>  
+    <span class="k">if</span><span class="p">(</span><span class="nb">is_array</span><span class="p">(</span><span class="nv">$StrValue</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="nv">$StrValue</span><span class="o">=</span><span class="nb">implode</span><span class="p">(</span><span class="nv">$StrValue</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">preg_match</span><span class="p">(</span><span class="s2">"/"</span><span class="o">.</span><span class="nv">$ArrReq</span><span class="o">.</span><span class="s2">"/is"</span><span class="p">,</span><span class="nv">$StrtValue</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">){</span>   
+        <span class="k">print</span> <span class="s2">"holy shit!"</span><span class="p">;</span>
+        <span class="k">exit</span><span class="p">();</span>
+    <span class="p">}</span>      
+<span class="p">}</span> 
+
+<span class="nv">$filter</span> <span class="o">=</span> <span class="s2">"union|select|from|where|join|sleep|benchmark|,|\(|\)"</span><span class="p">;</span>
+
+<span class="k">foreach</span><span class="p">(</span><span class="nv">$_POST</span> <span class="k">as</span> <span class="nv">$key</span><span class="o">=&gt;</span><span class="nv">$value</span><span class="p">){</span> 
+    <span class="nx">AttackFilter</span><span class="p">(</span><span class="nv">$key</span><span class="p">,</span><span class="nv">$value</span><span class="p">,</span><span class="nv">$filter</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'key1'</span><span class="p">])</span> <span class="o">||</span> <span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'key2'</span><span class="p">]))</span> <span class="p">{</span>
+    <span class="k">print</span> <span class="sh">&lt;&lt;&lt;DBAPP
+
+&lt;img src='image/img.jpg' /&gt;
+&lt;!--index.phps--&gt;
+DBAPP;
+</span>    <span class="k">die</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+
+<span class="nv">$query</span> <span class="o">=</span> <span class="nb">mysql_query</span><span class="p">(</span><span class="s2">"SELECT * FROM tb_ctf WHERE key1 = '</span><span class="si">{</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'key1'</span><span class="p">]</span><span class="si">}</span><span class="s2">'"</span><span class="p">);</span> 
+<span class="k">if</span><span class="p">(</span><span class="nb">mysql_num_rows</span><span class="p">(</span><span class="nv">$query</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span> 
+    <span class="nv">$key</span> <span class="o">=</span> <span class="nb">mysql_fetch_array</span><span class="p">(</span><span class="nv">$query</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="nv">$key</span><span class="p">[</span><span class="s1">'key2'</span><span class="p">]</span> <span class="o">==</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'key2'</span><span class="p">])</span> <span class="p">{</span>
+        <span class="k">print</span> <span class="nv">$flag</span><span class="p">;</span>
+    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+        <span class="k">print</span> <span class="s2">"Error!"</span><span class="p">;</span>
+        <span class="p">}</span>
+<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+    <span class="k">print</span> <span class="s2">"Error!"</span><span class="p">;</span>
+<span class="p">}</span>
+
+ 
+ 
+<span class="nv">$sql</span><span class="o">=</span><span class="s2">"SELECT * FROM interest WHERE key1 = 'key1=ads' || 1 group by key2 with rollup limit 1 offset 1 #'"</span><span class="p">;</span><span class="c1">#答案等效语句,#  -&gt;   注释掉另一个'</span>
+
+</code></pre></div></div>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$filter</span> <span class="o">=</span> <span class="s2">"and|select|from|where|union|join|sleep|benchmark|,|\(|\)"</span><span class="p">;</span> 
+<span class="c1">#过滤了and、select、from、where、union、join、sleep、benchmark、等参数后使用查询语句查询数据库</span>
+<span class="nv">$sql</span><span class="o">=</span><span class="s2">"SELECT * FROM interest WHERE key1 = '</span><span class="si">{</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'key1'</span><span class="p">]</span><span class="si">}</span><span class="s2">'"</span><span class="p">;</span>
+</code></pre></div></div>
+<p>传递参数：</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">key1</span><span class="o">=</span><span class="nx">ads</span><span class="err">'</span> <span class="o">||</span> <span class="mi">1</span> <span class="nx">group</span> <span class="nx">by</span> <span class="nx">key2</span> <span class="nx">with</span> <span class="nx">rollup</span> <span class="nx">limit</span> <span class="mi">1</span> <span class="nx">offset</span> <span class="mi">1</span> <span class="c1"># &amp; key2 =  </span>
+</code></pre></div></div>
+<p>‘是对前面的’的封闭，然后利用||1将这个条件变成true过
+group by,with rollup将pw归纳排序出来，用limit offset取出一条数据（题目判断有要求）
+至于为啥offset 2，这个是试出来的，其实我们根本不可能知道with rollup会总结归纳出多少条信息，offset 2能过说明正确的pwd位于第三条信息</p>
+
+<h2 id="reverse">REVERSE</h2>
+<h3 id="1mysterious">1.Mysterious</h3>
+<p>从DialogBoxParamA 函数中定位处理函数</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">__stdcall</span> <span class="nf">sub_401090</span><span class="o">(</span><span class="n">HWND</span> <span class="n">hWnd</span><span class="o">,</span> <span class="kt">int</span> <span class="n">a2</span><span class="o">,</span> <span class="kt">int</span> <span class="n">a3</span><span class="o">,</span> <span class="kt">int</span> <span class="n">a4</span><span class="o">)</span>
+<span class="o">{</span>
+  <span class="kt">char</span> <span class="n">v5</span><span class="o">;</span> <span class="c1">// [esp+50h] [ebp-310h]</span>
+  <span class="n">CHAR</span> <span class="n">Text</span><span class="o">[</span><span class="mi">4</span><span class="o">];</span> <span class="c1">// [esp+154h] [ebp-20Ch]</span>
+  <span class="kt">char</span> <span class="n">v7</span><span class="o">;</span> <span class="c1">// [esp+159h] [ebp-207h]</span>
+  <span class="n">__int16</span> <span class="n">v8</span><span class="o">;</span> <span class="c1">// [esp+255h] [ebp-10Bh]</span>
+  <span class="kt">char</span> <span class="n">v9</span><span class="o">;</span> <span class="c1">// [esp+257h] [ebp-109h]</span>
+  <span class="kt">int</span> <span class="n">v10</span><span class="o">;</span> <span class="c1">// [esp+258h] [ebp-108h]</span>
+  <span class="n">CHAR</span> <span class="n">String</span><span class="o">;</span> <span class="c1">// [esp+25Ch] [ebp-104h]</span>
+  <span class="kt">char</span> <span class="n">v12</span><span class="o">;</span> <span class="c1">// [esp+25Fh] [ebp-101h]</span>
+  <span class="kt">char</span> <span class="n">v13</span><span class="o">;</span> <span class="c1">// [esp+260h] [ebp-100h]</span>
+  <span class="kt">char</span> <span class="n">v14</span><span class="o">;</span> <span class="c1">// [esp+261h] [ebp-FFh]</span>
+ 
+  <span class="n">memset</span><span class="o">(&amp;</span><span class="n">String</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mh">0x104</span><span class="n">u</span><span class="o">);</span>
+  <span class="n">v10</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+  <span class="k">if</span> <span class="o">(</span> <span class="n">a2</span> <span class="o">==</span> <span class="mi">16</span> <span class="o">)</span>
+  <span class="o">{</span>
+    <span class="n">DestroyWindow</span><span class="o">(</span><span class="n">hWnd</span><span class="o">);</span>
+    <span class="n">PostQuitMessage</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+  <span class="o">}</span>
+  <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span> <span class="n">a2</span> <span class="o">==</span> <span class="mi">273</span> <span class="o">)</span>
+  <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span> <span class="n">a3</span> <span class="o">==</span> <span class="mi">1000</span> <span class="o">)</span>
+    <span class="o">{</span>
+      <span class="n">GetDlgItemTextA</span><span class="o">(</span><span class="n">hWnd</span><span class="o">,</span> <span class="mi">1002</span><span class="o">,</span> <span class="o">&amp;</span><span class="n">String</span><span class="o">,</span> <span class="mi">260</span><span class="o">);</span>
+      <span class="n">strlen</span><span class="o">(&amp;</span><span class="n">String</span><span class="o">);</span>
+      <span class="k">if</span> <span class="o">(</span> <span class="n">strlen</span><span class="o">(&amp;</span><span class="n">String</span><span class="o">)</span> <span class="o">&gt;</span> <span class="mi">6</span> <span class="o">)</span>
+        <span class="n">ExitProcess</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+      <span class="n">v10</span> <span class="o">=</span> <span class="n">atoi</span><span class="o">(&amp;</span><span class="n">String</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+      <span class="k">if</span> <span class="o">(</span> <span class="n">v10</span> <span class="o">==</span> <span class="mi">123</span> <span class="o">&amp;&amp;</span> <span class="n">v12</span> <span class="o">==</span> <span class="mi">120</span> <span class="o">&amp;&amp;</span> <span class="n">v14</span> <span class="o">==</span> <span class="mi">122</span> <span class="o">&amp;&amp;</span> <span class="n">v13</span> <span class="o">==</span> <span class="mi">121</span> <span class="o">)</span>
+      <span class="o">{</span>
+        <span class="n">strcpy</span><span class="o">(</span><span class="n">Text</span><span class="o">,</span> <span class="s">"flag"</span><span class="o">);</span>
+        <span class="n">memset</span><span class="o">(&amp;</span><span class="n">v7</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mh">0xFC</span><span class="n">u</span><span class="o">);</span>
+        <span class="n">v8</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="n">v9</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="n">_itoa</span><span class="o">(</span><span class="n">v10</span><span class="o">,</span> <span class="o">&amp;</span><span class="n">v5</span><span class="o">,</span> <span class="mi">10</span><span class="o">);</span>
+        <span class="n">strcat</span><span class="o">(</span><span class="n">Text</span><span class="o">,</span> <span class="s">"{"</span><span class="o">);</span>
+        <span class="n">strcat</span><span class="o">(</span><span class="n">Text</span><span class="o">,</span> <span class="o">&amp;</span><span class="n">v5</span><span class="o">);</span>
+        <span class="n">strcat</span><span class="o">(</span><span class="n">Text</span><span class="o">,</span> <span class="s">"_"</span><span class="o">);</span>
+        <span class="n">strcat</span><span class="o">(</span><span class="n">Text</span><span class="o">,</span> <span class="s">"Buff3r_0v3rf|0w"</span><span class="o">);</span>
+        <span class="n">strcat</span><span class="o">(</span><span class="n">Text</span><span class="o">,</span> <span class="s">"}"</span><span class="o">);</span>
+        <span class="n">MessageBoxA</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">Text</span><span class="o">,</span> <span class="s">"well done"</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+      <span class="o">}</span>
+      <span class="n">SetTimer</span><span class="o">(</span><span class="n">hWnd</span><span class="o">,</span> <span class="mi">1</span><span class="n">u</span><span class="o">,</span> <span class="mh">0x3E8</span><span class="n">u</span><span class="o">,</span> <span class="n">TimerFunc</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="k">if</span> <span class="o">(</span> <span class="n">a3</span> <span class="o">==</span> <span class="mi">1001</span> <span class="o">)</span>
+      <span class="n">KillTimer</span><span class="o">(</span><span class="n">hWnd</span><span class="o">,</span> <span class="mi">1</span><span class="n">u</span><span class="o">);</span>
+  <span class="o">}</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>输入的字符不能超过6位  要为6位</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span> <span class="n">v10</span> <span class="o">==</span> <span class="mi">123</span> <span class="o">&amp;&amp;</span> <span class="n">String</span><span class="o">[</span><span class="mi">3</span><span class="o">]</span> <span class="o">==</span> <span class="mi">120</span> <span class="o">&amp;&amp;</span> <span class="n">String</span><span class="o">[</span><span class="mi">5</span><span class="o">]</span> <span class="o">==</span> <span class="mi">122</span> <span class="o">&amp;&amp;</span> <span class="n">String</span><span class="o">[</span><span class="mi">4</span><span class="o">]</span> <span class="o">==</span> <span class="mi">121</span> <span class="o">)</span> 
+</code></pre></div></div>
+<p>&amp;String+1 = 123 =&gt; &amp;String =122 <br />
+String[3] =&gt; x<br />
+String[4] =&gt; y<br />
+String[5] =&gt; z</p>
+
+<h3 id="2findkey">2.findKey</h3>
+<p>flag n0_Zu0_n0_die 思路待整理</p>
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <img src="http://localhost:4000/assets/img/profile.png" alt="">
+      </div>
+      <div class="author-name" rel="author">co0ontty</div>
+      <div class="bio">
+        <p>山东科技大学（泰安）啄木鸟安全实验室创始成员</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/5792988237" target="_blank">
+                    <i class="iconfont icon-weibo"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="mailto:co0ontty@aliyin.com" target="_blank">
+                    <i class="iconfont icon-email"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//facebook.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-facebook"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-github"></i>
+                </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+      <div class="read-next-item">
+        <a href="/2019/04/04/xctfeasy.html" class="read-next-link"></a>
+        <section>
+          <span>Xctf练习题</span>
+          <p>1.view_source</p>
+        </section>
+        
+        <div class="filter"></div>
+        <img src="https://i.loli.net/2019/04/04/5ca5717a1a74b.png" alt="">
+        
+     </div>
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2019/01/17/Bugkuweb.html" class="read-next-link"></a>
+          <section>
+            <span>Bugku-web结题思路(持续更新)</span>
+            <p>1、web2：</p>
+          </section>
+          
+          <div class="filter"></div>
+          <img src="https://i.loli.net/2019/04/04/5ca5adcb6096c.png" alt="">
+          
+      </div>
+      
+    </section>
+    <section class="post-footer-item comment">
+    <!-- <div id="disqus_thread"></div> -->
+    <!-- <div id="gitalk_container"></div> -->
+    </section>
+  </section>
+  
+  <footer class="g-footer">
+  <section><a href="javascript:scroll(50,50)">回到顶端</a></section>
+  <section>co0ontty ©
+  
+  
+    2018
+    -
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+<!--   <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+  <script src="/assets/js/md5.min.js"></script> -->
+  <script>
+    socialShare('.social-share', {
+      sites: [
+        
+          'wechat'
+          ,
+          
+        
+          'weibo'
+          ,
+          
+        
+          'douban'
+          ,
+          
+        
+          'twitter'
+          
+        
+      ],
+      wechatQrcodeTitle: "分享到微信朋友圈",
+      wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+    });
+  </script>
+
+
+<div id="gitmentContainer"></div>
+
+<link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
+<script src="https://billts.site/js/gitment.js"></script>
+<!-- <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css"> -->
+<!-- <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> -->
+<script>
+    var gitment = new Gitment({
+    id: '<%= page.date %>',
+        owner: '',
+        repo: 'co0ontty.github.io',
+        oauth: {
+            client_id: '303a0c4d64e25977696c',
+            client_secret: '52428e99c40d3d8bb29692209d2d88791c8dc325',
+        },
+    });
+    gitment.render('gitmentContainer')
+</script>
+
+
+<!--    -->
+  
+  <!--  -->
+
+
+	
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+</body>
+
+</html>
