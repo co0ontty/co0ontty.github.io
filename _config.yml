@@ -36,13 +36,13 @@ nightMode: true
 comments:
   disqus: false
   disqus_url: 'https://weijunzii.disqus.com/embed.js'
-gitment:
-  enable: true
-  githubID: CHINA-JARY
-  repo: clouddisk
-  ClientID: e689910fcdc9ca009924
-  ClientSecret: 4e663bde8d0fc95ab202b63f42a22974dc3d00fc
-  lazy: true
+# gitment:
+#   enable: true
+#   githubID: CHINA-JARY
+#   repo: clouddisk
+#   ClientID: e689910fcdc9ca009924
+#   ClientSecret: 4e663bde8d0fc95ab202b63f42a22974dc3d00fc
+#   lazy: true
   # gitalk: true
   # gitalk_clientID: '6e851dde663bbbee6a8b'
   # gitalk_Secret: '382f87715b7fea4bba377e2395691289f9885f2a'

@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html>
-<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
-<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script> -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -114,10 +112,10 @@ Author: Ray-Eldath
 </header>
 
 
-    <header
+  <header
     class="g-banner post-header post-pattern-circuitBoard bgcolor-default "
     data-theme="default"
-	>
+  >
     <div class="post-wrapper">
       <div class="post-tags">
         
@@ -132,7 +130,7 @@ Author: Ray-Eldath
       </div>
       <h1>Bugku-web结题思路(持续更新)</h1>
       <div class="post-meta">
-        <span class="post-meta-item"><i class="iconfont icon-author"></i><a href="http://localhost:4000" target="_blank" rel="author">co0ontty</a></></span>
+        <span class="post-meta-item"><i class="iconfont icon-author"></i>co0ontty</span>
         <time class="post-meta-item" datetime="19-01-17"><i class="iconfont icon-date"></i>17 Jan 2019</time>
       </div>
     </div>
@@ -419,25 +417,18 @@ http://123.206.87.240:8002/web16/?kkeyey1[]=1&amp;kekeyy2[]=2</p>
       </div>
       
     </section>
-    <section class="post-footer-item comment">
-    <!-- <div id="disqus_thread"></div> -->
-    <!-- <div id="gitalk_container"></div> -->
-    </section>
+    
   </section>
 
 
-
 <div id="gitmentContainer"></div>
-
-<link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
-<script src="https://billts.site/js/gitment.js"></script>
-<!-- <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css"> -->
-<!-- <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> -->
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
     var gitment = new Gitment({
-    id: '<%= page.date %>',
+        id: window.location.pathname,
         owner: 'co0ontty',
-        repo: 'co0ontty.github.io',
+        repo: 'clouddisk',
         oauth: {
             client_id: '303a0c4d64e25977696c',
             client_secret: '52428e99c40d3d8bb29692209d2d88791c8dc325',
@@ -445,7 +436,6 @@ http://123.206.87.240:8002/web16/?kkeyey1[]=1&amp;kekeyy2[]=2</p>
     });
     gitment.render('gitmentContainer')
 </script>
-
 
 
   <footer class="g-footer">
@@ -469,8 +459,6 @@ http://123.206.87.240:8002/web16/?kkeyey1[]=1&amp;kekeyy2[]=2</p>
 
 
   <script src="/assets/js/social-share.min.js"></script>
-<!--   <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
-  <script src="/assets/js/md5.min.js"></script> -->
   <script>
     socialShare('.social-share', {
       sites: [
@@ -496,14 +484,8 @@ http://123.206.87.240:8002/web16/?kkeyey1[]=1&amp;kekeyy2[]=2</p>
     });
   </script>
 
-
-
 <!--    -->
-  
-  <!--  -->
 
-
-	
   <script src="/assets/js/prism.js"></script>
   <script src="/assets/js/index.min.js"></script>
 </body>
