@@ -1,0 +1,103 @@
+﻿# Site settings 配置站点
+title: 'co0ontty'
+description: 'Share my leaning。'
+keyword: 'co0ontty,co0ontty的博客, 信息安全, python, mysql, php, html, jsp'
+url: 'https://co0ontty.github.io/' # your host
+encoding: UTF-8
+# if you don't need baseurl, you should leave this value blank.
+baseurl: ''
+
+# Navigation links
+nav:
+  首页: '/'
+  # friends: '/friends.html'
+  标签: '/tags.html'
+  友链: '/links.html'
+  关于我: '/about.html'
+  # 订阅: '/rss.xml'
+
+# Footer
+footer:
+  since: 2018
+
+# Author 配置博主信息
+author: 'co0ontty'
+nickname: 'co0ontty'
+bio: '山东科技大学（泰安）啄木鸟安全实验室创始成员'
+avatar: '/assets/img/profile.png'
+
+# Search
+search: true
+
+# Night mode
+nightMode: true
+
+# Comments 评论功能
+comments:
+  disqus: false
+  disqus_url: 'https://weijunzii.disqus.com/embed.js'
+  
+  gitalk: true
+  gitalk_clientID: '6e851dde663bbbee6a8b'
+  gitalk_Secret: '382f87715b7fea4bba377e2395691289f9885f2a'
+  gitalk_repo: 'co0ontty.github.io'
+  gitalk_owner: 'co0ontty'
+  gitalk_admin: 'co0ontty'
+  distractionFreeMode: true
+  
+
+reward:
+  enable: true
+  reward_comment: '头发不够用了'
+  wechatpay: 'https://upload-images.jianshu.io/upload_images/2989110-9ed50d1f90af6cdb.jpg'
+  alipay: 'https://upload-images.jianshu.io/upload_images/2989110-b332375de5cb2f4a.png'
+
+# MathJax 公式支持 by Ray-Eldath
+mathjax: true
+
+# Share
+social-share: true
+social-share-items: ['wechat', 'weibo', 'douban', 'twitter']
+
+# theme color 主题皮肤
+theme-color: 'default'  # pink or default
+
+# Post header background patterns (when the post no cover): circuitBoard, overlappingCircles, food, glamorous, ticTacToe, seaOfClouds
+postPatterns: 'circuitBoard'
+
+# SNS settings 配置社交网站
+# url: email, weibo, zhihu, twitter, instagram, juejin, github, douban, facebook, dribble, uicn, jianshu, medium, linkedin
+sns:
+  #weibo: '//weibo.com/lovecolcol'
+  #wechat: '//mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI3NjQ1Mzc5OA==#wechat_redirect'
+  weibo: '//weibo.com/5792988237'
+  email: 'mailto:co0ontty@aliyin.com'
+  facebook: '//facebook.com/co0ontty'
+  github: '//github.com/co0ontty'
+
+# Tags 设置标签
+recommend-tags: true # whether or not display recommend-tags on the sidebar
+recommend-condition-size: 12 # a tag will be recommended if the size of it is more than this value
+
+# Build settings
+paginate: 10
+paginate_path: 'page:num'
+exclude: ['node_modules', 'dev', 'package.json', 'gulpfile.js', '.gitignore', 'README.md']
+
+# Markdown
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+
+# RSS
+RSS: false
+
+# Permalink
+# See: https://github.com/kaeyleo/jekyll-theme-H2O/issues/35
+permalink: /:year/:month/:day/:title.html
+
+# Plugins
+plugins: [jekyll-paginate]
+
+theme: jekyll-theme-cayman
