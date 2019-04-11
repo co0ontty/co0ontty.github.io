@@ -105,42 +105,6 @@
     {% endif %}
   </section>
 
-<!-- LiveRe City install code -->
-<div id="lv-container" data-id="city" data-uid="Mi8xLzM=">
-<script type="text/javascript">
-   (function(d, s) {
-       var j, e = d.getElementsByTagName(s)[0];
-
-       if (typeof LivereTower === 'function') { return; }
-
-       j = d.createElement(s);
-       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
-       j.async = true;
-
-       e.parentNode.insertBefore(j, e);
-   })(document, 'script');
-</script>
-<noscript>Please activate JavaScript for write a comment in LiveRe</noscript>
-</div>
-<!-- completed City install code -->
-
-<!-- <div id="gitmentContainer"></div>
-<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-    var gitment = new Gitment({
-        id: window.location.pathname,
-        owner: 'co0ontty',
-        repo: 'clouddisk',
-        oauth: {
-            client_id: '303a0c4d64e25977696c',
-            client_secret: '52428e99c40d3d8bb29692209d2d88791c8dc325',
-        },
-    });
-    gitment.render('gitmentContainer')
-</script> -->
-
-
   {% include footer.html %}
 
   <script src="/assets/js/social-share.min.js"></script>
@@ -158,7 +122,7 @@
     });
   </script>
 
-<!--   {% if site.comments.disqus %}
+  {% if site.comments.disqus %}
   <script>
     /**
      *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
@@ -171,15 +135,54 @@
     */
     (function() { // DON'T EDIT BELOW THIS LINE
       var d = document, s = d.createElement('script');
-      s.src = '{{ site.comments.disqus_url }}';
+      s.src = 'https://liaokeyu.disqus.com/embed.js';
       s.setAttribute('data-timestamp', +new Date());
       (d.head || d.body).appendChild(s);
     })();
   </script>
-  {% endif %} -->
+  {% endif %}
+  <div id="lv-container" data-id="city" data-uid="MTAyMC80MTI3My8xNzgyMQ==">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
 
   <script src="/assets/js/prism.js"></script>
   <script src="/assets/js/index.min.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?7084bb2b47ca9a611ae8225633e5caeb";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
 </body>
 
 </html>
