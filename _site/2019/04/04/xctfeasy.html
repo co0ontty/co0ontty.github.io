@@ -274,9 +274,36 @@ HTTP Referer是header的一部分，当浏览器向web服务器发送请求的�
     <!-- <div id="gitalk_container"></div> -->
     </section>
   </section>
-  
+
+
+
+<div id="gitmentContainer"></div>
+
+<link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
+<script src="https://billts.site/js/gitment.js"></script>
+<!-- <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css"> -->
+<!-- <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> -->
+<script>
+    var gitment = new Gitment({
+    id: '<%= page.date %>',
+        owner: 'co0ontty',
+        repo: 'co0ontty.github.io',
+        oauth: {
+            client_id: '303a0c4d64e25977696c',
+            client_secret: '52428e99c40d3d8bb29692209d2d88791c8dc325',
+        },
+    });
+    gitment.render('gitmentContainer')
+</script>
+
+
+
   <footer class="g-footer">
-  <section><a href="javascript:scroll(50,50)">回到顶端</a></section>
+  <!-- <section><a href="javascript:scroll(50,50)">回到顶端</a></section> -->
+<!-- 网站计数器 -->
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="site_pv_count" title="总点击量"><img src="/assets/vendor/octicons/svg/eye.svg" width=16 height=16> <span id="busuanzi_value_site_pv"></span></span> &nbsp; &nbsp; | &nbsp; &nbsp; <span id="site_uv_count" title="总访客量"> <img src="/assets/vendor/octicons/svg/person.svg" width=10 height=16> <span id="busuanzi_value_site_uv"></span></span>
+<!-- 到此为止 -->
   <section>co0ontty ©
   
   
@@ -286,6 +313,8 @@ HTTP Referer是header的一部分，当浏览器向web服务器发送请求的�
   2019
   </section>
   <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+
+
 </footer>
 
 
@@ -317,25 +346,6 @@ HTTP Referer是header的一部分，当浏览器向web服务器发送请求的�
     });
   </script>
 
-
-<div id="gitmentContainer"></div>
-
-<link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
-<script src="https://billts.site/js/gitment.js"></script>
-<!-- <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css"> -->
-<!-- <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> -->
-<script>
-    var gitment = new Gitment({
-    id: '<%= page.date %>',
-        owner: '',
-        repo: 'co0ontty.github.io',
-        oauth: {
-            client_id: '303a0c4d64e25977696c',
-            client_secret: '52428e99c40d3d8bb29692209d2d88791c8dc325',
-        },
-    });
-    gitment.render('gitmentContainer')
-</script>
 
 
 <!--    -->
