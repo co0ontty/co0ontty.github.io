@@ -47,3 +47,23 @@ while 1:
 
 
 ```
+## 相关CTF题目  
+moctf web-没时间解释了 
+进入题目发现URL为index2.php,尝试访问index.php发现存在短暂跳转。抓包后发现
+[![屏幕快照 2019-04-12 20.21.27.png](https://i.loli.net/2019/04/12/5cb082e3c7046.png)](https://i.loli.net/2019/04/12/5cb082e3c7046.png)
+访问这个网页，发现为上传界面，随便输入两个值
+[![屏幕快照 2019-04-12 20.28.44.png](https://i.loli.net/2019/04/12/5cb0849537251.png)](https://i.loli.net/2019/04/12/5cb0849537251.png)
+访问这个网址后被告知太慢了，猜测可能为时间竞争类型。
+使用burp多线程并发提交
+### 抓取输入界面的包
+[![屏幕快照 2019-04-12 20.41.41.png](https://i.loli.net/2019/04/12/5cb08929ce64a.png)](https://i.loli.net/2019/04/12/5cb08929ce64a.png)
+sent to Intruder 
+[![屏幕快照 2019-04-12 20.41.41.png](https://i.loli.net/2019/04/12/5cb089af69160.png)](https://i.loli.net/2019/04/12/5cb089af69160.png)
+### 访问Too slow 的页面并抓包
+[![屏幕快照 2019-04-12 20.41.48.png](https://i.loli.net/2019/04/12/5cb08a119212e.png)](https://i.loli.net/2019/04/12/5cb08a119212e.png)
+### 配置Intruder
+[![屏幕快照 2019-04-12 20.42.08.png](https://i.loli.net/2019/04/12/5cb08a7b2801b.png)](https://i.loli.net/2019/04/12/5cb08a7b2801b.png)
+[![屏幕快照 2019-04-12 20.41.55.png](https://i.loli.net/2019/04/12/5cb08a7b2cdd8.png)](https://i.loli.net/2019/04/12/5cb08a7b2cdd8.png)
+两个配置相同  
+同时启动两个Attack进程，在Too slow页面发现flag    
+[![屏幕快照 2019-04-12 20.40.57.png](https://i.loli.net/2019/04/12/5cb08a35088ab.png)](https://i.loli.net/2019/04/12/5cb08a35088ab.png)
