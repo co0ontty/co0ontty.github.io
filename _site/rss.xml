@@ -5,9 +5,23 @@
     <description>Share my leaning。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 12 Apr 2019 21:41:51 +0800</pubDate>
-    <lastBuildDate>Fri, 12 Apr 2019 21:41:51 +0800</lastBuildDate>
+    <pubDate>Fri, 12 Apr 2019 22:19:32 +0800</pubDate>
+    <lastBuildDate>Fri, 12 Apr 2019 22:19:32 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title></title>
+        <description>&lt;h2 id=&quot;php备份文件&quot;&gt;php备份文件：&lt;/h2&gt;
+&lt;p&gt;1.index.php.bak
+2.index.php~
+3.index.php.swp&lt;/p&gt;
+</description>
+        <pubDate>Fri, 12 Apr 2019 22:19:32 +0800</pubDate>
+        <link>http://localhost:4000/2019/04/12/2019-4-12-Allweb.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/04/12/2019-4-12-Allweb.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>Uplode-Labs通关笔记</title>
@@ -1185,37 +1199,6 @@ rpc-whitelist:允许访问的IP白名单&lt;br /&gt;
         <category>Tools</category>
         
         <category>ALL</category>
-        
-      </item>
-    
-      <item>
-        <title>服务器流量监控统计</title>
-        <description>&lt;h2 id=&quot;本博客旨在记录连接服务器特定服务的ip&quot;&gt;本博客旨在记录连接服务器特定服务的IP&lt;/h2&gt;
-&lt;h4 id=&quot;安装服务&quot;&gt;安装服务&lt;/h4&gt;
-&lt;p&gt;类似于nginx，ss等实时显示的应用框架，或者使用netstat或者ps等实时监控命令，进行实时的监控。&lt;/p&gt;
-&lt;h4 id=&quot;应用&quot;&gt;应用&lt;/h4&gt;
-&lt;p&gt;在运行需要监控的服务之前使用命令：&lt;/p&gt;
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;script &lt;span class=&quot;nt&quot;&gt;-a&lt;/span&gt; ss.txt  
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;该命令将接下来终端中所有命令及回显记录到example.txt中&lt;br /&gt;
-运行命令&lt;br /&gt;
-&lt;img src=&quot;/assets/img/posts/ss.png&quot; alt=&quot;avatar&quot; /&gt;&lt;br /&gt;
-结束记录&lt;/p&gt;
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-</description>
-        <pubDate>Fri, 21 Dec 2018 00:18:43 +0800</pubDate>
-        <link>http://localhost:4000/2018/12/21/liuliang.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/12/21/liuliang.html</guid>
-        
-        <category>ALL</category>
-        
-        <category>运维</category>
-        
-        
-        <category>ALL</category>
-        
-        <category>运维</category>
         
       </item>
     
