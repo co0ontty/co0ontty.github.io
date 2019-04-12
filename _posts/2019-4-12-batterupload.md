@@ -34,7 +34,7 @@ copy($_GET['src'],$_GET['dst'])
 攻击者上传了一个用来生成恶意shell的文件，在上传完成和安全检查完成并删除它的间隙，攻击者通过不断地发起访问请求的方法访问了该文件，该文件就会被执行，并且在服务器上生成一个恶意shell的文件。至此，该文件的任务就已全部完成，至于后面发现它是一个不安全的文件并把它删除的问题都已经不重要了，因为攻击者已经成功的在服务器中植入了一个shell文件，后续的一切就都不是问题了。
 ## 漏洞利用详细步骤
 1.抓包并根据过滤条件修改后发送到Intruder模块开多线程不断发包,使WEB服务不断接受该文件。
-![屏幕快照 2019-04-12 18.26.16.png](https://img-blog.csdn.net/201803102006224?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMTM3Nzk5Ng==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)](https://img-blog.csdn.net/201803102006224?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMTM3Nzk5Ng==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+![屏幕快照 2019-04-12 18.26.16.png](https://img-blog.csdn.net/201803102006224?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMTM3Nzk5Ng==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
 2.然后写一个python脚本不断去访问那个文件，如果在WEB服务判定并删除不安全文件之前成功的访问则会达到效果。
 ```py
 
