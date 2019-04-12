@@ -111,7 +111,8 @@ Windows文件流特性绕过，文件名改成shell.php::$DATA，上传成功后
 如果哪位大佬知道怎么回事可以评论告诉我  
 ## Pass-12 （00截断-0x00)
 同Pass-11 但是这次需要将%00换成空格，然后在hex选项卡中将20改为00  
-## Pass-13
+
+## Pass-13 (添加文件头进行绕过)
 
 绕过文件头检查，添加GIF图片的文件头`GIF89a`，绕过GIF图片检查。
 
@@ -145,7 +146,7 @@ png图片webshell上传同**Pass-13**。
 
 jpg/jpeg图片webshell上传同**Pass-13**。
 
-## Pass-16
+## Pass-16 （对比渲染图片，添加代码）
 
 原理：将一个正常显示的图片，上传到服务器。寻找图片被渲染后与原始图片部分对比仍然相同的数据块部分，将Webshell代码插在该部分，然后上传。具体实现需要自己编写Python程序，人工尝试基本是不可能构造出能绕过渲染函数的图片webshell的。
 
@@ -171,7 +172,7 @@ jpg/jpeg图片webshell上传同**Pass-13**。
 
 ![](/assets/img/posts/16-6.png)
 
-## Pass-17
+## Pass-17 （多线程并发上传绕过删除条件竞争）
 
 利用条件竞争删除文件时间差绕过。使用命令`pip install hackhttp`安装[hackhttp](https://github.com/BugScanTeam/hackhttp)模块，运行下面的Python代码即可。如果还是删除太快，可以适当调整线程并发数。
 
@@ -224,7 +225,7 @@ pool.join()
 
 ![](/assets/img/posts/17-1.png)
 
-## Pass-18
+## Pass-18 （多线程并发绕过重命名条件竞争）
 
 刚开始没有找到绕过方法，最后下载作者Github提供的打包环境，利用上传重命名竞争+Apache解析漏洞，成功绕过。
 
