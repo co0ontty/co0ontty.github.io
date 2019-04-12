@@ -67,24 +67,38 @@ SetHandler application/x-httpd-php
 [![屏幕快照 2019-04-09 19.53.36.png](https://i.loli.net/2019/04/09/5cac893e518c1.png)](https://i.loli.net/2019/04/09/5cac893e518c1.png)
 上传成功后，上传图片马03.jpg ，运行成功    
 [![屏幕快照 2019-04-09 19.55.50.png](https://i.loli.net/2019/04/09/5cac8971e083b.png)](https://i.loli.net/2019/04/09/5cac8971e083b.png)  
-## Pass-5 （未区分大小写）
+## Pass-5（未区分大小写）
 Pass-4中存在以下代码：  
 ```php
  $file_ext = strtolower($file_ext); //转换为小写
 ```
 而Pass-5中没有，说明Pass-5虽然过滤了所有的文件后缀，但是没有区分大小写。
 上传shell.PHP即可绕过  
-## Pass-6  
+## Pass-6（文件名+后缀+空格）
 相比于第五关的过滤条件缺少了
 ```php
  $file_ext = trim($file_ext); //首尾去空
 ```
 所以通过构造文件名+后缀+空格进行绕过，即"shell.php "
-## Pass-7  
+## Pass-7  （shell.php.）
 缺少"."过滤代码：
 ```php
 $file_name = deldot($file_name);//删除文件名末尾的点
 ```
-所以通过构造shell.php.进行绕过  
-## Pass-8 
+所以利用windows文件系统的文件名特性（windows系统上的文件名最后一个.会被去掉）通过构造shell.php.进行绕过  
+## Pass-8 （::$DATA）
+Windows文件流特性绕过，文件名改成shell.php::$DATA，上传成功后保存的文件名其实是shell.php
+## Pass-9  （点+空格+点）
+黑名单过滤，注意第15行和之前不太一样，路径拼接的是处理后的文件名，于是构造info.php. . （点+空格+点），经过处理后，文件名变成info.php.，即可绕过，经过windows文件系统的特性处理后即可上传访问成功。
+## Pass-10  （双写后缀名）
+第8行代码存在上传漏洞：
+```php
+6：$deny_ext = array("php","php5","php4","php3","php2","html","htm","phtml","pht","jsp","jspa","jspx","jsw","jsv","jspf","jtml","asp","aspx","asa","asax","ascx","ashx","asmx","cer","swf","htaccess");
+7: $file_name = trim($_FILES['upload_file']['name']);
+8:$file_name = str_ireplace($deny_ext,"", $file_name);
 
+```
+该代码的作用为将第六行中的$deny_ext中的后缀名替换为空。
+所以本题目可以使用双写后缀名的方法进行绕过。
+![屏幕快照 2019-04-12 09.29.58.png](https://i.loli.net/2019/04/12/5cafeae609ce6.png)
+## Pass-11 
