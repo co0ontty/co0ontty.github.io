@@ -172,6 +172,9 @@ jpg/jpeg图片webshell上传同**Pass-13**。
 
 ![](/assets/img/posts/16-6.png)
 
+同时你也可以使用工具对文件进行渲染：
+https://wiki.ioin.in/soft/detail/1q
+先上传正常图片，经过渲染后下载正常图片，使用该工具处理经过渲染的图片，成功上传。
 ## Pass-17 （多线程并发上传绕过删除条件竞争）
 
 利用条件竞争删除文件时间差绕过。使用命令`pip install hackhttp`安装[hackhttp](https://github.com/BugScanTeam/hackhttp)模块，运行下面的Python代码即可。如果还是删除太快，可以适当调整线程并发数。
