@@ -20,12 +20,19 @@ tags: WEB ALL
 ① 对网站的中间件进行识别，根据中间件的版本判断是否存在响应的漏洞；弱口令爆破相关的界面。  
 ② 对网站的目录及敏感文件进行扫描，判断是否存在文件泄露类型漏洞  
 ③ XSS SQL CSRF SSRF 文件上传 任意文件下载 等技术细节：
-·利用XSS可以做什么： 
-弹窗、植入webshell、窃取用户cookie等秘密信息、诱导管理员增加或删除相关的信息。  
-·如何防止窃取cookie：  
-将session的过期时间设置短一些；
-监控referrer与userAgent的值；
-使用HttpOnly禁止脚本读取Cookie。
+·利用XSS可以做什么：  
+弹窗、植入webshell、窃取用户cookie等秘密信息、诱导管理员增加或删除相关的信息。    
+·如何防止窃取cookie：    
+将session的过期时间设置短一些；  
+监控referrer与userAgent的值；  
+使用HttpOnly禁止脚本读取Cookie。  
+·SQL注入可以做什么：  
+读取数据库中未经授权访问的内容  
+获取webshell（这个很重要）  
+·SQL注入获取webshell的方法：  
+详见另一篇博客中的mysql提权方法（https://co0ontty.github.io/2019/05/06/resttudy.html）    
+·怎么判断网站是否存在SSRF漏洞：  
+详见另一篇博客中SSRF漏洞的解析（https://co0ontty.github.io/2019/05/06/resttudy.html）  
 #### 3.漏洞利用
 #### 4.清除测试记录 
 #### 5.复测，提交报告
