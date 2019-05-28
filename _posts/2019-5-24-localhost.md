@@ -3,8 +3,8 @@ layout: post
 title: "内网渗透总结（持续更新）"
 date: 2019-5-24 11:49:43
 author: co0ontty
-categories: ALL
-tags: ALL 
+categories: 渗透 ALL
+tags: 渗透 ALL 
 ---
 ## 添加路由：
 ### 获取内网网段地址：
