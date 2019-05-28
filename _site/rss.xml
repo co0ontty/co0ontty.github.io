@@ -5,8 +5,8 @@
     <description>Share my leaning。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 28 May 2019 16:44:57 +0800</pubDate>
-    <lastBuildDate>Tue, 28 May 2019 16:44:57 +0800</lastBuildDate>
+    <pubDate>Tue, 28 May 2019 18:28:44 +0800</pubDate>
+    <lastBuildDate>Tue, 28 May 2019 18:28:44 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -27,7 +27,7 @@
 
 &lt;h2 id=&quot;后渗透过程&quot;&gt;后渗透过程：&lt;/h2&gt;
 
-&lt;p&gt;·使用cs创建了exe程序，利用meterpreter上传并执行该程序，再cs中获得到响应。&lt;/p&gt;
+&lt;p&gt;·使用cs创建了exe程序，利用meterpreter上传并执行该程序，在cs中获得到响应。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2019/05/27/5ceb3196290be92366.png&quot; alt=&quot;517D5F3E86BCF60093F6F946CDDACD63.png&quot; /&gt;&lt;/p&gt;
 
@@ -67,7 +67,15 @@
     
       <item>
         <title>内网渗透总结（持续更新）</title>
-        <description>&lt;h2 id=&quot;添加路由&quot;&gt;添加路由：&lt;/h2&gt;
+        <description>&lt;h2 id=&quot;获得cs连接&quot;&gt;获得cs连接：&lt;/h2&gt;
+&lt;p&gt;通过各种技术手段获得shell以后，制作cs的连接程序。
+&lt;img src=&quot;https://i.loli.net/2019/05/28/5cecfeed4ba9298900.png&quot; alt=&quot;屏幕快照 2019-05-28 17.26.39.png&quot; /&gt;&lt;br /&gt;
+使用shell运行该程序，建立cs连接。&lt;/p&gt;
+&lt;h2 id=&quot;公网反弹meterpreter&quot;&gt;公网反弹meterpreter：&lt;/h2&gt;
+&lt;p&gt;生成cs的listener的时候，将msf的端口设置为公网服务器的某个端口，再将该端口通过frp映射到本地的msf中。
+&lt;img src=&quot;https://i.loli.net/2019/05/28/5cecfcc20e98925613.png&quot; alt=&quot;屏幕快照 2019-05-28 17.17.00.png&quot; /&gt;
+使用cs的spawn将目标的meterpreter反弹到msf中，进行下一步操作&lt;/p&gt;
+&lt;h2 id=&quot;添加路由&quot;&gt;添加路由：&lt;/h2&gt;
 &lt;h3 id=&quot;获取内网网段地址&quot;&gt;获取内网网段地址：&lt;/h3&gt;
 &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;meterpreter &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; run get_local_subnets
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
@@ -80,9 +88,18 @@
 &lt;h3 id=&quot;使用&quot;&gt;使用：&lt;/h3&gt;
 &lt;p&gt;将添加路由完成的meterpreter进程添加到backgroup，让回话在后台持续运行 &lt;br /&gt;
 使用相应的脚本对目标内网进行探测&lt;/p&gt;
-&lt;h2 id=&quot;内网主机发现&quot;&gt;内网主机发现：&lt;/h2&gt;
-&lt;h3 id=&quot;cmd&quot;&gt;cmd：&lt;/h3&gt;
-&lt;p&gt;for /l %p in (1,1,254) do @ping -l 1 -n 3 -w 40 192.168.1.%p &amp;amp; if errorlevel 1 (echo 192.168.1.%p»na.txt) else (echo 192.168.1.%p»ok.txt)&lt;/p&gt;
+&lt;h2 id=&quot;内网扫描&quot;&gt;内网扫描：&lt;/h2&gt;
+&lt;h3 id=&quot;主机发现&quot;&gt;主机发现：&lt;/h3&gt;
+&lt;p&gt;1、使用cs中的netview &lt;br /&gt;
+2、将路由切换到后台，使用use auxiliary/scanner/discovery/arp_sweep   对内网中的设备进行arpscan，发现内网存活的主机，并根据返回的信息对内网的主机进行进一步的渗透。&lt;/p&gt;
+&lt;h3 id=&quot;端口扫描&quot;&gt;端口扫描：&lt;/h3&gt;
+&lt;p&gt;1、使用cs中的portscan&lt;br /&gt;
+2、使用msf中的use auxiliary/scanner/portscan/中的模块对目标内网中主机的端口进行扫描&lt;br /&gt;
+&lt;img src=&quot;https://i.loli.net/2019/05/28/5ced0ceeb792189976.png&quot; alt=&quot;屏幕快照 2019-05-28 18.26.34.png&quot; /&gt;
+详细的使用说明可以参考：&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;https://blog.csdn.net/qq_34841823/article/details/54016723&lt;/p&gt;
+&lt;/blockquote&gt;
 </description>
         <pubDate>Fri, 24 May 2019 19:49:43 +0800</pubDate>
         <link>http://localhost:4000/2019/05/24/localhost.html</link>

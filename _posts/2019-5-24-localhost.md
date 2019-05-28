@@ -37,3 +37,6 @@ meterpreter > run autoroute -p
 ### 端口扫描：
 1、使用cs中的portscan  
 2、使用msf中的use auxiliary/scanner/portscan/中的模块对目标内网中主机的端口进行扫描  
+![屏幕快照 2019-05-28 18.26.34.png](https://i.loli.net/2019/05/28/5ced0ceeb792189976.png)
+详细的使用说明可以参考：
+>https://blog.csdn.net/qq_34841823/article/details/54016723

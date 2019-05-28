@@ -139,7 +139,15 @@ Author: Ray-Eldath
     
 
     <article class="markdown-body">
-      <h2 id="添加路由">添加路由：</h2>
+      <h2 id="获得cs连接">获得cs连接：</h2>
+<p>通过各种技术手段获得shell以后，制作cs的连接程序。
+<img src="https://i.loli.net/2019/05/28/5cecfeed4ba9298900.png" alt="屏幕快照 2019-05-28 17.26.39.png" /><br />
+使用shell运行该程序，建立cs连接。</p>
+<h2 id="公网反弹meterpreter">公网反弹meterpreter：</h2>
+<p>生成cs的listener的时候，将msf的端口设置为公网服务器的某个端口，再将该端口通过frp映射到本地的msf中。
+<img src="https://i.loli.net/2019/05/28/5cecfcc20e98925613.png" alt="屏幕快照 2019-05-28 17.17.00.png" />
+使用cs的spawn将目标的meterpreter反弹到msf中，进行下一步操作</p>
+<h2 id="添加路由">添加路由：</h2>
 <h3 id="获取内网网段地址">获取内网网段地址：</h3>
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>meterpreter <span class="o">&gt;</span> run get_local_subnets
 </code></pre></div></div>
@@ -152,9 +160,18 @@ Author: Ray-Eldath
 <h3 id="使用">使用：</h3>
 <p>将添加路由完成的meterpreter进程添加到backgroup，让回话在后台持续运行 <br />
 使用相应的脚本对目标内网进行探测</p>
-<h2 id="内网主机发现">内网主机发现：</h2>
-<h3 id="cmd">cmd：</h3>
-<p>for /l %p in (1,1,254) do @ping -l 1 -n 3 -w 40 192.168.1.%p &amp; if errorlevel 1 (echo 192.168.1.%p»na.txt) else (echo 192.168.1.%p»ok.txt)</p>
+<h2 id="内网扫描">内网扫描：</h2>
+<h3 id="主机发现">主机发现：</h3>
+<p>1、使用cs中的netview <br />
+2、将路由切换到后台，使用use auxiliary/scanner/discovery/arp_sweep   对内网中的设备进行arpscan，发现内网存活的主机，并根据返回的信息对内网的主机进行进一步的渗透。</p>
+<h3 id="端口扫描">端口扫描：</h3>
+<p>1、使用cs中的portscan<br />
+2、使用msf中的use auxiliary/scanner/portscan/中的模块对目标内网中主机的端口进行扫描<br />
+<img src="https://i.loli.net/2019/05/28/5ced0ceeb792189976.png" alt="屏幕快照 2019-05-28 18.26.34.png" />
+详细的使用说明可以参考：</p>
+<blockquote>
+  <p>https://blog.csdn.net/qq_34841823/article/details/54016723</p>
+</blockquote>
 
     </article>
 
