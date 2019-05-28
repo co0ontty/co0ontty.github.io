@@ -142,7 +142,8 @@ Author: Ray-Eldath
     
 
     <article class="markdown-body">
-      <h2 id="使用的pyhton版本及库">使用的pyhton版本及库</h2>
+      <h2 id="第一种方法">第一种方法</h2>
+<h2 id="使用的pyhton版本及库">使用的pyhton版本及库</h2>
 
 <p>本文中的python使用的是python3</p>
 
@@ -201,6 +202,35 @@ Author: Ray-Eldath
 <span class="k">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 </code></pre></div></div>
+<h2 id="第二种方法">第二种方法：</h2>
+<h2 id="使用的pyhton版本及库-1">使用的pyhton版本及库</h2>
+<p>本文中的python使用的是python2</p>
+<h2 id="全部代码-1">全部代码：</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s">"http://119.23.73.3:5001/web10/"</span>
+<span class="n">mysession</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">session</span><span class="p">()</span>
+
+<span class="n">text</span> <span class="o">=</span> <span class="n">mysession</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+<span class="n">test</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">content</span> 
+<span class="c1"># 获取网页源代码
+</span>
+<span class="n">answernum</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">"moctf"</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+<span class="c1"># 统计该网页源代码中存在多少moctf
+</span>
+<span class="n">url2</span><span class="o">=</span><span class="s">"http://119.23.73.3:5001/web10/work.php"</span>
+
+<span class="n">data2</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">"answer"</span><span class="p">:</span><span class="n">answernum</span>
+<span class="p">}</span> <span class="c1">#需要使用post传递的参数
+</span>
+<span class="k">print</span> <span class="n">mysession</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url2</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">data2</span><span class="p">)</span><span class="o">.</span><span class="n">content</span> 
+<span class="c1"># 传递参数
+</span>
+
+</code></pre></div></div>
+<p>适用题目：http://119.23.73.3:5001/web10/</p>
 
     </article>
 

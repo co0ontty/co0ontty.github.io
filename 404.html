@@ -1,6 +1,6 @@
 ---
 layout: default
-description: "你迷路了，铁铁:("
+description: "Sorry, Page Not Found :("
 ---
 
 {% include header.html %}
@@ -8,8 +8,9 @@ description: "你迷路了，铁铁:("
 <header class="g-banner np-banner {{ site.postPatterns | prepend: 'post-pattern-' }}" data-theme="{{ site.theme-color }}">
     <div class="post-wrapper">
         <h1>404</h1>
-        <span class="subheading">{{ page.description }}</span>
-        <a href="{{ site.nav.home }}" class="btn">Back to home</a>
+        <!-- <span class="subheading">{{ page.description }}</span> -->
+        <script type="text/javascript" src="//qzonestyle.gtimg.cn/qzone/hybrid/app/404/search_children.js" charset="utf-8" homePageUrl="https://co0ontty.github.io" homePageName="回到我的主页"></script>
+		<a href="{{ site.nav.home }}" class="btn">Back to home</a>
     </div>
 </header>
 

@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>结合CTF详解条件竞争漏洞 - co0ontty</title>
+    <title>知道创宇渗透测试面试总结 - co0ontty</title>
     <meta name="author"  content="co0ontty">
-    <meta name="description" content="结合CTF详解条件竞争漏洞">
-    <meta name="keywords"  content="CTF, WEB, ALL">
+    <meta name="description" content="知道创宇渗透测试面试总结">
+    <meta name="keywords"  content="WEB, ALL">
     <!-- Open Graph -->
-    <meta property="og:title" content="结合CTF详解条件竞争漏洞 - co0ontty">
+    <meta property="og:title" content="知道创宇渗透测试面试总结 - co0ontty">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://localhost:4000/2019/04/13/batterupload.html">
+    <meta property="og:url" content="http://localhost:4000/2019/05/18/knownsec.html">
     <meta property="og:description" content="Share my leaning。">
     <meta property="og:site_name" content="co0ontty">
     <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
@@ -113,14 +113,12 @@ Author: Ray-Eldath
 
 
   <header
-    class="g-banner post-header post-pattern-circuitBoard bgcolor-default "
+    class="g-banner post-header post-pattern-circuitBoard bgcolor-default post-no-cover"
     data-theme="default"
   >
     <div class="post-wrapper">
       <div class="post-tags">
         
-          
-            <a href="http://localhost:4000/tags#CTF" class="post-tag">CTF</a>
           
             <a href="http://localhost:4000/tags#WEB" class="post-tag">WEB</a>
           
@@ -128,15 +126,12 @@ Author: Ray-Eldath
           
         
       </div>
-      <h1>结合CTF详解条件竞争漏洞</h1>
+      <h1>知道创宇渗透测试面试总结</h1>
       <div class="post-meta">
         <span class="post-meta-item"><i class="iconfont icon-author"></i>co0ontty</span>
-        <time class="post-meta-item" datetime="19-04-13"><i class="iconfont icon-date"></i>13 Apr 2019</time>
+        <time class="post-meta-item" datetime="19-05-18"><i class="iconfont icon-date"></i>18 May 2019</time>
       </div>
     </div>
-    
-    <div class="filter"></div>
-      <div class="post-cover" style="background: url('https://i.loli.net/2019/04/12/5cb07b9862aee.jpg') center no-repeat; background-size: cover;"></div>
     
   </header>
 
@@ -144,63 +139,30 @@ Author: Ray-Eldath
     
 
     <article class="markdown-body">
-      <h2 id="什么是条件竞争漏洞">什么是条件竞争漏洞？</h2>
-<p>条件竞争漏洞是一种服务器端的漏洞，由于服务器端在处理不同用户的请求时是并发进行的，因此，如果并发处理不当或相关操作逻辑顺序设计的不合理时，将会导致此类问题的发生。</p>
-<h2 id="漏洞分析">漏洞分析</h2>
-<p>假设有这么一个代码，实现用户上传图片功能</p>
-<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
-  <span class="k">if</span><span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">'src'</span><span class="p">])){</span>
-    <span class="nb">copy</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">'src'</span><span class="p">],</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">'dst'</span><span class="p">]);</span>
-    <span class="c1">//...</span>
-    <span class="c1">//check file</span>
-    <span class="nb">unlink</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">'dst'</span><span class="p">]);</span>
-    <span class="c1">//...</span>
- <span class="p">}</span>
-<span class="cp">?&gt;</span>
-</code></pre></div></div>
-<p>该代码中通过</p>
-<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">copy</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">'src'</span><span class="p">],</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">'dst'</span><span class="p">])</span>
-</code></pre></div></div>
-<p>将上传的文件从源地址转换到目的地址进行储存。<br />
-然后通过中间一系列check file代码，检查文件的安全性，如果发现该文件为不安全文件则使用unlink删除该文件。
-但是如果判断时间过长，在该不安全文件被判定性质并且删除之前执行了该文件则会导致系统漏洞的形成。</p>
-<h2 id="漏洞利用思路">漏洞利用思路</h2>
-<p>攻击者上传了一个用来生成恶意shell的文件，在上传完成和安全检查完成并删除它的间隙，攻击者通过不断地发起访问请求的方法访问了该文件，该文件就会被执行，并且在服务器上生成一个恶意shell的文件。至此，该文件的任务就已全部完成，至于后面发现它是一个不安全的文件并把它删除的问题都已经不重要了，因为攻击者已经成功的在服务器中植入了一个shell文件，后续的一切就都不是问题了。</p>
-<h2 id="漏洞利用详细步骤">漏洞利用详细步骤</h2>
-<p>1.抓包并根据过滤条件修改后发送到Intruder模块开多线程不断发包,使WEB服务不断接受该文件。
-<img src="https://img-blog.csdn.net/201803102006224?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMTM3Nzk5Ng==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="屏幕快照 2019-04-12 18.26.16.png" />
-2.然后写一个python脚本不断去访问那个文件，如果在WEB服务判定并删除不安全文件之前成功的访问则会达到效果。</p>
-<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="kn">import</span> <span class="nn">requests</span>
-<span class="n">url</span> <span class="o">=</span> <span class="s">'你的文件路径'</span>
-<span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-    <span class="k">if</span> <span class="s">'moctf'</span> <span class="ow">in</span>  <span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">:</span>
-        <span class="k">print</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span>
-
-
-</code></pre></div></div>
-<h2 id="相关ctf题目">相关CTF题目</h2>
-<h3 id="moctf-web-没时间解释了">moctf web-没时间解释了</h3>
-
-<p>进入题目发现URL为index2.php,尝试访问index.php发现存在短暂跳转。抓包后发现
-<a href="https://i.loli.net/2019/04/12/5cb082e3c7046.png"><img src="https://i.loli.net/2019/04/12/5cb082e3c7046.png" alt="屏幕快照 2019-04-12 20.21.27.png" /></a>
-访问这个网页，发现为上传界面，随便输入两个值
-<a href="https://i.loli.net/2019/04/12/5cb0849537251.png"><img src="https://i.loli.net/2019/04/12/5cb0849537251.png" alt="屏幕快照 2019-04-12 20.28.44.png" /></a>
-访问这个网址后被告知太慢了，猜测可能为时间竞争类型。
-使用burp多线程并发提交</p>
-<h3 id="抓取输入界面的包">抓取输入界面的包</h3>
-<p><a href="https://i.loli.net/2019/04/12/5cb08929ce64a.png"><img src="https://i.loli.net/2019/04/12/5cb08929ce64a.png" alt="屏幕快照 2019-04-12 20.41.41.png" /></a>
-sent to Intruder 
-<a href="https://i.loli.net/2019/04/12/5cb089af69160.png"><img src="https://i.loli.net/2019/04/12/5cb089af69160.png" alt="屏幕快照 2019-04-12 20.41.41.png" /></a></p>
-<h3 id="访问too-slow-的页面并抓包">访问Too slow 的页面并抓包</h3>
-<p><a href="https://i.loli.net/2019/04/12/5cb08a119212e.png"><img src="https://i.loli.net/2019/04/12/5cb08a119212e.png" alt="屏幕快照 2019-04-12 20.41.48.png" /></a></p>
-<h3 id="配置intruder">配置Intruder</h3>
-<p><a href="https://i.loli.net/2019/04/12/5cb08a7b2801b.png"><img src="https://i.loli.net/2019/04/12/5cb08a7b2801b.png" alt="屏幕快照 2019-04-12 20.42.08.png" /></a>
-<a href="https://i.loli.net/2019/04/12/5cb08a7b2cdd8.png"><img src="https://i.loli.net/2019/04/12/5cb08a7b2cdd8.png" alt="屏幕快照 2019-04-12 20.41.55.png" /></a>
-两个配置相同<br />
-同时启动两个Attack进程，在Too slow页面发现flag  <br />
-<a href="https://i.loli.net/2019/04/12/5cb08a35088ab.png"><img src="https://i.loli.net/2019/04/12/5cb08a35088ab.png" alt="屏幕快照 2019-04-12 20.40.57.png" /></a></p>
+      <h2 id="过程">过程：</h2>
+<p>在Boss直聘上创宇的HR联系我要了份简历，学长之前在那里工作也给我内推过，所以至于是哪个方式让我的简历到了渗透岗的面试人员手里就不是很清楚了。</p>
+<h3 id="一面">一面：</h3>
+<p>正在参加某项保密工作的时候，一个创宇技术人员打电话给我，问了一些问题（下面介绍），简单的回答之后，通知我等二面电话。</p>
+<h3 id="二面">二面：</h3>
+<p>二面的时候，一个在出差的技术人员给我打电话，好像是个技术大拿，问了一些问题（下面介绍），聊得比较开心，通知我等通知。</p>
+<h2 id="一面问题">一面问题：</h2>
+<p>一、参加比赛的时候着重于哪个方向？  <br />
+      web安全  <br />
+   二、渗透网站的思路、每个步骤中可能遇到的一些技术细节<br />
+      sql注入、XSS、SSRF、CSRF<br />
+   三、会不会流量分析，分享一个遇到的比较有意思的流量分析题目<br />
+      简单的会，TCP流量中的图片分离（题目：百里挑一）</p>
+<h2 id="二面问题">二面问题：</h2>
+<p>一、渗透一个网站的思路<br />
+      渗透面试的老套路，这里就不做赘述，可以看我上一篇博客<br />
+   二、内网渗透常见的思路及常用的工具<br />
+      msf、反弹shell、设置路由<br />
+   三、分享一个渗透测试的记录</p>
+<h2 id="三面问题">三面问题：</h2>
+<p>一、有没有真实的渗透测试经历<br />
+      最近正在参加**行动<br />
+   二、什么时候可以入职<br />
+      让我一个月内入职，可是我还没放假，整挺难受，还没有回复</p>
 
     </article>
 
@@ -253,10 +215,10 @@ sent to Intruder
     <section class="post-footer-item read-next">
       
       <div class="read-next-item">
-        <a href="/2019/05/07/resttudy.html" class="read-next-link"></a>
+        <a href="/2019/05/24/localhost.html" class="read-next-link"></a>
         <section>
-          <span>WEB安全面试复习笔记</span>
-          <p>对Web安全的理解我觉得 Web 安全首先得懂 Web、第三方内容、Web 前端框架、Web 服务器语言、Web ...</p>
+          <span>内网渗透总结（持续更新）</span>
+          <p>添加路由：获取内网网段地址：meterpreter &gt; run get_local_subnets添加去往目...</p>
         </section>
         
      </div>
@@ -264,14 +226,11 @@ sent to Intruder
 
       
       <div class="read-next-item">
-        <a href="/2019/04/09/uplodelabs.html" class="read-next-link"></a>
+        <a href="/2019/05/08/Interviewsummary.html" class="read-next-link"></a>
           <section>
-            <span>Uplode-Labs通关笔记</span>
-            <p>漏洞类型分析漏洞类型判断简单shell制作shell.php&lt;?php assert($_GET["cmd"...</p>
+            <span>360企业安全观星实验室渗透测试（web）面试总结</span>
+            <p>简历：投递简历的时候详细描述了参加过的比赛及在校期间参加的一些项目情况，顺利的通过了简历的筛选。一面（技术面试）：...</p>
           </section>
-          
-          <div class="filter"></div>
-          <img src="https://i.loli.net/2019/04/08/5cab11a102167.png" alt="">
           
       </div>
       

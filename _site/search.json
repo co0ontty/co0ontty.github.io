@@ -1,6 +1,36 @@
 [
   
     {
+      "title"    : "内网渗透某酒店后台管理系统",
+      "tags"     : "渗透 ALL",
+      "url"      : "/2019/05/27/hotel.html"
+    } ,
+  
+    {
+      "title"    : "内网渗透总结（持续更新）",
+      "tags"     : "渗透 ALL",
+      "url"      : "/2019/05/24/localhost.html"
+    } ,
+  
+    {
+      "title"    : "知道创宇渗透测试面试总结",
+      "tags"     : "WEB ALL",
+      "url"      : "/2019/05/18/knownsec.html"
+    } ,
+  
+    {
+      "title"    : "360企业安全观星实验室渗透测试（web）面试总结",
+      "tags"     : "WEB ALL",
+      "url"      : "/2019/05/08/Interviewsummary.html"
+    } ,
+  
+    {
+      "title"    : "WEB安全面试复习笔记",
+      "tags"     : "WEB ALL",
+      "url"      : "/2019/05/07/resttudy.html"
+    } ,
+  
+    {
       "title"    : "结合CTF详解条件竞争漏洞",
       "tags"     : "CTF WEB ALL",
       "url"      : "/2019/04/13/batterupload.html"
@@ -22,6 +52,30 @@
       "title"    : "Xctf练习题",
       "tags"     : "CTF ALL",
       "url"      : "/2019/04/04/xctfeasy.html"
+    } ,
+  
+    {
+      "title"    : "密码学笔记",
+      "tags"     : "CTF ALL",
+      "url"      : "/2019/03/20/crypto.html"
+    } ,
+  
+    {
+      "title"    : "SQLI-LABS 闯关笔记",
+      "tags"     : "CTF WEB MYSQL ALL",
+      "url"      : "/2019/03/19/sqlilabs.html"
+    } ,
+  
+    {
+      "title"    : "SQL注入题目盲注爆破脚本",
+      "tags"     : "CTF WEB MYSQL ALL",
+      "url"      : "/2019/03/18/sqlinj.html"
+    } ,
+  
+    {
+      "title"    : "CTF WEB 常见思路",
+      "tags"     : "CTF WEB ALL",
+      "url"      : "/2019/03/14/Allweb.html"
     } ,
   
     {

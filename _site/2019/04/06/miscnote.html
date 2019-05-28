@@ -147,7 +147,7 @@ Author: Ray-Eldath
 <p>博客中题目文件下载地址：<br />
 https://home.mycloud.com/action/share/db1ed206-5f81-4d3a-b4be-865c5fe78a2c</p>
 
-<h2 id="题目一图片tiff">题目一：图片TIFF</h2>
+<h2 id="图片tiff">图片TIFF</h2>
 
 <p>题目文件：ada.jpg
 使用binwalk分析图片中的信息如下：</p>
@@ -157,7 +157,7 @@ https://home.mycloud.com/action/share/db1ed206-5f81-4d3a-b4be-865c5fe78a2c</p>
 <p>发现在图片中有zip，文件和TIFF信息。zip压缩包解压需要密码。查看一下TIFF信息，打开图片的详细信息部分，查看照片的相机信息，发现十六进制字符串，转换为字符串为 sdnisc_2018 即为压缩包密码，解压压缩包得到flag <br />
 进制转换工具推荐：co0ontty.github.io/things/cyberchef.htm</p>
 
-<h2 id="题目二png-ihdr隐写">题目二：PNG-IHDR隐写</h2>
+<h2 id="png-ihdr隐写">PNG-IHDR隐写</h2>
 
 <p>题目文件：2.png
 该图片，在windows下面可以正常打开，在LINUX下却无法打开，则判断可能是通过修改PNG的长宽高实现的隐写。<br />
@@ -167,35 +167,7 @@ IHDR后的部分，前4 bytes为PNG图像的宽度，接下来的4 bytes为PNG�
 通过windows打开图像可以发现，图片的宽度大于长度，所以将长度修改与宽度相等，得到答案<br />
 <img src="/assets/img/posts/PNG-IHDR2.png" alt="avatar" /></p>
 
-<h2 id="题目三grep-flag--r">题目三：grep “flag” -r</h2>
-
-<p>题目文件：zip
-根据题目文件名字猜测，通过增加后缀变成压缩包来解压。<br />
-解压后发现有很多文件，使用查找文件内容命令查找flag</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">grep</span> <span class="s2">"flag"</span> <span class="nt">-r</span> /Users/co0ontty/Downloads/眼见非实/
-</code></pre></div></div>
-
-<p>发现flag在/word/document.xml文件中<br />
-<img src="/assets/img/posts/grepflag.png" alt="avatar" /></p>
-
-<h2 id="题目四路由器配置文件-configbin">题目四：路由器配置文件 config.bin</h2>
-
-<p>题目文件：config.bin
-使用RouterPassView查看config.bin得到答案</p>
-
-<h2 id="题目四foremost分离图片">题目四：Foremost分离图片</h2>
-
-<p>题目文件：foremost.jpg<br />
-使用binwalk进行分析，发现图片中隐藏了另一个图片
-<img src="/assets/img/posts/foremost-1.png" alt="avatar" /> <br />
-使用foremost命令进行分离<br />
-<img src="/assets/img/posts/foremost-2.png" alt="avatar" /><br />
-<img src="/assets/img/posts/foremost-3.png" alt="avatar" /><br />
-成功分离出包含flag的图片<br />
-<img src="/assets/img/posts/foremost-4.png" alt="avatar" /></p>
-
-<h2 id="题目五百里挑一exif">题目五：百里挑一（EXIF）</h2>
+<h2 id="百里挑一exif">百里挑一（EXIF）</h2>
 
 <p>首先使用wireshark导出http文件，发现有一部分图片，使用脚本分理处图片中的flag发现只有一半。
  使用wireshark筛选ftp数据。
@@ -228,10 +200,59 @@ IHDR后的部分，前4 bytes为PNG图像的宽度，接下来的4 bytes为PNG�
     <span class="k">if</span> <span class="s">'XP Comment'</span> <span class="ow">in</span> <span class="n">exif_dict</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="n">exif_dict</span><span class="p">[</span><span class="s">'XP Comment'</span><span class="p">])</span>
 </code></pre></div></div>
+<h2 id="outguess">outguess</h2>
+<p>攻防世界misc-avatar
+outguess -r lamb.jpg -out 获得flag</p>
 
-<h2 id="题目六wireshark">题目六：wireshark</h2>
+<h2 id="图片分离拼接">图片分离拼接</h2>
+<p>xctf glance-50
+工具：imagemagick
+分离：</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg <span class="nt">-i</span> glance.gif frames/frame_%05d.png
+</code></pre></div></div>
+<p>拼接：</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>montage frames/<span class="k">*</span>.png <span class="nt">-geometry</span> +0+0 <span class="nt">-tile</span> <span class="sb">`</span><span class="nb">ls</span> <span class="nt">-l</span> frames | <span class="nb">wc</span> <span class="nt">-l</span><span class="sb">`</span>x1 flag.png 
+</code></pre></div></div>
+<h2 id="压缩包">压缩包</h2>
+
+<h2 id="foremost分离图片">Foremost分离图片</h2>
+<p>题目文件：foremost.jpg<br />
+使用binwalk进行分析，发现图片中隐藏了另一个图片
+<img src="/assets/img/posts/foremost-1.png" alt="avatar" /> <br />
+使用foremost命令进行分离<br />
+<img src="/assets/img/posts/foremost-2.png" alt="avatar" /><br />
+<img src="/assets/img/posts/foremost-3.png" alt="avatar" /><br />
+成功分离出包含flag的图片<br />
+<img src="/assets/img/posts/foremost-4.png" alt="avatar" /></p>
+
+<h2 id="grep-flag--r">grep “flag” -r</h2>
+
+<p>题目文件：zip
+根据题目文件名字猜测，通过增加后缀变成压缩包来解压。<br />
+解压后发现有很多文件，使用查找文件内容命令查找flag</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">grep</span> <span class="s2">"flag"</span> <span class="nt">-r</span> /Users/co0ontty/Downloads/眼见非实/
+</code></pre></div></div>
+
+<p>发现flag在/word/document.xml文件中<br />
+<img src="/assets/img/posts/grepflag.png" alt="avatar" /></p>
+
+<h2 id="掩码攻击">掩码攻击</h2>
+<p>适用于知道部分密码进行压缩包破解
+<a href="https://i.loli.net/2019/04/16/5cb5c6883e32e.png"><img src="https://i.loli.net/2019/04/16/5cb5c6883e32e.png" alt="屏幕快照 2019-04-16 20.11.29.png" /></a>
+红线部分为密码格式，前6位为meimei后四位随机</p>
+
+<h2 id="流量分析类">流量分析类</h2>
+
+<h2 id="wireshark">wireshark</h2>
 
 <p>需要分析登录信息，使用条件”http.request.method==POST”进行过滤得到答案</p>
+
+<h2 id="其他">其他</h2>
+<h2 id="路由器配置文件-configbin">路由器配置文件 config.bin</h2>
+
+<p>题目文件：config.bin
+使用RouterPassView查看config.bin得到答案</p>
 
     </article>
 
