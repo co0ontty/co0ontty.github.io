@@ -1,7 +1,7 @@
 ﻿# Site settings 配置站点
 title: 'co0ontty'
-description: 'Share my leaning。'
-keyword: 'co0ontty,co0ontty的博客, 信息安全, python, mysql, php, html, jsp'
+description: 'Walking to Dalao。'
+keyword: 'co0ontty,co0ontty的博客'
 url: 'https://co0ontty.github.io/' # your host
 encoding: UTF-8
 # if you don't need baseurl, you should leave this value blank.
@@ -85,7 +85,7 @@ sns:
   github: '//github.com/co0ontty'
 
 # Tags 设置标签
-recommend-tags: true # whether or not display recommend-tags on the sidebar
+recommend-tags: false # whether or not display recommend-tags on the sidebar
 recommend-condition-size: 12 # a tag will be recommended if the size of it is more than this value
 
 # Build settings

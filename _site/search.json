@@ -13,6 +13,12 @@
     } ,
   
     {
+      "title"    : "Python编写Poc学习",
+      "tags"     : "安全开发 python ALL",
+      "url"      : "/2019/05/18/pythonpoc.html"
+    } ,
+  
+    {
       "title"    : "知道创宇面试总结",
       "tags"     : "面试 ALL",
       "url"      : "/2019/05/18/knownsec.html"

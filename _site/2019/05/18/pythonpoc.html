@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>基于ivre的资产识别雷达搭建教程 - co0ontty</title>
+    <title>Python编写Poc学习 - co0ontty</title>
     <meta name="author"  content="co0ontty">
-    <meta name="description" content="基于ivre的资产识别雷达搭建教程">
-    <meta name="keywords"  content="Tools, 运维, ALL">
+    <meta name="description" content="Python编写Poc学习">
+    <meta name="keywords"  content="安全开发, python, ALL">
     <!-- Open Graph -->
-    <meta property="og:title" content="基于ivre的资产识别雷达搭建教程 - co0ontty">
+    <meta property="og:title" content="Python编写Poc学习 - co0ontty">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://localhost:4000/2018/11/26/ivre.html">
+    <meta property="og:url" content="http://localhost:4000/2019/05/18/pythonpoc.html">
     <meta property="og:description" content="Walking to Dalao。">
     <meta property="og:site_name" content="co0ontty">
     <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
@@ -113,30 +113,27 @@ Author: Ray-Eldath
 
 
   <header
-    class="g-banner post-header post-pattern-circuitBoard bgcolor-default "
+    class="g-banner post-header post-pattern-circuitBoard bgcolor-default post-no-cover"
     data-theme="default"
   >
     <div class="post-wrapper">
       <div class="post-tags">
         
           
-            <a href="http://localhost:4000/tags#Tools" class="post-tag">Tools</a>
+            <a href="http://localhost:4000/tags#%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91" class="post-tag">安全开发</a>
           
-            <a href="http://localhost:4000/tags#%E8%BF%90%E7%BB%B4" class="post-tag">运维</a>
+            <a href="http://localhost:4000/tags#python" class="post-tag">python</a>
           
             <a href="http://localhost:4000/tags#ALL" class="post-tag">ALL</a>
           
         
       </div>
-      <h1>基于ivre的资产识别雷达搭建教程</h1>
+      <h1>Python编写Poc学习</h1>
       <div class="post-meta">
         <span class="post-meta-item"><i class="iconfont icon-author"></i>co0ontty</span>
-        <time class="post-meta-item" datetime="18-11-26"><i class="iconfont icon-date"></i>26 Nov 2018</time>
+        <time class="post-meta-item" datetime="19-05-18"><i class="iconfont icon-date"></i>18 May 2019</time>
       </div>
     </div>
-    
-    <div class="filter"></div>
-      <div class="post-cover" style="background: url('/assets/img/posts/ivre-st.png') center no-repeat; background-size: cover;"></div>
     
   </header>
 
@@ -144,44 +141,33 @@ Author: Ray-Eldath
     
 
     <article class="markdown-body">
-      <h2 id="环境">环境：</h2>
-<p>基于docker的vagrant</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$co0ontty</span> <span class="nb">mkdir </span>ivre  
-<span class="nv">$co0ontty</span> <span class="nb">cd </span>ivre  
-<span class="nv">$co0ontty</span> <span class="nb">mkdir</span> <span class="nt">-m</span> 1777 var_<span class="o">{</span>lib,log<span class="o">}</span>_<span class="o">{</span>mongodb,neo4j<span class="o">}</span> ivre-share  
-<span class="nv">$co0ontty</span> wget <span class="nt">-q</span> https://ivre.rocks/Vagrantfile    
-<span class="nv">$co0ontty</span> vagrant up <span class="nt">--no-parallel</span>  
+      <h2 id="介绍">介绍：</h2>
+<p>本篇学习笔记将记录使用python编写poc的学习路线</p>
+<h2 id="sys库">sys库</h2>
+<h3 id="sysargv">sys.argv[]</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">sys</span>
 </code></pre></div></div>
-<p>搭建完成，在docker里会生成ivredb/ivreweb/ivreclient三个容器。</p>
-<h2 id="主动扫描">主动扫描：</h2>
-<h3 id="环境搭建">环境搭建：</h3>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$co0ontty</span> docker attach ivreclient //进入docker的shell  
-root@e809cb41cb9a:ivre scancli <span class="nt">--init</span> //初始化数据库  
-root@e809cb41cb9a:ivre ipinfo <span class="nt">--init</span>  //初始化数据库  
-root@e809cb41cb9a:ivre ipdata <span class="nt">--init</span>  //初始化数据库  
-root@e809cb41cb9a:ivre runscansagentdb <span class="nt">--init</span>  //初始化数据库  
-root@e809cb41cb9a:ivre ipdata <span class="nt">--download</span>  下载ip地址数据包  
-root@e809cb41cb9a:ivre ipdata <span class="nt">--import-all</span> <span class="nt">--no-update-passive-db</span>  导入ip数据包  
+<p>使用sys.argv[]可以在命令行运行python的时候传递参数。
+<img src="https://i.loli.net/2019/06/02/5cf3d0946417d50084.png" alt="屏幕快照 2019-06-02 21.35.06.png" /></p>
+<h2 id="socket库">socket库</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">socket</span>
 </code></pre></div></div>
-<h3 id="开始扫描">开始扫描：</h3>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@e809cb41cb9a: <span class="nb">cd</span> /ivre-share  
-root@e809cb41cb9a: ivre runscans <span class="nt">--routable</span> <span class="nt">--limit</span> 1000 <span class="nt">--country</span> CN <span class="nt">--output</span><span class="o">=</span>XMLFork  //随机扫描1000个地址  
-root@e809cb41cb9a: nmap2db <span class="nt">-c</span> ROUTABLE-CAMPAIGN-001 <span class="nt">-s</span> MySource <span class="nt">-r</span> scans/ROUTABLE/up  //将扫描结果导入数据库  
-</code></pre></div></div>
-<p>可能在扫描一千个随机地址的时候会出现ip格式不对的错误，这个时候可能是ivre和ip地址提供商之间的协调问题，我们就只好自己手动指定ip地址段来进行扫描：</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@e809cb41cb9a: ivre runscans <span class="nt">--network</span> 45.32.14.0/24 <span class="nt">--output</span><span class="o">=</span>XMLFork  //随机扫描45.32.14.0 网段的ip 导出的格式是XMLFork  
-root@e809cb41cb9a: ivre scan2db <span class="nt">-c</span> ROUTABLE,ROUTABLE-001 <span class="nt">-s</span> MySource <span class="nt">-r</span> ../  //不要问我为什么这么导出，我也不知道，误打误撞发现只有这样可以  
-</code></pre></div></div>
-<p>至此，你就可以访问ivreweb（http://ip/）来访问扫描器的主页<br />
-扫描完成后记得删除扫描产生的缓存文件</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@e809cb41cb9a: <span class="nb">rm</span> <span class="nt">-fr</span> /ivre-share/scans/COUNTRY-CN/ current/
-</code></pre></div></div>
-<h2 id="被动扫描">被动扫描：</h2>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@e809cb41cb9a: <span class="nb">cd</span> /ivre-share  
-root@e809cb41cb9a: bro <span class="nt">-r</span> 4SICS-GeekLounge-151021.pcap //使用Bro对数据包进行处理，完成后再当前文件夹生成.log文件  
-root@e809cb41cb9a: ivre bro2db <span class="k">*</span>.log //将.log文件导入数据库  
-root@e809cb41cb9a: ivre flowcli <span class="nt">--count</span> //查看导入数据的统计信息   
-打开浏览器，输入http://ip/flow.html 查看网络流量动画   
+<h3 id="端口扫描">端口扫描：</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">socket</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="c1"># import socket
+</span><span class="n">ip</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">open_ports</span><span class="o">=</span><span class="p">[]</span>
+<span class="k">for</span> <span class="n">port</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">4010</span><span class="p">):</span>
+	<span class="n">sock</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">SOCK_STREAM</span><span class="p">)</span>
+	<span class="c1"># sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+</span>	<span class="n">sock</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+	<span class="k">print</span> <span class="s">"[+]Trying to test "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span><span class="o">+</span><span class="s">":"</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">port</span><span class="p">)</span>
+	<span class="n">result</span> <span class="o">=</span> <span class="n">sock</span><span class="o">.</span><span class="n">connect_ex</span><span class="p">((</span><span class="n">ip</span><span class="p">,</span><span class="n">port</span><span class="p">))</span>
+	<span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+		<span class="n">open_ports</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">port</span><span class="p">)</span>
+	<span class="k">pass</span>
+<span class="k">print</span> <span class="n">open_ports</span>
 </code></pre></div></div>
 
     </article>
@@ -235,28 +221,22 @@ root@e809cb41cb9a: ivre flowcli <span class="nt">--count</span> //查看导入�
     <section class="post-footer-item read-next">
       
       <div class="read-next-item">
-        <a href="/2018/11/26/php_uplode.html" class="read-next-link"></a>
+        <a href="/2019/05/24/localhost.html" class="read-next-link"></a>
         <section>
-          <span>php文件上传</span>
-          <p>使用input标签上传&lt;form action="read_sql.php" method="post" e...</p>
+          <span>内网渗透总结（持续更新）</span>
+          <p>获得cs连接：通过各种技术手段获得shell以后，制作cs的连接程序。使用shell运行该程序，建立cs连接。公网...</p>
         </section>
-        
-        <div class="filter"></div>
-        <img src="/assets/img/posts/phpuplode1234.png" alt="">
         
      </div>
       
 
       
       <div class="read-next-item">
-        <a href="/2018/11/25/blog.html" class="read-next-link"></a>
+        <a href="/2019/05/18/knownsec.html" class="read-next-link"></a>
           <section>
-            <span>博客搭建教程</span>
-            <p>环境：</p>
+            <span>知道创宇面试总结</span>
+            <p>渗透测试岗：过程：在Boss直聘上创宇的HR联系我要了份简历，学长之前在那里工作也给我内推过，所以至于是哪个方式让...</p>
           </section>
-          
-          <div class="filter"></div>
-          <img src="/assets/img/posts/blog-6.png" alt="">
           
       </div>
       
