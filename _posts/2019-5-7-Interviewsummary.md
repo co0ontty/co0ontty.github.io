@@ -3,8 +3,8 @@ layout: post
 title: "360企业安全观星实验室渗透测试（web）面试总结"
 date: 2019-5-7 20:49:43
 author: co0ontty
-categories: WEB ALL
-tags: WEB ALL 
+categories: 面试 WEB ALL
+tags: 面试 WEB ALL 
 ---
 ## 简历：
 投递简历的时候详细描述了参加过的比赛及在校期间参加的一些项目情况，顺利的通过了简历的筛选。
