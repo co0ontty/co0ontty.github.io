@@ -113,3 +113,71 @@ print '本次端口扫描共用时 ', datetime.now() - t1
 ```
 演示：
 ![portscan.gif](https://i.loli.net/2019/06/03/5cf4c2ba33b1e88447.gif)
+## optparse库 python 命令解析模块
+```python
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+import optparse
+import socket
+import sys
+from datetime import datetime
+from multiprocessing.dummy import Pool as ThreadPool
+
+print "------------------------------------------------------------------------------------------"
+print "|             ___              _   _                            _                        |"
+print "|   ___ ___  / _ \  ___  _ __ | |_| |_ _   _   _ __   ___  _ __| |_ ___  ___ __ _ _ __   |"
+print "|  / __/ _ \| | | |/ _ \| '_ \| __| __| | | | | '_ \ / _ \| '__| __/ __|/ __/ _` | '_ \  |"
+print "| | (_| (_) | |_| | (_) | | | | |_| |_| |_| | | |_) | (_) | |  | |_\__ \ (_| (_| | | | | |"
+print "|  \___\___/ \___/ \___/|_| |_|\__|\__|\__, | | .__/ \___/|_|   \__|___/\___\__,_|_| |_| |"
+print "|                                      |___/  |_|                                        |"
+print "------------------------------------------------------------------------------------------"
+
+parse=optparse.OptionParser(usage='python portscan.py -H 127.0.0.1 -P 60,90 -T 32',version="co0ontty portscan version:1.0")
+parse.add_option('-H','--Host',dest='host',action='store',type=str,metavar='host',help='Enter Host!!')
+parse.add_option('-P','--Port',dest='port',type=str,metavar='port',default='1,10000',help='Enter Port!!')
+parse.add_option('-T','--Thread',dest='thread',type=int,metavar='thread')
+parse.set_defaults(thread=32)  
+options,args=parse.parse_args()
+
+# optparse.OptionParser usage=''介绍使用方式
+# dest='host',传递参数到名为host的变量
+# type='str',传递参数的类型
+# metavar='host', help中参数后的名称
+# help=''，help中的语句
+# parse.set_defaults(thread=32)  设置参数默认值的另一种方式
+# 当你将所有的命令行参数都定义好了的时候，我们需要调用parse_args()方法add_option()函数依次传入的参数： options,args=parse.parse_args()
+
+portList = options.port.split(",")
+startPort = portList[0]
+endPort = portList[1]
+remote_server_ip = socket.gethostbyname(options.host)
+ports = []
+openPort = []
+
+print '正在对目标： '+remote_server_ip + '  进行'+str(options.thread)+'线程扫描扫描'
+socket.setdefaulttimeout(0.5)
+
+def scan_port(port):
+    try:
+        s = socket.socket(2,1)
+        res = s.connect_ex((remote_server_ip,port))
+        if res == 0: 
+            openPort.append(port)
+        s.close()
+    except Exception,e:
+        print str(e.message)
+ 
+for i in range(int(startPort),int(endPort)+1):
+    ports.append(i)
+ 
+# 扫描开始
+t1 = datetime.now()
+# 创建线程
+pool = ThreadPool(processes = int(options.thread))
+results = pool.map(scan_port,ports)
+pool.close()
+pool.join()
+
+print openPort
+print '本次端口扫描共用时 ', datetime.now() - t1
+``` 
