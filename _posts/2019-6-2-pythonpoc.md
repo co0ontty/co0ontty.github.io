@@ -63,3 +63,52 @@ def main():
 if __name__ == '__main__':
 	main()
 ```
+## Threadpool 多线程
+### 多线程端口扫描：
+```python
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+import socket
+import sys
+from datetime import datetime
+from multiprocessing.dummy import Pool as ThreadPool
+ 
+remote_server = sys.argv[1]
+targetport = sys.argv[2].split("-")
+startPort = targetport[0]
+endPort = targetport[1]
+remote_server_ip = socket.gethostbyname(remote_server)
+ports = []
+ 
+print '-' * 60
+print '正在对目标： ', remote_server_ip + '进行扫描'
+print '-' * 60
+ 
+ 
+socket.setdefaulttimeout(0.5)
+ 
+def scan_port(port):
+    try:
+        s = socket.socket(2,1)
+        res = s.connect_ex((remote_server_ip,port))
+        if res == 0: # 如果端口开启 发送 hello 获取banner
+            print 'Port {}: OPEN'.format(port)
+        s.close()
+    except Exception,e:
+        print str(e.message)
+ 
+for i in range(int(startPort),int(endPort)+1):
+    ports.append(i)
+ 
+# Check what time the scan started
+t1 = datetime.now()
+ 
+# 创建线程
+pool = ThreadPool(processes = 32)
+results = pool.map(scan_port,ports)
+pool.close()
+pool.join()
+ 
+print '本次端口扫描共用时 ', datetime.now() - t1
+```
+![portscan.gif](https://i.loli.net/2019/06/03/5cf4c2ba33b1e88447.gif)
