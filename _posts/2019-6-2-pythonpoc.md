@@ -1,13 +1,13 @@
 ---
 layout: post
-title: "Python编写Poc学习"
+title: "Python编写扫描器"
 date: 2019-6-2 20:49:43
 author: co0ontty
 categories: 安全开发 python ALL
 tags: 安全开发 python ALL 
 ---
 ## 介绍：
-本篇学习笔记将记录使用python编写poc的学习路线
+本篇学习笔记将记录使用python编写scan的学习路线
 ## sys库
 ### sys.argv[]
 ```python
