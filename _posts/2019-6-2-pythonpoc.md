@@ -5,6 +5,7 @@ date: 2019-6-2 20:49:43
 author: co0ontty
 categories: 安全开发 python ALL
 tags: 安全开发 python ALL 
+cover: 'https://i.loli.net/2019/06/03/5cf52433822b260662.png'
 ---
 ## 介绍：
 本篇学习笔记将记录使用python编写scan的学习路线，记录整个python扫描器的编写过程，记录从第一行代码到最新版本，对每个版本更新用到的技术进行详解
