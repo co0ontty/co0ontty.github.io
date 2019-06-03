@@ -111,4 +111,5 @@ pool.join()
  
 print '本次端口扫描共用时 ', datetime.now() - t1
 ```
+演示：
 ![portscan.gif](https://i.loli.net/2019/06/03/5cf4c2ba33b1e88447.gif)

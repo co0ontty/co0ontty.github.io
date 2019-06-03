@@ -146,29 +146,103 @@ Author: Ray-Eldath
 <h2 id="sys库">sys库</h2>
 <h3 id="sysargv">sys.argv[]</h3>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">sys</span>
+<span class="c1"># 实时显示百分比
+</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">"</span><span class="si">%.2</span><span class="s">f"</span><span class="o">%</span><span class="n">percent</span><span class="p">)</span> 
+<span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">"</span><span class="si">%</span><span class="se">\r</span><span class="s">"</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 </code></pre></div></div>
+<h3 id="sysstdout">sys.stdout</h3>
 <p>使用sys.argv[]可以在命令行运行python的时候传递参数。
 <img src="https://i.loli.net/2019/06/02/5cf3d0946417d50084.png" alt="屏幕快照 2019-06-02 21.35.06.png" /></p>
 <h2 id="socket库">socket库</h2>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">socket</span>
 </code></pre></div></div>
 <h3 id="端口扫描">端口扫描：</h3>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">sys</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+</span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">socket</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="c1"># import socket
-</span><span class="n">ip</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">open_ports</span><span class="o">=</span><span class="p">[]</span>
-<span class="k">for</span> <span class="n">port</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">4010</span><span class="p">):</span>
-	<span class="n">sock</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">SOCK_STREAM</span><span class="p">)</span>
-	<span class="c1"># sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-</span>	<span class="n">sock</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-	<span class="k">print</span> <span class="s">"[+]Trying to test "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span><span class="o">+</span><span class="s">":"</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">port</span><span class="p">)</span>
-	<span class="n">result</span> <span class="o">=</span> <span class="n">sock</span><span class="o">.</span><span class="n">connect_ex</span><span class="p">((</span><span class="n">ip</span><span class="p">,</span><span class="n">port</span><span class="p">))</span>
-	<span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-		<span class="n">open_ports</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">port</span><span class="p">)</span>
+</span>
+<span class="c1"># 端口扫描模块
+</span><span class="k">def</span> <span class="nf">portScan</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span><span class="n">portStart</span><span class="p">,</span><span class="n">portEnd</span><span class="p">):</span>
+	<span class="n">open_ports</span><span class="o">=</span><span class="p">[]</span>
+	<span class="k">for</span> <span class="n">port</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">portStart</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">portEnd</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+		<span class="c1"># 显示扫描百分比
+</span>		<span class="n">percent</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">port</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">portEnd</span><span class="p">))</span>
+		<span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">"</span><span class="si">%.2</span><span class="s">f"</span><span class="o">%</span><span class="n">percent</span><span class="p">)</span>
+		<span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">"</span><span class="si">%</span><span class="se">\r</span><span class="s">"</span><span class="p">)</span>
+		<span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+		<span class="c1"># 发送数据，尝试建立连接
+</span>		<span class="n">sock</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">SOCK_STREAM</span><span class="p">)</span>
+		<span class="c1"># sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+</span>		<span class="n">sock</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+		<span class="n">result</span> <span class="o">=</span> <span class="n">sock</span><span class="o">.</span><span class="n">connect_ex</span><span class="p">((</span><span class="n">ip</span><span class="p">,</span><span class="n">port</span><span class="p">))</span>
+		<span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="n">open_ports</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">port</span><span class="p">)</span>
+		<span class="k">pass</span>
+	<span class="k">print</span> <span class="n">open_ports</span>
 	<span class="k">pass</span>
-<span class="k">print</span> <span class="n">open_ports</span>
+
+<span class="c1"># 获取ip和端口扫描范围
+</span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+	<span class="n">ip</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+	<span class="n">port</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">"-"</span><span class="p">)</span>
+	<span class="n">portStart</span> <span class="o">=</span> <span class="n">port</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+	<span class="n">portEnd</span> <span class="o">=</span> <span class="n">port</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+	<span class="n">portScan</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span><span class="n">portStart</span><span class="p">,</span><span class="n">portEnd</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+	<span class="n">main</span><span class="p">()</span>
 </code></pre></div></div>
+<h2 id="threadpool-多线程">Threadpool 多线程</h2>
+<h3 id="多线程端口扫描">多线程端口扫描：</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+</span><span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">multiprocessing.dummy</span> <span class="kn">import</span> <span class="n">Pool</span> <span class="k">as</span> <span class="n">ThreadPool</span>
+ 
+<span class="n">remote_server</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">targetport</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">"-"</span><span class="p">)</span>
+<span class="n">startPort</span> <span class="o">=</span> <span class="n">targetport</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">endPort</span> <span class="o">=</span> <span class="n">targetport</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">remote_server_ip</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostbyname</span><span class="p">(</span><span class="n">remote_server</span><span class="p">)</span>
+<span class="n">ports</span> <span class="o">=</span> <span class="p">[]</span>
+ 
+<span class="k">print</span> <span class="s">'-'</span> <span class="o">*</span> <span class="mi">60</span>
+<span class="k">print</span> <span class="s">'正在对目标： '</span><span class="p">,</span> <span class="n">remote_server_ip</span> <span class="o">+</span> <span class="s">'进行扫描'</span>
+<span class="k">print</span> <span class="s">'-'</span> <span class="o">*</span> <span class="mi">60</span>
+ 
+ 
+<span class="n">socket</span><span class="o">.</span><span class="n">setdefaulttimeout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+ 
+<span class="k">def</span> <span class="nf">scan_port</span><span class="p">(</span><span class="n">port</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">connect_ex</span><span class="p">((</span><span class="n">remote_server_ip</span><span class="p">,</span><span class="n">port</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">res</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># 如果端口开启 发送 hello 获取banner
+</span>            <span class="k">print</span> <span class="s">'Port {}: OPEN'</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">port</span><span class="p">)</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">,</span><span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+ 
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">startPort</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">endPort</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">ports</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+ 
+<span class="c1"># Check what time the scan started
+</span><span class="n">t1</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+ 
+<span class="c1"># 创建线程
+</span><span class="n">pool</span> <span class="o">=</span> <span class="n">ThreadPool</span><span class="p">(</span><span class="n">processes</span> <span class="o">=</span> <span class="mi">32</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="n">scan_port</span><span class="p">,</span><span class="n">ports</span><span class="p">)</span>
+<span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+ 
+<span class="k">print</span> <span class="s">'本次端口扫描共用时 '</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">t1</span>
+</code></pre></div></div>
+<p><img src="https://i.loli.net/2019/06/03/5cf4c2ba33b1e88447.gif" alt="portscan.gif" /></p>
 
     </article>
 
