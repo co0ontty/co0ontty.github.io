@@ -144,7 +144,7 @@ remote_server_ip = socket.gethostbyname(options.host)
 ports = []
 openPort = []
 
-print '正在对目标： '+remote_server_ip + '  进行'+str(options.thread)+'线程扫描扫描'
+print '正在对目标： '+remote_server_ip + '  进行  '+str(options.thread)+'  线程扫描'
 socket.setdefaulttimeout(0.5)
 
 def scan_port(port):
