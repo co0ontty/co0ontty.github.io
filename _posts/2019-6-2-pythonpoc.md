@@ -7,24 +7,10 @@ categories: 安全开发 python ALL
 tags: 安全开发 python ALL 
 ---
 ## 介绍：
-本篇学习笔记将记录使用python编写scan的学习路线
-## sys库
-### sys.argv[]
-```python
-import sys
-# 实时显示百分比
-sys.stdout.write("%.2f"%percent) 
-sys.stdout.write("%\r")
-sys.stdout.flush()
-```
-### sys.stdout
-使用sys.argv[]可以在命令行运行python的时候传递参数。
-![屏幕快照 2019-06-02 21.35.06.png](https://i.loli.net/2019/06/02/5cf3d0946417d50084.png)
-## socket库
-```python
-import socket
-```
-### 端口扫描：
+本篇学习笔记将记录使用python编写scan的学习路线，记录整个python扫描器的编写过程，记录从第一行代码到最新版本，对每个版本更新用到的技术进行详解
+## Version 1.0（socket库）
+### 使用socket库进行端口扫描：
+调用socket中的库对目标进行扫描，并统计目标端口的开放情况
 ```python
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
@@ -63,8 +49,9 @@ def main():
 if __name__ == '__main__':
 	main()
 ```
-## Threadpool 多线程
-### 多线程端口扫描：
+## Version 1.1（Threadpool 多线程）
+### 使用Threadpool进行多线程端口扫描：
+调用python中的Threadpool模块，设置多线程多目标的端口进行扫描，增加扫描的效率
 ```python
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
@@ -104,8 +91,8 @@ for i in range(int(startPort),int(endPort)+1):
 t1 = datetime.now()
  
 # 创建线程
-pool = ThreadPool(processes = 32)
-results = pool.map(scan_port,ports)
+pool = ThreadPool(processes = 32) # 设置线程数
+results = pool.map(scan_port,ports) # 设置需要使用多线程的函数名称，传递参数的集合，该函数会将传递参数的集合分条传递到函数中使用
 pool.close()
 pool.join()
  
@@ -113,7 +100,9 @@ print '本次端口扫描共用时 ', datetime.now() - t1
 ```
 演示：
 ![portscan.gif](https://i.loli.net/2019/06/03/5cf4c2ba33b1e88447.gif)
-## optparse库 python 命令解析模块
+## Version 1.2 (optparse库)
+### 使用optparse对python使用过程的命令进行解析
+调用python的optparse库，实现在运行该脚本的过程中使用“--host”等方式指定参数名称
 ```python
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
@@ -132,7 +121,7 @@ print "|  \___\___/ \___/ \___/|_| |_|\__|\__|\__, | | .__/ \___/|_|   \__|___/\
 print "|                                      |___/  |_|                                        |"
 print "------------------------------------------------------------------------------------------"
 
-parse=optparse.OptionParser(usage='python portscan.py -H 127.0.0.1 -P 60,90 -T 32',version="co0ontty portscan version:1.0")
+parse=optparse.OptionParser(usage='python portscan.py -H 127.0.0.1 -P 60,90 -T 32',version="co0ontty portscan version:1.2")
 parse.add_option('-H','--Host',dest='host',action='store',type=str,metavar='host',help='Enter Host!!')
 parse.add_option('-P','--Port',dest='port',type=str,metavar='port',default='1,10000',help='Enter Port!!')
 parse.add_option('-T','--Thread',dest='thread',type=int,metavar='thread')
@@ -151,6 +140,7 @@ portList = options.port.split(",")
 startPort = portList[0]
 endPort = portList[1]
 remote_server_ip = socket.gethostbyname(options.host)
+# remote_server_info = socket.gethostbyname_ex(host)
 ports = []
 openPort = []
 
@@ -181,3 +171,6 @@ pool.join()
 print openPort
 print '本次端口扫描共用时 ', datetime.now() - t1
 ``` 
+## Version 1.3 （gethostbyname_ex）
+### 使用gethostbyname_ex函数获取目标的域名、ip等信息
+期望实现的效果，通过gethostbyname_ex函数，对输入的目标host信息进行进一步的分析，实现对目标ip、域名、子域名、旁站等信息的收集
