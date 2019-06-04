@@ -11,6 +11,7 @@ cover: 'https://i.loli.net/2019/06/03/5cf52433822b260662.png'
 本篇学习笔记将记录使用python编写scan的学习路线，记录整个python扫描器的编写过程，记录从第一行代码到最新版本，对每个版本更新用到的技术进行详解
 ## Version 1.0（socket库）
 ### 使用socket库进行端口扫描：
+更新日志：  
 调用socket中的库对目标进行扫描，并统计目标端口的开放情况
 ```python
 #!/usr/bin/python
@@ -52,6 +53,7 @@ if __name__ == '__main__':
 ```
 ## Version 1.1（Threadpool 多线程）
 ### 使用Threadpool进行多线程端口扫描：
+更新日志：  
 调用python中的Threadpool模块，设置多线程多目标的端口进行扫描，增加扫描的效率
 ```python
 #!/usr/bin/python
@@ -103,6 +105,7 @@ print '本次端口扫描共用时 ', datetime.now() - t1
 ![portscan.gif](https://i.loli.net/2019/06/03/5cf4c2ba33b1e88447.gif)
 ## Version 1.2 (optparse库)
 ### 使用optparse对python使用过程的命令进行解析
+更新日志：   
 调用python的optparse库，实现在运行该脚本的过程中使用“--host”等方式指定参数名称
 ```python
 #!/usr/bin/python
@@ -174,4 +177,108 @@ print '本次端口扫描共用时 ', datetime.now() - t1
 ``` 
 ## Version 1.3 （gethostbyname_ex）
 ### 使用gethostbyname_ex函数获取目标的域名、ip等信息
-期望实现的效果，通过gethostbyname_ex函数，对输入的目标host信息进行进一步的分析，实现对目标ip、域名、子域名、旁站等信息的收集
+更新日志：  
+1、使用gethostbyname_ex 函数实现对输入的域名进行解析  
+2、使用-D 参数传递域名，扫描器将对域名相关的ip进行端口扫描   
+3、对代码进行了模块化操作  
+```python
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+import socket,sys,optparse
+from datetime import datetime
+from multiprocessing.dummy import Pool as ThreadPool
+
+print "------------------------------------------------------------------------------------------"
+print "|             ___              _   _                            _                        |"
+print "|   ___ ___  / _ \  ___  _ __ | |_| |_ _   _   _ __   ___  _ __| |_ ___  ___ __ _ _ __   |"
+print "|  / __/ _ \| | | |/ _ \| '_ \| __| __| | | | | '_ \ / _ \| '__| __/ __|/ __/ _` | '_ \  |"
+print "| | (_| (_) | |_| | (_) | | | | |_| |_| |_| | | |_) | (_) | |  | |_\__ \ (_| (_| | | | | |"
+print "|  \___\___/ \___/ \___/|_| |_|\__|\__|\__, | | .__/ \___/|_|   \__|___/\___\__,_|_| |_| |"
+print "|                                      |___/  |_|                                        |"
+print "------------------------------------------------------------------------------------------"
+
+def Ip_scan_port(port):
+	socket.setdefaulttimeout(0.5)
+	remote_server_ip = socket.gethostbyname(Ip_target)
+	try:
+		s = socket.socket(2,1)
+		res = s.connect_ex((remote_server_ip,port))
+		if res == 0: 
+			openPort.append(port)
+		s.close()
+	except Exception,e:
+		print str(e.message)
+def Domain_scan_port(port):
+	socket.setdefaulttimeout(0.5)
+	for remote_server_ip in Ip_from_domain:
+		try:
+			s = socket.socket(2,1)
+			res = s.connect_ex((remote_server_ip,port))
+
+			if res == 0:
+				# Domain_res = str(remote_server_ip)+":"+str(port)
+				Domain_result.append(str(remote_server_ip)+":"+str(port))
+			s.close()
+			pass
+		except Exception as e:
+			print str(e.message)		
+
+def moreInfo(domainName):
+	domainNames = socket.gethostbyname_ex(domainName)
+	global Ip_from_domain
+	Ip_from_domain = []
+	for x in domainNames:
+		if type(x) == list:
+			for i in x:
+				Ip_from_domain.append(socket.gethostbyname(i))
+		else:
+			Ip_from_domain.append(socket.gethostbyname(x))
+	Ip_from_domain = list(set(Ip_from_domain))
+	start_domain_pool()
+
+def start_IP_Pool():
+	pool = ThreadPool(processes = int(thread))
+	results = pool.map(Ip_scan_port,ports)
+	pool.close()
+	pool.join()
+	print openPort
+
+def start_domain_pool():
+	pool = ThreadPool(processes = int(thread))
+	results = pool.map(Domain_scan_port,ports)
+	pool.close()
+	pool.join()
+	print Domain_result
+
+def main():
+	parse=optparse.OptionParser(usage='python portscan.py -H 127.0.0.1 -P 60,90 -T 32',version="co0ontty portscan version:1.0")
+	parse.add_option('-H','--Host',dest='host',action='store',type=str,metavar='host',default="0",help='Enter Host!!')
+	parse.add_option('-P','--Port',dest='port',type=str,metavar='port',default='1,10000',help='Enter Port!!')
+	parse.add_option('-T','--Thread',dest='thread',type=int,metavar='thread')
+	parse.add_option('-D','--Domain',dest='domainName',type=str,metavar='domainName',default="0")
+	parse.set_defaults(thread=32)  
+	options,args=parse.parse_args()
+
+	global remote_server_ip,openPort,domainName,Ip_target,thread,openPort,ports,Domain_result
+	Ip_target = options.host
+	domainName = options.domainName
+	portList = options.port.split(",")
+	thread = options.thread
+	startPort = portList[0]
+	endPort = portList[1]
+	ports = []
+	openPort = []
+	Domain_result = []
+	for i in range(int(startPort),int(endPort)+1):
+	    ports.append(i)
+
+	if domainName == "0":
+		print "[+]port scan :"+Ip_target
+		start_IP_Pool()
+	else:
+		moreInfo(domainName)
+		pass
+if __name__ == '__main__':
+	main()
+```
+![屏幕快照 2019-06-04 10.54.03.png](https://i.loli.net/2019/06/04/5cf5dd613aa6446867.png)
