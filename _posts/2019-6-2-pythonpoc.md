@@ -195,6 +195,7 @@ print "|  / __/ _ \| | | |/ _ \| '_ \| __| __| | | | | '_ \ / _ \| '__| __/ __|/
 print "| | (_| (_) | |_| | (_) | | | | |_| |_| |_| | | |_) | (_) | |  | |_\__ \ (_| (_| | | | | |"
 print "|  \___\___/ \___/ \___/|_| |_|\__|\__|\__, | | .__/ \___/|_|   \__|___/\___\__,_|_| |_| |"
 print "|                                      |___/  |_|                                        |"
+print "|                             Blog: https://co0ontty.github.io                           |"
 print "------------------------------------------------------------------------------------------"
 
 def Ip_scan_port(port):
@@ -224,16 +225,18 @@ def Domain_scan_port(port):
 			print str(e.message)		
 
 def moreInfo(domainName):
-	domainNames = socket.gethostbyname_ex(domainName)
 	global Ip_from_domain
 	Ip_from_domain = []
+	domainNames = socket.gethostbyname_ex(domainName)
+	print "[+]Start domain Scan"
 	for x in domainNames:
 		if type(x) == list:
 			for i in x:
+				print "Find : "+str(i)+"\n"+" IP :"+str(socket.gethostbyname(i))
 				Ip_from_domain.append(socket.gethostbyname(i))
 		else:
 			Ip_from_domain.append(socket.gethostbyname(x))
-	Ip_from_domain = list(set(Ip_from_domain))
+	Ip_from_domain = list(set(Ip_from_domain)) #去重
 	start_domain_pool()
 
 def start_IP_Pool():
@@ -244,22 +247,25 @@ def start_IP_Pool():
 	print openPort
 
 def start_domain_pool():
+	print "[+] Start portscan on those IP from "+str(startPort)+" to "+str(endPort)
 	pool = ThreadPool(processes = int(thread))
 	results = pool.map(Domain_scan_port,ports)
 	pool.close()
 	pool.join()
-	print Domain_result
+	for x in Domain_result:
+		print "Find open port :"+str(x)
+		pass
 
 def main():
-	parse=optparse.OptionParser(usage='python portscan.py -H 127.0.0.1 -P 60,90 -T 32',version="co0ontty portscan version:1.0")
-	parse.add_option('-H','--Host',dest='host',action='store',type=str,metavar='host',default="0",help='Enter Host!!')
-	parse.add_option('-P','--Port',dest='port',type=str,metavar='port',default='1,10000',help='Enter Port!!')
-	parse.add_option('-T','--Thread',dest='thread',type=int,metavar='thread')
-	parse.add_option('-D','--Domain',dest='domainName',type=str,metavar='domainName',default="0")
+	parse=optparse.OptionParser(usage='python portscan.py -H 127.0.0.1 -P 60,90 -T 32 or python portscan.py -D www.baidu.com -P 60,90 -T 32 ',version="co0ontty portscan version:1.0")
+	parse.add_option('-H','--Host',dest='host',action='store',type=str,default="0")
+	parse.add_option('-P','--Port',dest='port',type=str,default='1,10000')
+	parse.add_option('-T','--Thread',dest='thread',type=int)
+	parse.add_option('-D','--Domain',dest='domainName',type=str,default="0")
 	parse.set_defaults(thread=32)  
 	options,args=parse.parse_args()
 
-	global remote_server_ip,openPort,domainName,Ip_target,thread,openPort,ports,Domain_result
+	global remote_server_ip,openPort,domainName,Ip_target,thread,openPort,ports,Domain_result,startPort,endPort
 	Ip_target = options.host
 	domainName = options.domainName
 	portList = options.port.split(",")
