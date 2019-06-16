@@ -1,6 +1,12 @@
 [
   
     {
+      "title"    : "vulhub漏洞复现",
+      "tags"     : "漏洞复现 WEB ALL",
+      "url"      : "/2019/06/16/vulhub.html"
+    } ,
+  
+    {
       "title"    : "Python编写扫描器",
       "tags"     : "安全开发 python ALL",
       "url"      : "/2019/06/03/pythonpoc.html"

