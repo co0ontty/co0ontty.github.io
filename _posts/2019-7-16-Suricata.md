@@ -1,12 +1,12 @@
 ---
 layout: post
 title:  "Suricata学习笔记"
-date:   2018-11-22 16:18:43
+date:   2019-9-16 16:18:43
 categories: Development
 author: co0ontty
 categories: 安全开发 ALL
 tags: 安全开发 ALL
-describe: Suricata学习笔记!
+describe: Suricata学习笔记
 ---
 
 ## Suricata学习笔记
