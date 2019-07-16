@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Woodpecker-Analyzer 使用说明 - co0ontty</title>
+    <title>Suricata学习笔记 - co0ontty</title>
     <meta name="author"  content="co0ontty">
-    <meta name="description" content="Woodpecker-Analyzer 使用说明">
-    <meta name="keywords"  content="PHP, MYSQL, HTML, ALL">
+    <meta name="description" content="Suricata学习笔记">
+    <meta name="keywords"  content="安全开发, ALL">
     <!-- Open Graph -->
-    <meta property="og:title" content="Woodpecker-Analyzer 使用说明 - co0ontty">
+    <meta property="og:title" content="Suricata学习笔记 - co0ontty">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://localhost:4000/2018/11/23/woodpecker-analyzer.html">
+    <meta property="og:url" content="http://localhost:4000/2018/11/23/Suricata.html">
     <meta property="og:description" content="Walking to Dalao。">
     <meta property="og:site_name" content="co0ontty">
     <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
@@ -113,32 +113,25 @@ Author: Ray-Eldath
 
 
   <header
-    class="g-banner post-header post-pattern-circuitBoard bgcolor-default "
+    class="g-banner post-header post-pattern-circuitBoard bgcolor-default post-no-cover"
     data-theme="default"
   >
     <div class="post-wrapper">
       <div class="post-tags">
         
           
-            <a href="http://localhost:4000/tags#PHP" class="post-tag">PHP</a>
-          
-            <a href="http://localhost:4000/tags#MYSQL" class="post-tag">MYSQL</a>
-          
-            <a href="http://localhost:4000/tags#HTML" class="post-tag">HTML</a>
+            <a href="http://localhost:4000/tags#%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91" class="post-tag">安全开发</a>
           
             <a href="http://localhost:4000/tags#ALL" class="post-tag">ALL</a>
           
         
       </div>
-      <h1>Woodpecker-Analyzer 使用说明</h1>
+      <h1>Suricata学习笔记</h1>
       <div class="post-meta">
         <span class="post-meta-item"><i class="iconfont icon-author"></i>co0ontty</span>
         <time class="post-meta-item" datetime="18-11-23"><i class="iconfont icon-date"></i>23 Nov 2018</time>
       </div>
     </div>
-    
-    <div class="filter"></div>
-      <div class="post-cover" style="background: url('/assets/img/posts/woodpecker-tongji.png') center no-repeat; background-size: cover;"></div>
     
   </header>
 
@@ -146,54 +139,106 @@ Author: Ray-Eldath
     
 
     <article class="markdown-body">
-      <h2 id="woodpecker-analyzer-使用说明">Woodpecker-Analyzer 使用说明</h2>
+      <h2 id="suricata学习笔记">Suricata学习笔记</h2>
 
-<h3 id="环境搭建">环境搭建</h3>
+<h3 id="suricata安装步骤">Suricata安装步骤：</h3>
 
-<p>1.将Github中的项目下载到web服务根目录中</p>
+<p>官网介绍使用wget下载压缩包解压后进行安装，流程相对复杂</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/co0ontty/Woodpecker-Analyzer.git
+<p>经测试在ubuntu下可以直接使用<code class="highlighter-rouge">sudo apt install Suricata</code>进行安装</p>
+
+<h3 id="suricata-使用方法">Suricata 使用方法：</h3>
+
+<p>重放pcap包：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>suricata <span class="nt">-c</span> suricata.yaml <span class="nt">-k</span> none <span class="nt">-r</span> cve-2018-7600.pcap
 </code></pre></div></div>
 
-<p>或者从csdn中下载<br />
-https://download.csdn.net/download/weixin_38830346/10868100</p>
+<p>监听网卡：</p>
 
-<p>2.设置数据库<br />
-默认设置的Mysql数据库密码为123456
-创建database：</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE database rizhi;
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>suricata <span class="nt">-c</span> /etc/suricata/suricata.yaml <span class="nt">-i</span> wlan0
 </code></pre></div></div>
 
-<p>在rizhi数据库中创建tables：</p>
+<p>使用原理：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use rizhi;  
-CREATE TABLE TCP (num int,ip VARCHAR(30));
+<p>Suricata通过用户自己编写的.rules规则文件对流量进行匹配，如果发现与规则匹配的流量则进行进一步的操作</p>
+
+<h3 id="suricata-规则编写">Suricata 规则编写</h3>
+
+<p>完整规则：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>alert http any any -&gt; any any <span class="o">(</span>msg: <span class="s2">"ATTACK [PTsecurity] Kibana &lt; 6.4.3 &lt;5.6.13 Arbitrary File Inclusion/Disclosure/RCE attempt (CVE-2018-17245)"</span><span class="p">;</span> flow: established, to_server<span class="p">;</span> content: <span class="s2">"/api/console/api_server"</span><span class="p">;</span> http_uri<span class="p">;</span> content: <span class="s2">"SENSE_VERSION"</span><span class="p">;</span> nocase<span class="p">;</span> http_uri<span class="p">;</span> distance: 0<span class="p">;</span> pcre: <span class="s2">"/apis</span><span class="se">\s</span><span class="s2">*=</span><span class="se">\s</span><span class="s2">*[^&amp;]*(?:(?:%2e|</span><span class="se">\.</span><span class="s2">)(?:%2e|</span><span class="se">\.</span><span class="s2">)(?:%5c|%2f|</span><span class="se">\/</span><span class="s2">|</span><span class="se">\\</span><span class="s2">))/Ui"</span><span class="p">;</span> reference: cve, 2018-17245<span class="p">;</span> reference: url, www.cyberark.com/threat-research-blog/execute-this-i-know-you-have-it<span class="p">;</span> reference: url, github.com/ptresearch/AttackDetection<span class="p">;</span> metadata: Open Ptsecurity.com ruleset<span class="p">;</span> classtype: attempted-admin<span class="p">;</span> sid: 30000027<span class="p">;</span> rev: 1<span class="p">;</span> <span class="o">)</span>
 </code></pre></div></div>
 
-<h3 id="使用">使用</h3>
+<h4 id="alert">alert：</h4>
 
-<p>本系统使用的日志为使用Windows中的bat脚本和系统安全事件对恶意流量进行分析生成data.txt日志文件<br />
-详细配置及使用脚本可参考我的另一片博客，windows事件触发器</p>
+<p>该参数用于指定规则触发的效果，包括一下四个参数可以选择：</p>
 
-<h5 id="1上传日志">1.上传日志</h5>
+<p><code class="highlighter-rouge">alert</code>:Suricata将触发警报，提示管理员系统存在异常操作行为。</p>
 
-<p>·进入啄木鸟日志分析系统
-<img src="/assets/img/posts/woodpecker-index.png" alt="avatar" /><br />
-·在主页敲击键盘回车进入系统
-<img src="/assets/img/posts/woodpecker-choice.png" alt="avatar" /><br />
-·选择上传日志，上传data.txt
-<img src="/assets/img/posts/woodpecker-uplode.png" alt="avatar" /></p>
+<p><code class="highlighter-rouge">reject</code>:拒绝该数据包。</p>
 
-<h5 id="2分析日志">2.分析日志</h5>
+<p><code class="highlighter-rouge">drop</code>:这仅涉及IPS /内联模式，匹配到规则后，停止传送该数据包</p>
 
-<p>·上传完成后点击分析日志即可获取日志的详细信息<br />
-<img src="/assets/img/posts/woodpecker-uploded.png" alt="avatar" /><br />
-<img src="/assets/img/posts/woodpecker-fenxi.png" alt="avatar" /><br />
-·点击统计情况即可获取统计图<br />
-<img src="/assets/img/posts/woodpecker-tongji.png" alt="avatar" /></p>
+<p><code class="highlighter-rouge">pass</code>:如果匹配成功，将停止扫描并跳过扫描该条数据</p>
 
-<p>该系统仍在努力开发中，有什么好想法欢迎交流.</p>
+<h4 id="msg">msg：</h4>
+
+<p>该条配置指定如果流量中包含攻击流量，匹配成功后在日志中显示的信息。</p>
+
+<h4 id="flow">flow：</h4>
+
+<p>用于匹配流的方向，flow关键字也可以用来表示签名必须仅在流上匹配（only_stream）或仅在数据包（no_stream）上匹配。</p>
+
+<p>flow参数可以包括以下几个关键词：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>to_client                       established           only_stream
+from_client                     stateless             no_stream
+to_server 
+from_server
+</code></pre></div></div>
+
+<p>from_server和to_client是一样的，to_server和from_client也是一样的。 这来自原始的Snort语言，我们支持它的兼容性的原因。</p>
+
+<p>使用方法：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>flow:to_client, established<span class="p">;</span>
+flow:from_client, established, only_stream<span class="p">;</span>
+</code></pre></div></div>
+
+<h5 id="flowbits">flowbits：</h5>
+
+<p>适用于两个流量包进行比对时，</p>
+
+<p><img src="/assets/img/posts/Suricata-1.png" alt="avatar" /></p>
+
+<p>第一条规则如果匹配成功，默认则会弹出警报，如果不需要警报则需要在后面追加参数<code class="highlighter-rouge">'flowbits：noalert</code></p>
+
+<p>此规则的目的是检查<code class="highlighter-rouge">userlogin</code>上的匹配，并在流程中标记该匹配。 所以，没有必要产生一个警报。<br />
+第二条规则没有第一条规则就没有效果。 如果第一条规则匹配，则流程将该特定条件设置为在流中存在。 现在用第二个规则可以检查前一个分组是否满足第一个条件。 如果第二条规则匹配，则会生成警报。</p>
+
+<p>作者：明翼<br />
+链接：https://www.jianshu.com/p/2d54c0461904<br />
+来源：简书<br />
+简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。</p>
+
+<h4 id="content">content</h4>
+
+<p>使用content的参数对流量进行关键字匹配</p>
+
+<p><code class="highlighter-rouge">http_url</code>说明content中内容匹配的数据存在于http的url中，还可以设置为<code class="highlighter-rouge">http_cookie</code>等</p>
+
+<p><code class="highlighter-rouge">nocase</code>设置content中的值不区分大小写</p>
+
+<p><code class="highlighter-rouge">distance</code>：表示第一次匹配后到下次匹配中间的偏移量</p>
+
+<p>####</p>
+
+<h3 id="pcre">pcre</h3>
+
+<p>pcre关键字使用PCRE来匹配payload中的内容，用法一般是首先使用content匹配到指定字符串，然后根据pcre对相应的payload进行正则匹配</p>
+
+<p>参考：[https://redmine.openinfosecfoundation.org/projects/suricata/wiki/Pcre_(Perl_Compatible_Regular_Expressions)](https://redmine.openinfosecfoundation.org/projects/suricata/wiki/Pcre_(Perl_Compatible_Regular_Expressions)</p>
 
     </article>
 
@@ -246,25 +291,28 @@ CREATE TABLE TCP (num int,ip VARCHAR(30));
     <section class="post-footer-item read-next">
       
       <div class="read-next-item">
-        <a href="/2018/11/23/Suricata.html" class="read-next-link"></a>
+        <a href="/2018/11/24/gongkongattack.html" class="read-next-link"></a>
         <section>
-          <span>Suricata学习笔记</span>
-          <p>Suricata学习笔记</p>
+          <span>工控上位机攻击步骤（windows）</span>
+          <p>攻入上位机获取控制权限实验说明</p>
         </section>
+        
+        <div class="filter"></div>
+        <img src="/assets/img/posts/swj-4.png" alt="">
         
      </div>
       
 
       
       <div class="read-next-item">
-        <a href="/2018/11/23/post.html" class="read-next-link"></a>
+        <a href="/2018/11/23/woodpecker-analyzer.html" class="read-next-link"></a>
           <section>
-            <span>python利用request构造post请求</span>
-            <p>第一种方法使用的pyhton版本及库</p>
+            <span>Woodpecker-Analyzer 使用说明</span>
+            <p>Woodpecker-Analyzer 使用说明</p>
           </section>
           
           <div class="filter"></div>
-          <img src="/assets/img/posts/request-post.png" alt="">
+          <img src="/assets/img/posts/woodpecker-tongji.png" alt="">
           
       </div>
       
