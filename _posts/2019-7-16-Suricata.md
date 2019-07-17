@@ -114,3 +114,23 @@ flow:from_client, established, only_stream;
 pcre关键字使用PCRE来匹配payload中的内容，用法一般是首先使用content匹配到指定字符串，然后根据pcre对相应的payload进行正则匹配
 
 参考：[https://redmine.openinfosecfoundation.org/projects/suricata/wiki/Pcre_(Perl_Compatible_Regular_Expressions)](https://redmine.openinfosecfoundation.org/projects/suricata/wiki/Pcre_(Perl_Compatible_Regular_Expressions)
+### reference
+标明这条规则对应的信息所在的URL
+```bash
+reference:url,www.info.nl
+如果在reference.config配置文件中存在关键字的引用关系，可以引用已经定义的关键字与url的对应关系例如：
+reference.config中定义cve对应的url为：http://cve.mitre.org/cgi-bin/cvename.cgi?name=
+则下面语句：
+reference:cve,2019-2653
+调用的url则为：http://cve.mitre.org/cgi-bin/cvename.cgi?name=2019-2653
+```
+### sid
+表示这条规则的id
+```bash
+sid:number;
+```
+### rev
+表示该条规则的版本号
+```bash
+rev:number;
+```
