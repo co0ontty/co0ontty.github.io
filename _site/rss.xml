@@ -5,9 +5,139 @@
     <description>Walking to Dalao。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 16 Jul 2019 22:57:08 +0800</pubDate>
-    <lastBuildDate>Tue, 16 Jul 2019 22:57:08 +0800</lastBuildDate>
+    <pubDate>Fri, 19 Jul 2019 23:12:26 +0800</pubDate>
+    <lastBuildDate>Fri, 19 Jul 2019 23:12:26 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>Suricata学习笔记</title>
+        <description>&lt;h2 id=&quot;suricata学习笔记&quot;&gt;Suricata学习笔记&lt;/h2&gt;
+
+&lt;h3 id=&quot;suricata安装步骤&quot;&gt;Suricata安装步骤：&lt;/h3&gt;
+
+&lt;p&gt;官网介绍使用wget下载压缩包解压后进行安装，流程相对复杂&lt;/p&gt;
+
+&lt;p&gt;经测试在ubuntu下可以直接使用&lt;code class=&quot;highlighter-rouge&quot;&gt;sudo apt install Suricata&lt;/code&gt;进行安装&lt;/p&gt;
+
+&lt;h3 id=&quot;suricata-使用方法&quot;&gt;Suricata 使用方法：&lt;/h3&gt;
+
+&lt;p&gt;重放pcap包：&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;suricata &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; suricata.yaml &lt;span class=&quot;nt&quot;&gt;-k&lt;/span&gt; none &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; cve-2018-7600.pcap
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;监听网卡：&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;suricata &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; /etc/suricata/suricata.yaml &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; wlan0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;使用原理：&lt;/p&gt;
+
+&lt;p&gt;Suricata通过用户自己编写的.rules规则文件对流量进行匹配，如果发现与规则匹配的流量则进行进一步的操作&lt;/p&gt;
+
+&lt;h3 id=&quot;suricata-规则编写&quot;&gt;Suricata 规则编写&lt;/h3&gt;
+
+&lt;p&gt;完整规则：&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;alert http any any -&amp;gt; any any &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;msg: &lt;span class=&quot;s2&quot;&gt;&quot;ATTACK [PTsecurity] Kibana &amp;lt; 6.4.3 &amp;lt;5.6.13 Arbitrary File Inclusion/Disclosure/RCE attempt (CVE-2018-17245)&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; flow: established, to_server&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; content: &lt;span class=&quot;s2&quot;&gt;&quot;/api/console/api_server&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; http_uri&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; content: &lt;span class=&quot;s2&quot;&gt;&quot;SENSE_VERSION&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; nocase&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; http_uri&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; distance: 0&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; pcre: &lt;span class=&quot;s2&quot;&gt;&quot;/apis&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\s&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;*=&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\s&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;*[^&amp;amp;]*(?:(?:%2e|&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\.&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;)(?:%2e|&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\.&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;)(?:%5c|%2f|&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\/&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\\&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;))/Ui&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; reference: cve, 2018-17245&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; reference: url, www.cyberark.com/threat-research-blog/execute-this-i-know-you-have-it&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; reference: url, github.com/ptresearch/AttackDetection&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; metadata: Open Ptsecurity.com ruleset&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; classtype: attempted-admin&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; sid: 30000027&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; rev: 1&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;alert&quot;&gt;alert：&lt;/h4&gt;
+
+&lt;p&gt;该参数用于指定规则触发的效果，包括一下四个参数可以选择：&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;alert&lt;/code&gt;:Suricata将触发警报，提示管理员系统存在异常操作行为。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;reject&lt;/code&gt;:拒绝该数据包。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;drop&lt;/code&gt;:这仅涉及IPS /内联模式，匹配到规则后，停止传送该数据包&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pass&lt;/code&gt;:如果匹配成功，将停止扫描并跳过扫描该条数据&lt;/p&gt;
+
+&lt;h4 id=&quot;msg&quot;&gt;msg：&lt;/h4&gt;
+
+&lt;p&gt;该条配置指定如果流量中包含攻击流量，匹配成功后在日志中显示的信息。&lt;/p&gt;
+
+&lt;h4 id=&quot;flow&quot;&gt;flow：&lt;/h4&gt;
+
+&lt;p&gt;用于匹配流的方向，flow关键字也可以用来表示签名必须仅在流上匹配（only_stream）或仅在数据包（no_stream）上匹配。&lt;/p&gt;
+
+&lt;p&gt;flow参数可以包括以下几个关键词：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;to_client                       established           only_stream
+from_client                     stateless             no_stream
+to_server 
+from_server
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;from_server和to_client是一样的，to_server和from_client也是一样的。 这来自原始的Snort语言，我们支持它的兼容性的原因。&lt;/p&gt;
+
+&lt;p&gt;使用方法：&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;flow:to_client, established&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+flow:from_client, established, only_stream&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h5 id=&quot;flowbits&quot;&gt;flowbits：&lt;/h5&gt;
+
+&lt;p&gt;适用于两个流量包进行比对时，&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/Suricata-1.png&quot; alt=&quot;avatar&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;第一条规则如果匹配成功，默认则会弹出警报，如果不需要警报则需要在后面追加参数&lt;code class=&quot;highlighter-rouge&quot;&gt;'flowbits：noalert&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;此规则的目的是检查&lt;code class=&quot;highlighter-rouge&quot;&gt;userlogin&lt;/code&gt;上的匹配，并在流程中标记该匹配。 所以，没有必要产生一个警报。&lt;br /&gt;
+第二条规则没有第一条规则就没有效果。 如果第一条规则匹配，则流程将该特定条件设置为在流中存在。 现在用第二个规则可以检查前一个分组是否满足第一个条件。 如果第二条规则匹配，则会生成警报。&lt;/p&gt;
+
+&lt;h4 id=&quot;content&quot;&gt;content&lt;/h4&gt;
+
+&lt;p&gt;使用content的参数对流量进行关键字匹配&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;http_url&lt;/code&gt;说明content中内容匹配的数据存在于http的url中，还可以设置为&lt;code class=&quot;highlighter-rouge&quot;&gt;http_cookie&lt;/code&gt;等&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;nocase&lt;/code&gt;设置content中的值不区分大小写&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;distance&lt;/code&gt;：表示第一次匹配后到下次匹配中间的偏移量&lt;/p&gt;
+
+&lt;p&gt;####&lt;/p&gt;
+
+&lt;h3 id=&quot;pcre&quot;&gt;pcre&lt;/h3&gt;
+
+&lt;p&gt;pcre关键字使用PCRE来匹配payload中的内容，用法一般是首先使用content匹配到指定字符串，然后根据pcre对相应的payload进行正则匹配&lt;/p&gt;
+
+&lt;p&gt;参考：[https://redmine.openinfosecfoundation.org/projects/suricata/wiki/Pcre_(Perl_Compatible_Regular_Expressions)](https://redmine.openinfosecfoundation.org/projects/suricata/wiki/Pcre_(Perl_Compatible_Regular_Expressions)&lt;/p&gt;
+&lt;h3 id=&quot;reference&quot;&gt;reference&lt;/h3&gt;
+&lt;p&gt;标明这条规则对应的信息所在的URL&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;reference:url,www.info.nl
+如果在reference.config配置文件中存在关键字的引用关系，可以引用已经定义的关键字与url的对应关系例如：
+reference.config中定义cve对应的url为：http://cve.mitre.org/cgi-bin/cvename.cgi?name&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
+则下面语句：
+reference:cve,2019-2653
+调用的url则为：http://cve.mitre.org/cgi-bin/cvename.cgi?name&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2019-2653
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;sid&quot;&gt;sid&lt;/h3&gt;
+&lt;p&gt;表示这条规则的id&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sid:number&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;rev&quot;&gt;rev&lt;/h3&gt;
+&lt;p&gt;表示该条规则的版本号&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rev:number&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Wed, 17 Jul 2019 00:18:43 +0800</pubDate>
+        <link>http://localhost:4000/2019/07/17/Suricata.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/07/17/Suricata.html</guid>
+        
+        <category>安全开发</category>
+        
+        <category>ALL</category>
+        
+        
+        <category>安全开发</category>
+        
+        <category>ALL</category>
+        
+      </item>
     
       <item>
         <title>vulhub漏洞复现</title>
@@ -1535,135 +1665,6 @@ Content-Disposition: form-data; name=&quot;submit&quot;
         <category>CTF</category>
         
         <category>WEB</category>
-        
-        <category>ALL</category>
-        
-      </item>
-    
-      <item>
-        <title>CTF 杂项题目总结（持续更新）</title>
-        <description>&lt;h2 id=&quot;图片隐写&quot;&gt;图片隐写&lt;/h2&gt;
-
-&lt;p&gt;博客中题目文件下载地址：&lt;br /&gt;
-https://home.mycloud.com/action/share/db1ed206-5f81-4d3a-b4be-865c5fe78a2c&lt;/p&gt;
-
-&lt;h2 id=&quot;图片tiff&quot;&gt;图片TIFF&lt;/h2&gt;
-
-&lt;p&gt;题目文件：ada.jpg
-使用binwalk分析图片中的信息如下：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/posts/ada.png&quot; alt=&quot;avatar&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;发现在图片中有zip，文件和TIFF信息。zip压缩包解压需要密码。查看一下TIFF信息，打开图片的详细信息部分，查看照片的相机信息，发现十六进制字符串，转换为字符串为 sdnisc_2018 即为压缩包密码，解压压缩包得到flag &lt;br /&gt;
-进制转换工具推荐：co0ontty.github.io/things/cyberchef.htm&lt;/p&gt;
-
-&lt;h2 id=&quot;png-ihdr隐写&quot;&gt;PNG-IHDR隐写&lt;/h2&gt;
-
-&lt;p&gt;题目文件：2.png
-该图片，在windows下面可以正常打开，在LINUX下却无法打开，则判断可能是通过修改PNG的长宽高实现的隐写。&lt;br /&gt;
-使用工具打开图片，分析文件头种IHDR部分&lt;br /&gt;
-&lt;img src=&quot;/assets/img/posts/PNG-IHDR.png&quot; alt=&quot;avatar&quot; /&gt; &lt;br /&gt;
-IHDR后的部分，前4 bytes为PNG图像的宽度，接下来的4 bytes为PNG图像的长度&lt;br /&gt;
-通过windows打开图像可以发现，图片的宽度大于长度，所以将长度修改与宽度相等，得到答案&lt;br /&gt;
-&lt;img src=&quot;/assets/img/posts/PNG-IHDR2.png&quot; alt=&quot;avatar&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;百里挑一exif&quot;&gt;百里挑一（EXIF）&lt;/h2&gt;
-
-&lt;p&gt;首先使用wireshark导出http文件，发现有一部分图片，使用脚本分理处图片中的flag发现只有一半。
- 使用wireshark筛选ftp数据。
- &lt;img src=&quot;/assets/img/posts/ah-1.png&quot; alt=&quot;avatar&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;发现文件使用的为被动模式传输，传输端口为38x256+111 = 9839（传输文件使用的端口）
- 更改筛选条件为tcp，端口为 9839
- &lt;img src=&quot;/assets/img/posts/ah-2.png&quot; alt=&quot;avatar&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;追踪PSH,ACK流，导出原始数据为jpg文件格式（其他流同上步骤）
- &lt;img src=&quot;/assets/img/posts/ah-4.png&quot; alt=&quot;avatar&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;使用脚本调用exiftool分析得到答案&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;#coding=UTF-8
-&lt;/span&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;os&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;imgs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;listdir&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'.'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;imgs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;img&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;img&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;imgs&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'.jpg'&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;img&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;img&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;imgs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;exif_dict&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;dict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;exif&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;popen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'exiftool '&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;img&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;exif&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;exif&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ex&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;exif&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;ex&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;':'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;exif_dict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'XP Comment'&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;exif_dict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exif_dict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'XP Comment'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h2 id=&quot;outguess&quot;&gt;outguess&lt;/h2&gt;
-&lt;p&gt;攻防世界misc-avatar
-outguess -r lamb.jpg -out 获得flag&lt;/p&gt;
-
-&lt;h2 id=&quot;图片分离拼接&quot;&gt;图片分离拼接&lt;/h2&gt;
-&lt;p&gt;xctf glance-50
-工具：imagemagick
-分离：&lt;/p&gt;
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ffmpeg &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; glance.gif frames/frame_%05d.png
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;拼接：&lt;/p&gt;
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;montage frames/&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;.png &lt;span class=&quot;nt&quot;&gt;-geometry&lt;/span&gt; +0+0 &lt;span class=&quot;nt&quot;&gt;-tile&lt;/span&gt; &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-l&lt;/span&gt; frames | &lt;span class=&quot;nb&quot;&gt;wc&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-l&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;x1 flag.png 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h2 id=&quot;压缩包&quot;&gt;压缩包&lt;/h2&gt;
-
-&lt;h2 id=&quot;foremost分离图片&quot;&gt;Foremost分离图片&lt;/h2&gt;
-&lt;p&gt;题目文件：foremost.jpg&lt;br /&gt;
-使用binwalk进行分析，发现图片中隐藏了另一个图片
-&lt;img src=&quot;/assets/img/posts/foremost-1.png&quot; alt=&quot;avatar&quot; /&gt; &lt;br /&gt;
-使用foremost命令进行分离&lt;br /&gt;
-&lt;img src=&quot;/assets/img/posts/foremost-2.png&quot; alt=&quot;avatar&quot; /&gt;&lt;br /&gt;
-&lt;img src=&quot;/assets/img/posts/foremost-3.png&quot; alt=&quot;avatar&quot; /&gt;&lt;br /&gt;
-成功分离出包含flag的图片&lt;br /&gt;
-&lt;img src=&quot;/assets/img/posts/foremost-4.png&quot; alt=&quot;avatar&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;grep-flag--r&quot;&gt;grep “flag” -r&lt;/h2&gt;
-
-&lt;p&gt;题目文件：zip
-根据题目文件名字猜测，通过增加后缀变成压缩包来解压。&lt;br /&gt;
-解压后发现有很多文件，使用查找文件内容命令查找flag&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;flag&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; /Users/co0ontty/Downloads/眼见非实/
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;发现flag在/word/document.xml文件中&lt;br /&gt;
-&lt;img src=&quot;/assets/img/posts/grepflag.png&quot; alt=&quot;avatar&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;掩码攻击&quot;&gt;掩码攻击&lt;/h2&gt;
-&lt;p&gt;适用于知道部分密码进行压缩包破解
-&lt;a href=&quot;https://i.loli.net/2019/04/16/5cb5c6883e32e.png&quot;&gt;&lt;img src=&quot;https://i.loli.net/2019/04/16/5cb5c6883e32e.png&quot; alt=&quot;屏幕快照 2019-04-16 20.11.29.png&quot; /&gt;&lt;/a&gt;
-红线部分为密码格式，前6位为meimei后四位随机&lt;/p&gt;
-
-&lt;h2 id=&quot;流量分析类&quot;&gt;流量分析类&lt;/h2&gt;
-
-&lt;h2 id=&quot;wireshark&quot;&gt;wireshark&lt;/h2&gt;
-
-&lt;p&gt;需要分析登录信息，使用条件”http.request.method==POST”进行过滤得到答案&lt;/p&gt;
-
-&lt;h2 id=&quot;其他&quot;&gt;其他&lt;/h2&gt;
-&lt;h2 id=&quot;路由器配置文件-configbin&quot;&gt;路由器配置文件 config.bin&lt;/h2&gt;
-
-&lt;p&gt;题目文件：config.bin
-使用RouterPassView查看config.bin得到答案&lt;/p&gt;
-</description>
-        <pubDate>Sat, 06 Apr 2019 00:18:43 +0800</pubDate>
-        <link>http://localhost:4000/2019/04/06/miscnote.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2019/04/06/miscnote.html</guid>
-        
-        <category>CTF</category>
-        
-        <category>ALL</category>
-        
-        
-        <category>CTF</category>
         
         <category>ALL</category>
         
