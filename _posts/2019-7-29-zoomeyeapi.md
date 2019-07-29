@@ -1,0 +1,211 @@
+---
+layout: post
+title:  "钟馗之眼python调用框架"
+date:   2019-7-29 16:18:43
+categories: Development
+author: co0ontty
+categories: 安全开发  ALL
+tags: 安全开发  ALL
+describe: 钟馗之眼python调用框架
+cover: '/assets/img/posts/zoomeye.jpg'
+---
+## python调用zoomeye-api
+编写原因：使用pocsuite框架调用zoomeye测试poc的过程中发现pocsuite中的dork参数要求很严格，所以打算写一个调用zoomeye的python程序，将查询结果写入文件然后使用pocsuite读文件测试
+### 源码
+**下载zoomeye目标到txt**
+```python
+# coding=UTF-8
+import optparse
+import os  
+import sys  
+import requests   
+parse=optparse.OptionParser(usage='python zoomeye-api.py -K gitstack -P 4 ',version="phoenix zoomeye-api version:1.0")
+parse.add_option('-U','--user',dest='user',type=str,metavar='user',help='Enter zoomeye username!!')
+parse.add_option('-P','--passwd',dest='passwd',type=str,metavar='passwd',help='Enter zoomeye password!!')
+parse.add_option('-K','--key',dest='key',type=str,metavar='key',help='Enter search key!!')
+parse.add_option('-L','--limit',dest='limit',type=str,metavar='limit',default='4',help='Enter limit pages!!')
+options,args=parse.parse_args()
+#输入个人账号密码  
+user = options.user
+passwd = options.passwd
+page = 1
+#验证用户名密码，返回access_token     
+def Check():
+    data_info = {'username' : user,'password' : passwd} 
+    try:
+        respond = requests.post(url = 'https://api.zoomeye.org/user/login',json = data_info)
+    except requests.RequestException as e:
+        print("[-] %s" % e)
+        print("[-] 连接失败!")
+    else:
+        if respond.status_code==200:
+            access_token=respond.json()
+            return access_token
+        else:
+            print("[-] %s %s \n[-] %s" % (respond.status_code, respond.json()["error"], respond.json()["message"]))
+            print("[-] 连接失败!")
+      
+          
+def search():  
+    global mode,query
+    mode = "host"
+    query = options.key
+ 
+def getRespose(access_token):   
+    authorization = {'Authorization' : 'JWT ' + access_token["access_token"]}
+    try:
+        respond = requests.get(url = 'https://api.zoomeye.org/'+mode+'/search?query=' + query+"&page=" + str(page),headers = authorization)
+    except requests.RequestException as e:
+        print("[-] %s" % e)
+        print("[-] %s 检索失败!" % mode.capitalize())
+    else:
+        if respond.status_code == 200:
+            return respond.json()  
+        else:
+            print("[-] %s %s \n[-] %s" % (respond.status_code, respond.json()["error"], respond.json()["message"]))
+            print("[-] %s 检索失败!" % mode.capitalize())
+              
+def output_data(temp):
+    result = list()
+    if mode == "host":
+        for line in temp["matches"]:
+            result.append(line["ip"] + ":" + str(line["portinfo"]["port"]) + "\n")
+    else:
+        for line in temp["matches"]:
+            result.append(line["site"] + "\n")
+    return result
+          
+def mian():
+    global page
+    access_token = Check()
+    search()
+    if not access_token:
+        sys.exit()
+    else:
+        pass
+    result = list()
+    if search:
+        max_page = int(options.limit)
+        while page<=max_page:
+            temp=getRespose(access_token)
+            if not temp:
+                print('[-]检索完成!')
+                break
+            else:
+                if not temp["matches"]:
+                    print ('[-]没有数据!')
+                    break
+                else:
+                    result.extend(output_data(temp))
+                    print('[-]开始下载第 %s 页'% page)
+            page +=1
+    result = set(result)
+    with open('ZoomEyes.txt', "w") as f:
+        f.writelines(result)
+        f.close()
+if __name__ == '__main__':
+    mian()
+```
+**下载zoomeye目标到txt，并调用pocsuite框架**
+```python
+# coding=UTF-8
+import optparse
+import os  
+import sys  
+import requests   
+parse=optparse.OptionParser(usage='python phoenix-pocsuite.py -K gitstack -P 4 ',version="phoenix zoomeye-api version:1.0")
+parse.add_option('-U','--user',dest='user',type=str,metavar='user',help='Enter zoomeye username!!')
+parse.add_option('-P','--passwd',dest='passwd',type=str,metavar='passwd',help='Enter zoomeye password!!')
+parse.add_option('-K','--key',dest='key',type=str,metavar='key',help='Enter search key!!')
+parse.add_option('-L','--limit',dest='limit',type=str,metavar='limit',default='4',help='Enter limit pages!!')
+parse.add_option('-F','--file',dest='pocname',type=str,metavar='pocname',help='Enter pocname!!')
+options,args=parse.parse_args()
+#输入个人账号密码  
+user = options.user
+passwd = options.passwd
+pocname = options.pocname
+page = 1
+#验证用户名密码，返回access_token     
+def Check():
+    data_info = {'username' : user,'password' : passwd} 
+    try:
+        respond = requests.post(url = 'https://api.zoomeye.org/user/login',json = data_info)
+    except requests.RequestException as e:
+        print("[-] %s" % e)
+        print("[-] 连接失败!")
+    else:
+        if respond.status_code==200:
+            access_token=respond.json()
+            return access_token
+        else:
+            print("[-] %s %s \n[-] %s" % (respond.status_code, respond.json()["error"], respond.json()["message"]))
+            print("[-] 连接失败!")
+      
+          
+def search():  
+    global mode,query
+    mode = "host"
+    query = options.key
+ 
+def getRespose(access_token):   
+    authorization = {'Authorization' : 'JWT ' + access_token["access_token"]}
+    try:
+        respond = requests.get(url = 'https://api.zoomeye.org/'+mode+'/search?query=' + query+"&page=" + str(page),headers = authorization)
+    except requests.RequestException as e:
+        print("[-] %s" % e)
+        print("[-] %s 检索失败!" % mode.capitalize())
+    else:
+        if respond.status_code == 200:
+            return respond.json()  
+        else:
+            print("[-] %s %s \n[-] %s" % (respond.status_code, respond.json()["error"], respond.json()["message"]))
+            print("[-] %s 检索失败!" % mode.capitalize())
+              
+def output_data(temp):
+    result = list()
+    if mode == "host":
+        for line in temp["matches"]:
+            result.append(line["ip"] + ":" + str(line["portinfo"]["port"]) + "\n")
+    else:
+        for line in temp["matches"]:
+            result.append(line["site"] + "\n")
+    return result
+          
+def mian():
+    global page
+    access_token = Check()
+    search()
+    if not access_token:
+        sys.exit()
+    else:
+        pass
+    result = list()
+    if search:
+        max_page = int(options.limit)
+        while page<=max_page:
+            temp=getRespose(access_token)
+            if not temp:
+                print('[-]检索完成!')
+                break
+            else:
+                if not temp["matches"]:
+                    print ('[-]没有数据!')
+                    break
+                else:
+                    result.extend(output_data(temp))
+                    print('[-]开始下载第 %s 页'% page)
+            page +=1
+    result = set(result)
+    with open('ZoomEyes.txt', "w") as f:
+        f.writelines(result)
+        f.close()
+    #传递参数调用pocsuite进行测试
+    coomand = os.system("pocsuite -r {} -f {} --thread 20".format(pocname,"ZoomEyes.txt"))
+    print coomand
+if __name__ == '__main__':
+    mian()
+```
+### 使用方法：
+```bash
+python phoenix-pocsuite.py -U zoomeye_username -P zoomeye_password -K search_keyword -L search_max_pages -F poc.py
+```
