@@ -1,6 +1,12 @@
 [
   
     {
+      "title"    : "Nginx反向代理设置",
+      "tags"     : "安全开发 运维 ALL",
+      "url"      : "/2019/07/23/nginx.html"
+    } ,
+  
+    {
       "title"    : "Suricata学习笔记",
       "tags"     : "安全开发 ALL",
       "url"      : "/2019/07/17/Suricata.html"
