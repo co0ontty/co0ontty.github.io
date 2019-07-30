@@ -104,9 +104,27 @@ flow:from_client, established, only_stream;
 
 `distance`：表示第一次匹配后到下次匹配中间的偏移量
 
-#### 
-
-### pcre
+### reference
+标明这条规则对应的信息所在的URL
+```bash
+reference:url,www.info.nl
+如果在reference.config配置文件中存在关键字的引用关系，可以引用已经定义的关键字与url的对应关系例如：
+reference.config中定义cve对应的url为：http://cve.mitre.org/cgi-bin/cvename.cgi?name=
+则下面语句：
+reference:cve,2019-2653
+调用的url则为：http://cve.mitre.org/cgi-bin/cvename.cgi?name=2019-2653
+```
+### sid
+表示这条规则的id
+```bash
+sid:number;
+```
+### rev
+表示该条规则的版本号
+```bash
+rev:number;
+```
+#### pcre
 
 pcre关键字使用PCRE来匹配payload中的内容，用法一般是首先使用content匹配到指定字符串，然后根据pcre对相应的payload进行正则匹配
 
@@ -144,23 +162,3 @@ pcre匹配webshell
 匹配该字符前面的字符（单个）至少一次；1次，2次...n次，倾向于短字符，非贪婪量词
 **（）** ：
 模式分组字符 eg：/(perl)+/  #有()匹配模式是perl，没有括号，匹配模式是单个字符l；
-### reference
-标明这条规则对应的信息所在的URL
-```bash
-reference:url,www.info.nl
-如果在reference.config配置文件中存在关键字的引用关系，可以引用已经定义的关键字与url的对应关系例如：
-reference.config中定义cve对应的url为：http://cve.mitre.org/cgi-bin/cvename.cgi?name=
-则下面语句：
-reference:cve,2019-2653
-调用的url则为：http://cve.mitre.org/cgi-bin/cvename.cgi?name=2019-2653
-```
-### sid
-表示这条规则的id
-```bash
-sid:number;
-```
-### rev
-表示该条规则的版本号
-```bash
-rev:number;
-```
