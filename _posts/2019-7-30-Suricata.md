@@ -1,12 +1,13 @@
 ---
 layout: post
 title:  "Suricata学习笔记"
-date:   2019-7-16 16:18:43
+date:   2019-7-30 16:18:43
 categories: Development
 author: co0ontty
 categories: 安全开发 ALL
 tags: 安全开发 ALL
 describe: Suricata学习笔记
+cover: '/assets/img/posts/suricata-cover.jpg'
 ---
 
 ## Suricata学习笔记
@@ -109,7 +110,40 @@ flow:from_client, established, only_stream;
 
 pcre关键字使用PCRE来匹配payload中的内容，用法一般是首先使用content匹配到指定字符串，然后根据pcre对相应的payload进行正则匹配
 
-参考：[https://redmine.openinfosecfoundation.org/projects/suricata/wiki/Pcre_(Perl_Compatible_Regular_Expressions)](https://redmine.openinfosecfoundation.org/projects/suricata/wiki/Pcre_(Perl_Compatible_Regular_Expressions)
+参考：[https://www.cnblogs.com/xh13dream/p/8604366.html](https://www.cnblogs.com/xh13dream/p/8604366.html)  
+
+![pcre匹配案例](/assets/img/posts/pcre-1.png)  
+pcre匹配 / 的时候需要配合 \ 进行转义  
+
+![pcre匹配案例](/assets/img/posts/pcre-2.png)  
+pcre匹配webshell  
+
+模式匹配中常用特殊字符
+
+**点号 .** ：
+匹配任何单个字符(换行符\n除外)
+**反斜杠 \\** ：
+转义字符，用于特殊符号前，使其失去特殊字符的作用变成普通字符
+**加号 +** ：
+匹配该字符前面的<font color=red>字符（单个）</font>至少一次；1次，2次...n次
+**星号 \*** ：
+匹配该字符前面的字符任意次：0次，1次...n次
+**问号 ？** ：
+匹配该字符前面的字符0次或者一次
+**.\*** ：
+匹配任意字符任意次（换行符除外）
+**{count}** ：
+匹配前面的字符count次
+**{min，}** ：
+匹配前面的字符至少min次
+**{min，max}** ：
+匹配至少min，至多max
+**\*？** ：
+匹配该字符前面的字符任意次：0次，1次...n次，倾向于短字符，非贪婪量词
+**+？** ：
+匹配该字符前面的字符（单个）至少一次；1次，2次...n次，倾向于短字符，非贪婪量词
+**（）** ：
+模式分组字符 eg：/(perl)+/  #有()匹配模式是perl，没有括号，匹配模式是单个字符l；
 ### reference
 标明这条规则对应的信息所在的URL
 ```bash
