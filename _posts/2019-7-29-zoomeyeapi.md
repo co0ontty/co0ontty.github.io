@@ -13,6 +13,8 @@ cover: '/assets/img/posts/zoomeye.jpg'
 编写原因：使用pocsuite框架调用zoomeye测试poc的过程中发现pocsuite中的dork参数要求很严格，所以打算写一个调用zoomeye的python程序，将查询结果写入文件然后使用pocsuite读文件测试
 ### 源码
 **下载zoomeye目标到txt**
+* 面向过程：
+
 ```python
 # coding=UTF-8
 import optparse
@@ -105,6 +107,117 @@ def mian():
         f.close()
 if __name__ == '__main__':
     mian()
+```
+* 面向对象：
+
+```python
+# coding=UTF-8
+import optparse
+import os
+import sys
+import requests
+import argparse
+
+
+def get_info():
+    parse = argparse.ArgumentParser(
+        usage='python phoenix-pocsuite.py -K gitstack -P 4 ', version="phoenix zoomeye-api version:1.1")
+    parse.add_argument('-U', '--user', dest='user', type=str,
+                       metavar='user', help='Enter zoomeye username!!')
+    parse.add_argument('-P', '--passwd', dest='passwd', type=str,
+                       metavar='passwd', help='Enter zoomeye password!!')
+    parse.add_argument('-K', '--keyword', dest='keyword', type=str,
+                       metavar='keyword', help='Enter search keyword!!')
+    parse.add_argument('-L', '--maxpage', dest='maxpage', type=str,
+                       metavar='maxpage', default='4', help='Enter maxpage!!')
+    return parse.parse_args()
+
+
+class zoomeye_api():
+    def __init__(self, user, passwd, keyword, maxpage):
+        self.user = user
+        self.passwd = passwd
+        self.keyword = keyword
+        self.maxpage = maxpage
+
+    def Check(self):
+        data_info = {'username': self.user, 'password': self.passwd}
+        try:
+            respond = requests.post(
+                url='https://api.zoomeye.org/user/login', json=data_info)
+        except requests.RequestException as e:
+            print("[-] %s" % e)
+            print("[-] 连接失败!")
+        else:
+            if respond.status_code == 200:
+                access_token = respond.json()
+                return access_token
+            else:
+                print("[-] %s %s \n[-] %s" % (respond.status_code,
+                                              respond.json()["error"], respond.json()["message"]))
+                print("[-] 连接失败!")
+
+    def getRespose(self, access_token):
+        authorization = {'Authorization': 'JWT ' +
+                         access_token["access_token"]}
+        try:
+            respond = requests.get(url='https://api.zoomeye.org/'+"host" +
+                                   '/search?query=' + self.keyword+"&page=" + str(self.page), headers=authorization)
+        except requests.RequestException as e:
+            print("[-] %s" % e)
+            print("[-] %s 检索失败!" )
+        else:
+            if respond.status_code == 200:
+                response = respond.json()
+                return response
+            else:
+                print("[-] %s %s \n[-] %s" % (respond.status_code,
+                                              respond.json()["error"], respond.json()["message"]))
+                print("[-] %s 检索失败!" )
+
+    def out_data(self, temp):
+        result = list()
+        for line in temp["matches"]:
+            result.append(line["ip"] + ":" +
+                          str(line["portinfo"]["port"]) + "\n")
+        return result
+
+    def start_download(self):
+        access_token = self.Check()
+        if not access_token:
+            sys.exit()
+        else:
+            pass
+        result = list()
+        for self.page in range(1,int(self.maxpage)+1):
+            temp = self.getRespose(access_token)
+            if not temp:
+                print('[-]检索完成!')
+                break
+            else:
+                if not temp["matches"]:
+                    print('[-]没有数据!')
+                    break
+                else:
+                    result.extend(self.out_data(temp))
+                    print ('[-]开始下载第 %s 页' % self.page)
+
+
+        result = set(result)
+        with open('Zoomeye2.txt', "w") as f:
+            f.writelines(result)
+            f.close()
+
+
+def main():
+    args = get_info()
+    Info = zoomeye_api(args.user, args.passwd, args.keyword, args.maxpage)
+    Info.start_download()
+
+
+if __name__ == '__main__':
+    main()
+
 ```
 **下载zoomeye目标到txt，并调用pocsuite框架**
 ```python
