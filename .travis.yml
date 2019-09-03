@@ -4,3 +4,9 @@ before_install:
   - npm i -g lint-md-cli
 script: 
   - lint-md _posts --config .lint-md.json
+notifications:
+  email:
+    recipients:
+      - co0ontty@aliyun.com
+    on_success: never # default: change
+    on_failure: always # default: always
