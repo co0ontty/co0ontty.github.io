@@ -6,4 +6,4 @@ install:
 script:
   - bundle install
   - bundle exec jekyll build
-  - lint-md _post/
+  - lint-md _post
