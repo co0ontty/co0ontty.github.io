@@ -41,13 +41,13 @@ else
 ?>
 ```
 ### 输出文件
-#### 输出文件全部内容
+#### 输出文件全部内容：
 ```php
 $myfile = fopen($filename,"r");  //打开文件
 echo fread($myfile,filesize($filename));  //输出全部文件内容
 fclose($myfile);  //关闭文件，减少系统资源占用
 ```
-#### 逐列循环列表文件内容
+#### 逐列循环列表文件内容：
 ```php
 $line_num = count(file('data.txt')); 
 //输出文件中的总行数

@@ -12,13 +12,13 @@ cover: '/assets/img/posts/suricata-cover.jpg'
 
 ## Suricata 学习笔记
 
-### Suricata 安装步骤
+### Suricata 安装步骤：
 
 官网介绍使用 wget 下载压缩包解压后进行安装，流程相对复杂
 
 经测试在 ubuntu 下可以直接使用`sudo apt install Suricata`进行安装  
 
-### Suricata 使用方法
+### Suricata 使用方法：
 
 重放 pcap 包：
 
@@ -44,7 +44,7 @@ Suricata 通过用户自己编写的.rules 规则文件对流量进行匹配，�
 alert http any any -> any any (msg: "ATTACK [PTsecurity] Kibana < 6.4.3 <5.6.13 Arbitrary File Inclusion/Disclosure/RCE attempt (CVE-2018-17245)"; flow: established, to_server; content: "/api/console/api_server"; http_uri; content: "SENSE_VERSION"; nocase; http_uri; distance: 0; pcre: "/apis\s*=\s*[^&]*(?:(?:%2e|\.)(?:%2e|\.)(?:%5c|%2f|\/|\\))/Ui"; reference: cve, 2018-17245; reference: url, www.cyberark.com/threat-research-blog/execute-this-i-know-you-have-it; reference: url, github.com/ptresearch/AttackDetection; metadata: Open Ptsecurity.com ruleset; classtype: attempted-admin; sid: 30000027; rev: 1; )
 ```
 
-#### alert
+#### alert：
 
 该参数用于指定规则触发的效果，包括一下四个参数可以选择：
 
@@ -56,17 +56,17 @@ alert http any any -> any any (msg: "ATTACK [PTsecurity] Kibana < 6.4.3 <5.6.13 
 
 `pass`:如果匹配成功，将停止扫描并跳过扫描该条数据
 
-#### msg
+#### msg：
 
 该条配置指定如果流量中包含攻击流量，匹配成功后在日志中显示的信息。
 
-#### flow
+#### flow：
 
 用于匹配流的方向，flow 关键字也可以用来表示签名必须仅在流上匹配（only_stream）或仅在数据包（no_stream）上匹配。
 
 flow 参数可以包括以下几个关键词：
 
-```plain
+```
 to_client                       established           only_stream
 from_client                     stateless             no_stream
 to_server 
@@ -82,7 +82,7 @@ flow:to_client, established;
 flow:from_client, established, only_stream;
 ```
 
-##### flowbits
+##### flowbits：
 
 适用于两个流量包进行比对时，
 

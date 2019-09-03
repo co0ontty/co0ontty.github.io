@@ -16,9 +16,7 @@ ThinkPHP 是一款运用极广的 PHP 开发框架。其版本 5 中，由于没
 ### 漏洞环境搭建
 可使用 vulhub 环境：`/vulhub/thinkphp/5-rce`
 ### 漏洞利用
-
-* poc:  
-
+* poc:
 ```python
 #!/usr/bin/env python
 # coding: utf-8
@@ -78,8 +76,7 @@ class TestPOC(POCBase):
 register(TestPOC)
 
 ```
-* exp:  
-
+* exp:
 ```python
 #!/usr/bin/env python
 # coding: utf-8

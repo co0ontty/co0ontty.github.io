@@ -9,11 +9,11 @@ describe: Bugku web wp
 cover: 'https://i.loli.net/2019/04/04/5ca5adcb6096c.png'
 ---
 
-## 1、web2
+## 1、web2：
 
 查看网页源码即可看到 flag  
 
-## 2、计算器
+## 2、计算器：
 
 发现计算结果均为二位数，但是只能输入一个数字。使用检查功能（F12）将输入框中的 maxlength="1"改为 maxlength="2"即可  
 
@@ -68,7 +68,7 @@ http://123.206.87.240:8003/index.php?hello=1);print_r(file("./flag.php")
 eval("var_dump(1);print_r(file("./flag.php")")
 ```
 
-#### 方法二
+#### 方法二：
 
 直接将文件包含在参数 hello 中  
 

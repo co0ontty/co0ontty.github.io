@@ -35,7 +35,7 @@ http://104.36.68.99/upload/shell.php?cmd=phpinfo();
 
 [![屏幕快照 2019-04-08 17.12.25.png](https://i.loli.net/2019/04/08/5cab108972e22.png)](https://i.loli.net/2019/04/08/5cab108972e22.png)
 
-### 大佬教的骚操作
+### 大佬教的骚操作：
 禁用本页 JS，直接上传   
 [![01-1.png](https://i.loli.net/2019/04/09/5cabf54fdd3de.png)](https://i.loli.net/2019/04/09/5cabf54fdd3de.png)  
 
