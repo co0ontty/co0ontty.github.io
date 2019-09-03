@@ -4,7 +4,10 @@ rvm:
 before_install:
   - npm i -g lint-md
 script:
-  - lint-md _posts/* --config lint-md.json
   - bundle install
   - bundle exec jekyll build
+lint:
+  image: yuque/lint-md:cli
+  script:
+    - lint-md _posts/* --config lint-md.json
 
