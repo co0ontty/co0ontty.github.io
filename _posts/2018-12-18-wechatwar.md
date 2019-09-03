@@ -9,11 +9,11 @@ describe: 服务器运行异常发送微信通知
 ---
 
 ## 服务器端口异常消息报警
-## 注册得到 sckey
-进入网站http://sc.ftqq.com/ 按照提示登录并获得 sckey
+## 注册得到sckey
+进入网站http://sc.ftqq.com/ 按照提示登录并获得sckey
 ## 绑定微信
-获得 sckey 后，绑定微信，测试是否可以通信
-## 使用 bash 脚本测试并发信息
+获得sckey后，绑定微信，测试是否可以通信
+## 使用bash脚本测试并发信息
 ```bash
 #!/bin/bash
 
@@ -39,6 +39,6 @@ fi
 
 done
 ```
-## 使用 crontab 设置定时任务
+## 使用crontab设置定时任务
 设置五分钟检查一次
 */5 * * * * /bin/bash check_ip_port.sh

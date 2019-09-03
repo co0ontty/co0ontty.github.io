@@ -1,6 +1,7 @@
-language: node_js
-node_js: 6
-before_install:
-  - npm i -g lint-md-cli
-script: 
-  - lint-md _posts --config .lint-md.json
+language: ruby
+rvm:
+  - 2.3.3
+script:
+  - bundle install
+  - bundle exec jekyll build
+

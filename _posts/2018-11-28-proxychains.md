@@ -6,13 +6,13 @@ author: co0ontty
 cover: '/assets/img/posts/proxychains-1.png'
 categories: 运维 ALL
 tags: 运维 ALL
-describe: 通过 proxychains 实现终端的代理使用
+describe: 通过proxychains实现终端的代理使用
 ---
 ## 何来此操作
-在 linux 小飞机没有办法全局代理，即使使用一些方法进行了全剧代理，效果也不是很明显，大部分情况下终端都是没有办法走代理的。  
+在linux 小飞机没有办法全局代理，即使使用一些方法进行了全剧代理，效果也不是很明显，大部分情况下终端都是没有办法走代理的。  
 ## 问题解决
-使用 proxychains 解决终端代理的问题  
-### 下载和安装 proxychains
+使用proxychains解决终端代理的问题  
+### 下载和安装proxychains
 ```bash
 git clone https://github.com/rofl0r/proxychains-ng.git #如果clone 不下来就下载zip 我就存在下载不动的情况
 
@@ -27,7 +27,7 @@ sudo make install
 sudo make install-config (installs proxychains.conf)
 
 ```
-### 配置 proxychains
+### 配置proxychains
 ```bash
 sudo vi /etc/proxychains.conf
 
@@ -39,14 +39,14 @@ sudo vi /etc/proxychains.conf
 socks5 	127.0.0.1 28125
 ```
 ### 使用  
-首先使用 curl 查看自己的 IP 地址  
+首先使用curl 查看自己的IP地址  
 ```bash
 在终端中输入
 curl ipinfo.io  
 ```
 ![avatar](/assets/img/posts/proxychains-1.png)  
   
-使用 proxychains 代理自己的终端  
+使用proxychains 代理自己的终端  
 ```bash
 proxychains curl ipinfo.io  
 ```

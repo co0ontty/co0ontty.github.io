@@ -1,18 +1,18 @@
 ---
 layout: post
-title: "Python 编写扫描器"
+title: "Python编写扫描器"
 date: 2019-6-2 20:49:43
 author: co0ontty
 categories: 安全开发 python ALL
 tags: 安全开发 python ALL 
 cover: 'https://i.loli.net/2019/06/03/5cf52433822b260662.png'
 ---
-## 介绍
-本篇学习笔记将记录使用 python 编写 scan 的学习路线，记录整个 python 扫描器的编写过程，记录从第一行代码到最新版本，对每个版本更新用到的技术进行详解
-## Version 1.0（socket 库）
-### 使用 socket 库进行端口扫描
+## 介绍：
+本篇学习笔记将记录使用python编写scan的学习路线，记录整个python扫描器的编写过程，记录从第一行代码到最新版本，对每个版本更新用到的技术进行详解
+## Version 1.0（socket库）
+### 使用socket库进行端口扫描：
 更新日志：  
-调用 socket 中的库对目标进行扫描，并统计目标端口的开放情况
+调用socket中的库对目标进行扫描，并统计目标端口的开放情况
 ```python
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
@@ -52,9 +52,9 @@ if __name__ == '__main__':
 	main()
 ```
 ## Version 1.1（Threadpool 多线程）
-### 使用 Threadpool 进行多线程端口扫描
+### 使用Threadpool进行多线程端口扫描：
 更新日志：  
-调用 python 中的 Threadpool 模块，设置多线程多目标的端口进行扫描，增加扫描的效率
+调用python中的Threadpool模块，设置多线程多目标的端口进行扫描，增加扫描的效率
 ```python
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
@@ -103,10 +103,10 @@ print '本次端口扫描共用时 ', datetime.now() - t1
 ```
 演示：
 ![portscan.gif](https://i.loli.net/2019/06/03/5cf4c2ba33b1e88447.gif)
-## Version 1.2 (optparse 库)
-### 使用 optparse 对 python 使用过程的命令进行解析
+## Version 1.2 (optparse库)
+### 使用optparse对python使用过程的命令进行解析
 更新日志：   
-调用 python 的 optparse 库，实现在运行该脚本的过程中使用“--host”等方式指定参数名称
+调用python的optparse库，实现在运行该脚本的过程中使用“--host”等方式指定参数名称
 ```python
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
@@ -176,10 +176,10 @@ print openPort
 print '本次端口扫描共用时 ', datetime.now() - t1
 ``` 
 ## Version 1.3 （gethostbyname_ex）
-### 使用 gethostbyname_ex 函数获取目标的域名、ip 等信息
+### 使用gethostbyname_ex函数获取目标的域名、ip等信息
 更新日志：  
-1、使用 gethostbyname_ex 函数实现对输入的域名进行解析  
-2、使用-D 参数传递域名，扫描器将对域名相关的 ip 进行端口扫描   
+1、使用gethostbyname_ex 函数实现对输入的域名进行解析  
+2、使用-D 参数传递域名，扫描器将对域名相关的ip进行端口扫描   
 3、对代码进行了模块化操作  
 ```python
 #!/usr/bin/python

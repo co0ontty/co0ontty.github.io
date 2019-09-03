@@ -1,14 +1,14 @@
 ---
 layout: post
-title:  "php 文件上传"
+title:  "php文件上传"
 date:   2018-11-26
 author: co0ontty
 cover: '/assets/img/posts/phpuplode1234.png'
 categories: PHP ALL
 tags: PHP ALL
-describe: PHP 上传功能代码示例
+describe: PHP上传功能代码示例
 ---
-### 使用 input 标签上传
+### 使用input标签上传
 ```php
 <form action="read_sql.php" method="post" enctype="multipart/form-data">
 	请选择文件：<input type="file" name="file" /><input type="submit" value="上传" />
@@ -41,13 +41,13 @@ else
 ?>
 ```
 ### 输出文件
-#### 输出文件全部内容
+#### 输出文件全部内容：
 ```php
 $myfile = fopen($filename,"r");  //打开文件
 echo fread($myfile,filesize($filename));  //输出全部文件内容
 fclose($myfile);  //关闭文件，减少系统资源占用
 ```
-#### 逐列循环列表文件内容
+#### 逐列循环列表文件内容：
 ```php
 $line_num = count(file('data.txt')); 
 //输出文件中的总行数

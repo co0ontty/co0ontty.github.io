@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "ThinkPHP 5.0/5.1 远程代码执行漏洞" 
+title:  "ThinkPHP 5.0/5.1远程代码执行漏洞" 
 date:   2019-08-12 15:46:50
 categories: Development
 author: co0ontty
@@ -10,9 +10,9 @@ describe:
 cover: '/assets/img/posts/00cfba101b23708bbb9c9041dea84cc9.jpg'
 
 ---
-## ThinkPHP 5.0/5.1 远程代码执行漏洞
+## ThinkPHP 5.0/5.1远程代码执行漏洞
 ## 漏洞概述
-ThinkPHP 是一款运用极广的 PHP 开发框架。其版本 5 中，由于没有正确处理控制器名，导致在网站没有开启强制路由的情况下（即默认情况下）可以执行任意方法，从而导致远程命令执行漏洞。
+ThinkPHP是一款运用极广的PHP开发框架。其版本5中，由于没有正确处理控制器名，导致在网站没有开启强制路由的情况下（即默认情况下）可以执行任意方法，从而导致远程命令执行漏洞。
 ### 漏洞环境搭建
 可使用 vulhub 环境：`/vulhub/thinkphp/5-rce`
 ### 漏洞利用
@@ -152,7 +152,7 @@ register(TestPOC)
 
 ```
 ### 流量分析
-该漏洞使用了$this->app->controller 方法来实例化控制器，然后调用实例中的方法。跟进 controller 方法；通过 parseModuleAndClass 方法解析出$module 和$class，然后实例化$class。当$name 以反斜线\开始时直接将其作为类名。利用命名空间的特点，如果可以控制此处的$name（即路由中的 controller 部分），那么就可以实例化任何一个类。
+该漏洞使用了$this->app->controller方法来实例化控制器，然后调用实例中的方法。跟进controller方法；通过parseModuleAndClass方法解析出$module和$class，然后实例化$class。当$name以反斜线\开始时直接将其作为类名。利用命名空间的特点，如果可以控制此处的$name（即路由中的controller部分），那么就可以实例化任何一个类。
 
-即漏洞利用 poc 为：`http://localhost:9096/public/index.php?s=index/think\app/invokefunction&function=call_user_func_array&vars[0]=system&vars[1][]=whoami`
+即漏洞利用poc为：`http://localhost:9096/public/index.php?s=index/think\app/invokefunction&function=call_user_func_array&vars[0]=system&vars[1][]=whoami`
 只需要去检测 `\app/invokefunction&function`实例化类的部分即可判定攻击行为
