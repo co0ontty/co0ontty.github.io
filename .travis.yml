@@ -9,5 +9,5 @@ script:
 lint:
   image: yuque/lint-md:cli
   script:
-    - lint-md _posts/* --config lint-md.json
+    - lint-md _posts
 
