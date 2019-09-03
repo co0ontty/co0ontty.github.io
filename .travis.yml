@@ -3,4 +3,4 @@ node_js: 6
 before_install:
   - npm i -g lint-md-cli
 script: 
-  - lint-md _posts --config .lint-md.json
+  - ./.sh
