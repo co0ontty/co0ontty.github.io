@@ -1,18 +1,18 @@
 ---
 layout: post
-title:  "钟馗之眼python调用框架"
+title:  "钟馗之眼 python 调用框架"
 date:   2019-8-8 16:18:43
 categories: Development
 author: co0ontty
 categories: 安全开发  ALL
 tags: 安全开发  ALL
-describe: 钟馗之眼python调用框架
+describe: 钟馗之眼 python 调用框架
 cover: '/assets/img/posts/zoomeye.jpg'
 ---
-## python调用zoomeye-api
-编写原因：使用pocsuite框架调用zoomeye测试poc的过程中发现pocsuite中的dork参数要求很严格，所以打算写一个调用zoomeye的python程序，将查询结果写入文件然后使用pocsuite读文件测试
+## python 调用 zoomeye-api
+编写原因：使用 pocsuite 框架调用 zoomeye 测试 poc 的过程中发现 pocsuite 中的 dork 参数要求很严格，所以打算写一个调用 zoomeye 的 python 程序，将查询结果写入文件然后使用 pocsuite 读文件测试
 ### 源码
-**下载zoomeye目标到txt**
+**下载 zoomeye 目标到 txt**
 * 面向过程：
 
 ```python
@@ -219,7 +219,7 @@ if __name__ == '__main__':
     main()
 
 ```
-**下载zoomeye目标到txt，并调用pocsuite框架**
+**下载 zoomeye 目标到 txt，并调用 pocsuite 框架**
 ```python
 # coding=UTF-8
 import optparse
@@ -318,7 +318,7 @@ def mian():
 if __name__ == '__main__':
     mian()
 ```
-### 使用方法：
+### 使用方法
 ```bash
 python phoenix-pocsuite.py -U zoomeye_username -P zoomeye_password -K search_keyword -L search_max_pages -F poc.py
 ```

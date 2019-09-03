@@ -1,11 +1,11 @@
 ---
 layout: post
-title: "Xctf练习题"
+title: "Xctf 练习题"
 date: 2019-4-3 20:49:43
 author: co0ontty
 categories: CTF ALL
 tags: CTF ALL
-describe: xctf攻防世界wp!
+describe: xctf 攻防世界 wp!
 cover: 'https://i.loli.net/2019/04/04/5ca5717a1a74b.png'
 ---
 
@@ -16,44 +16,44 @@ view-source:URL
 
 ## 2.get_post
 
-url?a=1传递get值，使用hackbar传递b的值得到flag  
+url?a=1 传递 get 值，使用 hackbar 传递 b 的值得到 flag  
 
 ## 3.robots
 
-访问网站url/robots.txt发现网页包含f1ag_1s_h3re.php文件，访问得到flag  
+访问网站 url/robots.txt 发现网页包含 f1ag_1s_h3re.php 文件，访问得到 flag  
 
 ## 4.backup
 
-访问网站index.php的备份文件index.php.bak得到flag  
+访问网站 index.php 的备份文件 index.php.bak 得到 flag  
 
 ## 5.cookie
 
-使用burp抓包看响应头  
+使用 burp 抓包看响应头  
 
 ## 6.disable_button
 
-①可以将代码中的disable=""标签删除   
-②可以使用hackbar传递post的值
+①可以将代码中的 disable=""标签删除   
+②可以使用 hackbar 传递 post 的值
 
 ```php
 <form action="" method="post" > <input disabled class="btn btn-default"style="height:50px;width:200px;"type="submit" value="flag"name="auth" /> 
 </form>
 ```
 
-post传递参数auth=flag  
+post 传递参数 auth=flag  
 
 ## 7.xff_referer
 
-X-Forwarded-For:简称XFF头，它代表客户端，也就是HTTP的请求端真实的IP，只有在通过了HTTP 代理或者负载均衡服务器时才会添加该项
-HTTP Referer是header的一部分，当浏览器向web服务器发送请求的时候，一般会带上Referer，告诉服务器我是从哪个页面链接过来的，服务器基此可以获得一些信息用于处理
+X-Forwarded-For:简称 XFF 头，它代表客户端，也就是 HTTP 的请求端真实的 IP，只有在通过了 HTTP 代理或者负载均衡服务器时才会添加该项
+HTTP Referer 是 header 的一部分，当浏览器向 web 服务器发送请求的时候，一般会带上 Referer，告诉服务器我是从哪个页面链接过来的，服务器基此可以获得一些信息用于处理
 解题步骤：
-使用burp抓包修改X-Forwarded-For和Referer参数
+使用 burp 抓包修改 X-Forwarded-For 和 Referer 参数
 ![avatar](/assets/img/posts/xctf-1.png)  
 
 ## 8.weak_auth
 
-爆破得到flag  
+爆破得到 flag  
 
 ## 9.webshell
 
-链接webshell得到flag  
+链接 webshell 得到 flag  

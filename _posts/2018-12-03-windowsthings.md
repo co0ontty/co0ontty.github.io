@@ -1,20 +1,20 @@
 ---
 layout: post
-title:  "windows事件触发器"
+title:  "windows 事件触发器"
 date:   2018-12-03 20:49:43 
 author: co0ontty
 cover: '/assets/img/posts/xtsj.jpg'
 categories: windows 运维 ALL
 tags: windows 运维 ALL
-describe: 使用windows事件触发器监视系统活动
+describe: 使用 windows 事件触发器监视系统活动
 ---
-### 方法一：使用windows触发器记录系统日志
-打开windows事件查看器  
+### 方法一：使用 windows 触发器记录系统日志
+打开 windows 事件查看器  
 手动触发事件  
-在windows事件触发器中找到想要添加触发器的事件  
+在 windows 事件触发器中找到想要添加触发器的事件  
 点击右下方，将任务附加到此事件  
 ### 方法二：任务计划程序  
-打开windows任务计划程序  
+打开 windows 任务计划程序  
 创建任务  
 设置名称，位置  
 选中触发器细节（当任何用户登陆时候）   
@@ -22,7 +22,7 @@ describe: 使用windows事件触发器监视系统活动
 ### 实际应用
 当后台有新用户建立的时候，系统日志触发器被触发，运行事先预设的程序或者脚本  
 脚本源码：  
-backup.bat 当后台建立3389连接的时候，将连接信息记录在D盘的data.txt文件中  
+backup.bat 当后台建立 3389 连接的时候，将连接信息记录在 D 盘的 data.txt 文件中  
 ```sh
 for /F %%i in ('date /t') do ( set tt=%%i)
 echo %tt:~0,10% >> D:\data.txt
@@ -49,4 +49,4 @@ start V15.lnk
 time /t >> D:\data.txt
 echo Siemens TIA Portal V15 has been opend >>D:\data.txt
 ```
-检测shell反弹的脚本正在进一步完善   
+检测 shell 反弹的脚本正在进一步完善   
