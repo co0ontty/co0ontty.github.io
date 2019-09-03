@@ -318,7 +318,7 @@ def mian():
 if __name__ == '__main__':
     mian()
 ```
-### 使用方法
+### 使用方法：
 ```bash
 python phoenix-pocsuite.py -U zoomeye_username -P zoomeye_password -K search_keyword -L search_max_pages -F poc.py
 ```

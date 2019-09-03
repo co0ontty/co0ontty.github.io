@@ -7,10 +7,10 @@ categories: 安全开发 python ALL
 tags: 安全开发 python ALL 
 cover: 'https://i.loli.net/2019/06/03/5cf52433822b260662.png'
 ---
-## 介绍
+## 介绍：
 本篇学习笔记将记录使用 python 编写 scan 的学习路线，记录整个 python 扫描器的编写过程，记录从第一行代码到最新版本，对每个版本更新用到的技术进行详解
 ## Version 1.0（socket 库）
-### 使用 socket 库进行端口扫描
+### 使用 socket 库进行端口扫描：
 更新日志：  
 调用 socket 中的库对目标进行扫描，并统计目标端口的开放情况
 ```python
@@ -52,7 +52,7 @@ if __name__ == '__main__':
 	main()
 ```
 ## Version 1.1（Threadpool 多线程）
-### 使用 Threadpool 进行多线程端口扫描
+### 使用 Threadpool 进行多线程端口扫描：
 更新日志：  
 调用 python 中的 Threadpool 模块，设置多线程多目标的端口进行扫描，增加扫描的效率
 ```python

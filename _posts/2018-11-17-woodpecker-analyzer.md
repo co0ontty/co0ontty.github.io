@@ -7,7 +7,7 @@ author: co0ontty
 cover: '/assets/img/posts/woodpecker-tongji.png'
 categories: PHP MYSQL HTML ALL
 tags: PHP MYSQL HTML ALL
-describe: 啄木鸟日志分析系统使用教程
+describe: 啄木鸟日志分析系统使用教程!
 ---
 
 ## Woodpecker-Analyzer 使用说明
@@ -16,7 +16,7 @@ describe: 啄木鸟日志分析系统使用教程
 
 1.将 Github 中的项目下载到 web 服务根目录中  
 
-```plain
+```
 git clone https://github.com/co0ontty/Woodpecker-Analyzer.git
 ```
 
@@ -27,13 +27,13 @@ https://download.csdn.net/download/weixin_38830346/10868100
 默认设置的 Mysql 数据库密码为 123456
 创建 database：  
 
-```plain
+```
 CREATE database rizhi;
 ```
 
 在 rizhi 数据库中创建 tables：   
 
-```plain
+```
 use rizhi;  
 CREATE TABLE TCP (num int,ip VARCHAR(30));
 ```
