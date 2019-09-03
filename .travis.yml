@@ -1,9 +1,9 @@
 language: ruby
 rvm:
   - 2.3.3
-install:
+before_install:
   - npm i -g lint-md-cli
 script:
+  - lint-md _post
   - bundle install
   - bundle exec jekyll build
-  - lint-md _post
