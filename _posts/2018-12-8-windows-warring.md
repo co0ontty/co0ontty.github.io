@@ -1,16 +1,16 @@
 ---
 layout: post
-title:  "evtx-windows系统日志比对系统"
+title:  "evtx-windows 系统日志比对系统"
 date:   2018-12-07 20:49:43 
 author: co0ontty
 categories: python windows  ALL 
 tags: python windows  ALL
-describe: windows系统日志变化发生变化时发出警告
+describe: windows 系统日志变化发生变化时发出警告
 ---
 
-# windwos系统安全日志监视系统
-### 思路：
-该脚本使用python的evtx库，对windwos的系统日志进行读取和比对，当发现系统日志中的信息被删除则出现弹框进行提示
+# windwos 系统安全日志监视系统
+### 思路
+该脚本使用 python 的 evtx 库，对 windwos 的系统日志进行读取和比对，当发现系统日志中的信息被删除则出现弹框进行提示
 ### 源代码分享
 ```py
 #-*-coding:utf-8-*-
@@ -47,10 +47,10 @@ else:
     show()
 exit()
 ```
-使用vbs脚本在调用py，并隐藏窗口运行  
+使用 vbs 脚本在调用 py，并隐藏窗口运行  
 ```py
 set ws = WScript.CreateObject("WScript.Shell")
 ws.Run "python evtx2.py",0
 ```
 ### 后续工作
-使用windows系统计划任务管理器设置定时任务，每隔一段时间运行一次脚本，发现系统日志中的信息被删除则发出报警
+使用 windows 系统计划任务管理器设置定时任务，每隔一段时间运行一次脚本，发现系统日志中的信息被删除则发出报警
