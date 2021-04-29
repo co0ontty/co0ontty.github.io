@@ -4,8 +4,8 @@ title:  "cobaltstrike 域前置隐藏 c2"
 date:   2021-04-29 17:18:43
 categories: Development
 author: co0ontty
-categories: ALL
-tags: ALL
+categories: 安全研究 ALL
+tags: 安全研究 ALL
 describe: cobaltstrike 域前置隐藏 c2
 cover: '/assets/img/posts/WechatIMG3712.jpeg'
 ---
