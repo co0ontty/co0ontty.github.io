@@ -116,6 +116,6 @@ http-post {
 
 ![/assets/img/posts/WechatIMG4142.jpeg](/assets/img/posts/WechatIMG4142.jpeg)
 
-5. 流量分析，为了方便理解所以使用的 http 进行的演示，可以看到已经看不到任何与 c2 通许的特征，实战建议使用 https
+5. 流量分析，为了方便理解所以使用的 http 进行的演示，可以看到已经看不到任何与 c2 通讯的特征，实战建议使用 https
 
 ![/assets/img/posts/WechatIMG3712.jpeg](/assets/img/posts/WechatIMG3712.jpeg)
