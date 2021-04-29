@@ -21,11 +21,11 @@ cover: '/assets/img/posts/WechatIMG3712.jpeg'
 
 ## 开始搭建：
 
-1. 腾讯云 cdn 开通全站加速，并填写相关信息（youhao 为我同事，eversec.cn 为我司域名但我无法控制，可以改为任意域名，47.*.*.34 为我的 c2 服务器，其 80 端口为 cobaltstrike 的 http listener）
+- 腾讯云 cdn 开通全站加速，并填写相关信息（youhao 为我同事，eversec.cn 为我司域名但我无法控制，可以改为任意域名，47.*.*.34 为我的 c2 服务器，其 80 端口为 cobaltstrike 的 http listener）
 
 ![/assets/img/posts/WechatIMG41412.jpeg](/assets/img/posts/WechatIMG41412.jpeg)
 
-2. 为 cobaltstrike teamserver 添加 profile，其中 `youhao.eversec.cn` 修改为想要伪装的域名   
+- 为 cobaltstrike teamserver 添加 profile，其中 `youhao.eversec.cn` 修改为想要伪装的域名   
 
 ``` bash
 set sleeptime "5000";
@@ -107,15 +107,15 @@ http-post {
 }
 ```
 
-3. 获取 cdn 的节点 ip，ping 这个 cname 获取到 cdn 的节点 ip
+- 获取 cdn 的节点 ip，ping 这个 cname 获取到 cdn 的节点 ip
 
 ![/assets/img/posts/WechatIMG4144.jpeg](/assets/img/posts/WechatIMG4144.jpeg)
 ![/assets/img/posts/WechatIMG4143.png](/assets/img/posts/WechatIMG4143.png)
 
-4. 添加 listener，生成 payload 发给 youhao，youhao 上线
+- 添加 listener，生成 payload 发给 youhao，youhao 上线
 
 ![/assets/img/posts/WechatIMG4142.jpeg](/assets/img/posts/WechatIMG4142.jpeg)
 
-5. 流量分析，为了方便理解所以使用的 http 进行的演示，可以看到已经看不到任何与 c2 通讯的特征，实战建议使用 https
+- 流量分析，为了方便理解所以使用的 http 进行的演示，可以看到已经看不到任何与 c2 通讯的特征，实战建议使用 https
 
 ![/assets/img/posts/WechatIMG3712.jpeg](/assets/img/posts/WechatIMG3712.jpeg)
