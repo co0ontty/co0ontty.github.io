@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bugku-web结题思路(持续更新) - co0ontty</title>
+    <meta name="author"  content="co0ontty">
+    <meta name="description" content="Bugku-web结题思路(持续更新)">
+    <meta name="keywords"  content="CTF, WEB, ALL">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Bugku-web结题思路(持续更新) - co0ontty">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2019/01/17/Bugkuweb.html">
+    <meta property="og:description" content="Walking to Dalao。">
+    <meta property="og:site_name" content="co0ontty">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">首页</a></li>
+            
+            <li><a href="/tags.html">标签</a></li>
+            
+            <li><a href="/links.html">友链</a></li>
+            
+            <li><a href="/about.html">关于我</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+
+  <header
+    class="g-banner post-header post-pattern-circuitBoard bgcolor-default "
+    data-theme="default"
+  >
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+          
+            <a href="http://localhost:4000/tags#CTF" class="post-tag">CTF</a>
+          
+            <a href="http://localhost:4000/tags#WEB" class="post-tag">WEB</a>
+          
+            <a href="http://localhost:4000/tags#ALL" class="post-tag">ALL</a>
+          
+        
+      </div>
+      <h1>Bugku-web结题思路(持续更新)</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i class="iconfont icon-author"></i>co0ontty</span>
+        <time class="post-meta-item" datetime="19-01-17"><i class="iconfont icon-date"></i>17 Jan 2019</time>
+      </div>
+    </div>
+    
+    <div class="filter"></div>
+      <div class="post-cover" style="background: url('https://i.loli.net/2019/04/04/5ca5adcb6096c.png') center no-repeat; background-size: cover;"></div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+
+    <article class="markdown-body">
+      <h2 id="1web2">1、web2：</h2>
+
+<p>查看网页源码即可看到flag</p>
+
+<h2 id="2计算器">2、计算器：</h2>
+
+<p>发现计算结果均为二位数，但是只能输入一个数字。使用检查功能（F12）将输入框中的maxlength=”1”改为maxlength=”2”即可</p>
+
+<h2 id="3web基础_get">3、web基础$_GET</h2>
+
+<p>阅读代码发现需要使用GET方法传递参数，$what==’flag’。根据GET方法通过URL传递参数的特点，在题目URL后面添加 ?what=flag 即可获得答案。</p>
+
+<h2 id="4wen基础post">4、wen基础$——Post</h2>
+
+<p>同$_GET题目，但是需要使用Post方法传递参数，使用FireFox中的hackbar插件传递参数值，如下图。<br />
+<img src="/assets/img/posts/Bugkuweb-1.png" alt="avatar" /></p>
+
+<h2 id="5矛盾">5、矛盾</h2>
+
+<p>代码中使用!is_numeric($num)函数判断num是否为数字，题目要求num的值不为数字且值为1。所以构造值为一的非数字值。可以使用 1%00 （%00截断符）构造payload 获得flag</p>
+
+<h2 id="6web3">6、web3</h2>
+
+<p>查看网页源代码在最后可以发现字符串“KEY{J2sa42ahJK-HS11III}”，该字符串为常见的unicode编码，可以使用站长工具在线解析，同时可以使用html编码格式进行解析，将该字符串直接复制到html文件中即可自动解析出原有格式“KEY{J2sa42ahJK-HS11III}”</p>
+
+<h2 id="7域名解析">7、域名解析</h2>
+
+<p>通过设置本机hosts文件实现无权限直接访问需要域名解析才能访问的ip，设置hosts文件后访问flag.baidu.com 即可</p>
+
+<h2 id="8你必须让他停下来">8.你必须让他停下来</h2>
+
+<p>打开发现网页一直在变，使用burp抓包，send to repeter 使用 go 逐一显示网页，即可看到flag。</p>
+
+<h2 id="9本地包含">9.本地包含</h2>
+
+<p>源代码：</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cp">&lt;?php</span> 
+    <span class="k">include</span> <span class="s2">"flag.php"</span><span class="p">;</span> 
+    <span class="nv">$a</span> <span class="o">=</span> <span class="o">@</span><span class="nv">$_REQUEST</span><span class="p">[</span><span class="s1">'hello'</span><span class="p">];</span> 
+    <span class="k">eval</span><span class="p">(</span> <span class="s2">"var_dump(</span><span class="nv">$a</span><span class="s2">);"</span><span class="p">);</span> 
+    <span class="nb">show_source</span><span class="p">(</span><span class="k">__FILE__</span><span class="p">);</span> 
+<span class="cp">?&gt;</span>
+</code></pre></div></div>
+
+<p>eval应该是此题的突破口，能够执行php代码。
+hello是接受参数的变量，接下来就是构建hello变量，使其能够闭合var_dump，利用print_r输出<br />
+首先闭合var_dump: 1);
+第二步构建print_r：print_r(file(“./flag.php”));
+URL构建结束：
+http://123.206.87.240:8003/index.php?hello=1);print_r(file(“./flag.php”)
+构建的URL触发的 eval操作为</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">eval</span><span class="p">(</span><span class="s2">"var_dump(1);print_r(file("</span><span class="o">./</span><span class="nx">flag</span><span class="o">.</span><span class="nx">php</span><span class="s2">")"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="方法二">方法二：</h4>
+
+<p>直接将文件包含在参数hello中</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">?</span><span class="nx">hello</span><span class="o">=</span><span class="nx">get_file_contents</span><span class="p">(</span><span class="s1">'flag.php'</span><span class="p">)</span>
+<span class="o">?</span><span class="nx">hello</span><span class="o">=</span><span class="nb">file</span><span class="p">(</span><span class="s1">'flag.php'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="11web5">11.web5</h2>
+
+<p>查看题目源代码发现存在Jsfuck，在控制台中输入该串代码，得到flag<br />
+<img src="/assets/img/posts/Bugkuweb-2.png" alt="avatar" /></p>
+
+<h2 id="12头等舱">12.头等舱</h2>
+
+<p>使用burpsuit抓包得到flag<br />
+<img src="/assets/img/posts/Bugkuweb-3.png" alt="avatar" /></p>
+
+<h2 id="13网站被黑">13.网站被黑</h2>
+
+<p>查看题目URL发现路径十分的有特点，怀疑是通过上传webshell获得网站权限来挂载黑页。使用burp爆破后台目录，发现存在shell.php。爆破shell.php的密码为hack，登录获得flag。</p>
+
+<h2 id="14管理员系统">14.管理员系统</h2>
+
+<p>打开网页尝试登录后发现对ip进行了过滤<br />
+<img src="/assets/img/posts/Bugkuweb-4.png" alt="avatar" />    <br />
+查看源码发下在最末尾有base64加密的字符串dGVzdDEyMw==，解码后为test123<br />
+使用Burp进行抓包，传递X-Forwarded-For: 127.0.0.1 测试本地上传是否可以绕过ip过滤限制<br />
+绕过ip过滤限制后使用admin和test123登录得到flag<br />
+<img src="/assets/img/posts/Bugkuweb-5.png" alt="avatar" /></p>
+
+<h2 id="15web4">15.web4</h2>
+
+<p>查看源码</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script&gt;</span>
+<span class="kd">var</span> <span class="nx">p1</span> <span class="o">=</span> <span class="s1">'%66%75%6e%63%74%69%6f%6e%20%63%68%65%63%6b%53%75%62%6d%69%74%28%29%7b%76%61%72%20%61%3d%64%6f%63%75%6d%65%6e%74%2e%67%65%74%45%6c%65%6d%65%6e%74%42%79%49%64%28%22%70%61%73%73%77%6f%72%64%22%29%3b%69%66%28%22%75%6e%64%65%66%69%6e%65%64%22%21%3d%74%79%70%65%6f%66%20%61%29%7b%69%66%28%22%36%37%64%37%30%39%62%32%62'</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">p2</span> <span class="o">=</span> <span class="s1">'%61%61%36%34%38%63%66%36%65%38%37%61%37%31%31%34%66%31%22%3d%3d%61%2e%76%61%6c%75%65%29%72%65%74%75%72%6e%21%30%3b%61%6c%65%72%74%28%22%45%72%72%6f%72%22%29%3b%61%2e%66%6f%63%75%73%28%29%3b%72%65%74%75%72%6e%21%31%7d%7d%64%6f%63%75%6d%65%6e%74%2e%67%65%74%45%6c%65%6d%65%6e%74%42%79%49%64%28%22%6c%65%76%65%6c%51%75%65%73%74%22%29%2e%6f%6e%73%75%62%6d%69%74%3d%63%68%65%63%6b%53%75%62%6d%69%74%3b'</span><span class="p">;</span>
+<span class="kr">eval</span><span class="p">(</span><span class="nx">unescape</span><span class="p">(</span><span class="nx">p1</span><span class="p">)</span> <span class="o">+</span> <span class="nx">unescape</span><span class="p">(</span><span class="s1">'%35%34%61%61%32'</span> <span class="o">+</span> <span class="nx">p2</span><span class="p">));</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<p>按照最后一行代码的要求拼接字符串后进行URL DECODE 为</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">checkSubmit</span><span class="p">(){</span><span class="k">var</span> <span class="nx">a</span><span class="o">=</span><span class="nx">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"password"</span><span class="p">);</span><span class="k">if</span><span class="p">(</span><span class="s2">"undefined"</span><span class="o">!=</span><span class="nx">typeof</span> <span class="nx">a</span><span class="p">){</span><span class="k">if</span><span class="p">(</span><span class="s2">"67d709b2b54aa2aa648cf6e87a7114f1"</span><span class="o">==</span><span class="nx">a</span><span class="o">.</span><span class="nx">value</span><span class="p">)</span><span class="k">return</span><span class="o">!</span><span class="mi">0</span><span class="p">;</span><span class="nx">alert</span><span class="p">(</span><span class="s2">"Error"</span><span class="p">);</span><span class="nx">a</span><span class="o">.</span><span class="nx">focus</span><span class="p">();</span><span class="k">return</span><span class="o">!</span><span class="mi">1</span><span class="p">}}</span><span class="nx">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"levelQuest"</span><span class="p">)</span><span class="o">.</span><span class="nx">onsubmit</span><span class="o">=</span><span class="nx">checkSubmit</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>在输入框中输入67d709b2b54aa2aa648cf6e87a7114f1获得flag</p>
+
+<h2 id="16flag在index里">16.flag在index里</h2>
+
+<p>题目URL为http://123.206.87.240:8005/post/index.php?file=show.php发现可以使用文件包含漏洞 <br />
+文件包含漏洞，发现了一种伪协议的方法， 为了读取包含有敏感信息的PHP等源文件，我们就要先将“可能引发冲突的PHP代码”编码一遍，这里就会用到php://filter ，可以将php中的代码呈现出来，具体用法如下：
+http://123.206.87.240:8005/post/index.php?file=php://filter/read=convert.base64-encode/resource=index.php</p>
+
+<h2 id="17点击一百万次">17.点击一百万次</h2>
+
+<p>查看网页源代码</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script&gt;</span>
+    <span class="kd">var</span> <span class="nx">clicks</span><span class="o">=</span><span class="mi">0</span>
+    <span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">$</span><span class="p">(</span><span class="s2">"#cookie"</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">mousedown</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+          <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">width</span><span class="p">(</span><span class="s1">'350px'</span><span class="p">).</span><span class="nx">height</span><span class="p">(</span><span class="s1">'350px'</span><span class="p">);</span>
+        <span class="p">})</span>
+        <span class="p">.</span><span class="nx">mouseup</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+          <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">width</span><span class="p">(</span><span class="s1">'375px'</span><span class="p">).</span><span class="nx">height</span><span class="p">(</span><span class="s1">'375px'</span><span class="p">);</span>
+          <span class="nx">clicks</span><span class="o">++</span><span class="p">;</span>
+          <span class="nx">$</span><span class="p">(</span><span class="s2">"#clickcount"</span><span class="p">).</span><span class="nx">text</span><span class="p">(</span><span class="nx">clicks</span><span class="p">);</span>
+          <span class="k">if</span><span class="p">(</span><span class="nx">clicks</span> <span class="o">&gt;=</span> <span class="mi">1000000</span><span class="p">){</span>
+              <span class="kd">var</span> <span class="nx">form</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">'&lt;form action="" method="post"&gt;'</span> <span class="o">+</span>
+                        <span class="s1">'&lt;input type="text" name="clicks" value="'</span> <span class="o">+</span> <span class="nx">clicks</span> <span class="o">+</span> <span class="s1">'" hidden/&gt;'</span> <span class="o">+</span>
+                        <span class="s1">'&lt;/form&gt;'</span><span class="p">);</span>
+                        <span class="nx">$</span><span class="p">(</span><span class="s1">'body'</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">form</span><span class="p">);</span>
+                        <span class="nx">form</span><span class="p">.</span><span class="nx">submit</span><span class="p">();</span>
+          <span class="p">}</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="nt">&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<p>发现如下<script>代码，通过post传递clicks的参数  
+![avatar](/assets/img/posts/Bugkuweb-6.png)  
+获得flag</script></p>
+
+<h2 id="18备份是个好习惯">18.备份是个好习惯</h2>
+
+<p>使用源码泄露工具测试网站是否存在备份文件泄露的漏洞
+<img src="/assets/img/posts/Bugkuweb-7.png" alt="avatar" /><br />
+工具下载地址（https://coding.net/u/yihangwang/p/SourceLeakHacker/git?public=true） 
+发现备份文件index.php.bak泄露<br />
+打开index.php.bak发现如下代码：</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">include_once</span> <span class="s2">"flag.php"</span><span class="p">;</span>
+<span class="nb">ini_set</span><span class="p">(</span><span class="s2">"display_errors"</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="nv">$str</span> <span class="o">=</span> <span class="nb">strstr</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'REQUEST_URI'</span><span class="p">],</span> <span class="s1">'?'</span><span class="p">);</span>
+<span class="nv">$str</span> <span class="o">=</span> <span class="nb">substr</span><span class="p">(</span><span class="nv">$str</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+<span class="nv">$str</span> <span class="o">=</span> <span class="nb">str_replace</span><span class="p">(</span><span class="s1">'key'</span><span class="p">,</span><span class="s1">''</span><span class="p">,</span><span class="nv">$str</span><span class="p">);</span>
+<span class="nb">parse_str</span><span class="p">(</span><span class="nv">$str</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nb">md5</span><span class="p">(</span><span class="nv">$key1</span><span class="p">);</span>
+
+<span class="k">echo</span> <span class="nb">md5</span><span class="p">(</span><span class="nv">$key2</span><span class="p">);</span>
+<span class="k">if</span><span class="p">(</span><span class="nb">md5</span><span class="p">(</span><span class="nv">$key1</span><span class="p">)</span> <span class="o">==</span> <span class="nb">md5</span><span class="p">(</span><span class="nv">$key2</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nv">$key1</span> <span class="o">!==</span> <span class="nv">$key2</span><span class="p">){</span>
+    <span class="k">echo</span> <span class="nv">$flag</span><span class="o">.</span><span class="s2">"取得flag"</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="cp">?&gt;</span>
+</code></pre></div></div>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$str</span> <span class="o">=</span> <span class="nb">str_replace</span><span class="p">(</span><span class="s1">'key'</span><span class="p">,</span><span class="s1">''</span><span class="p">,</span><span class="nv">$str</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>将key替换成空，即删除key字符串</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span><span class="p">(</span><span class="nb">md5</span><span class="p">(</span><span class="nv">$key1</span><span class="p">)</span> <span class="o">==</span> <span class="nb">md5</span><span class="p">(</span><span class="nv">$key2</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nv">$key1</span> <span class="o">!==</span> <span class="nv">$key2</span><span class="p">){</span>
+    <span class="k">echo</span> <span class="nv">$flag</span><span class="o">.</span><span class="s2">"取得flag"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>md5弱类型比较漏洞，构造payload方式如下：
+①使用弱类型比较漏洞，常用字符串如下：<br />
+QNKCDZO</p>
+
+<p>240610708</p>
+
+<p>s878926199a</p>
+
+<p>s155964671a</p>
+
+<p>s214587387a</p>
+
+<p>s214587387a
+这些字符串md5加密后的值都为0exxxx形式，即为科学记数法，值相同。
+payload：<br />
+http://123.206.87.240:8002/web16/?kkeyey1=QNKCDZO&amp;kekeyy2=240610708  <br />
+②md5()函数无法处理数组，如果传入的为数组，会返回NULL，所以两个数组经过加密后得到的都是NULL,也就是相等的。
+payload:<br />
+http://123.206.87.240:8002/web16/?kkeyey1[]=1&amp;kekeyy2[]=2</p>
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <img src="http://localhost:4000/assets/img/profile.png" alt="">
+      </div>
+      <div class="author-name" rel="author">co0ontty</div>
+      <div class="bio">
+        <p>知道创宇实习生</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/5792988237" target="_blank">
+                    <i class="iconfont icon-weibo"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="mailto:co0ontty@gmail.com" target="_blank">
+                    <i class="iconfont icon-email"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//facebook.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-facebook"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-github"></i>
+                </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+      <div class="read-next-item">
+        <a href="/2019/01/17/anheng.html" class="read-next-link"></a>
+        <section>
+          <span>安恒西湖论剑周周练</span>
+          <p>CRYPTO</p>
+        </section>
+        
+        <div class="filter"></div>
+        <img src="https://i.loli.net/2019/04/04/5ca5ada158be8.jpg" alt="">
+        
+     </div>
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2019/01/17/GIWIFI.html" class="read-next-link"></a>
+          <section>
+            <span>GIWIFI破解思路</span>
+            <p>发现思路：</p>
+          </section>
+          
+          <div class="filter"></div>
+          <img src="https://i.loli.net/2019/04/05/5ca6ba3c2d9ee.png" alt="">
+          
+      </div>
+      
+    </section>
+    
+  </section>
+<div id="lv-container" data-id="city" data-uid="MTAyMC80MTI3My8xNzgyMQ==">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+  <footer class="g-footer">
+  <!-- <section><a href="javascript:scroll(50,50)">回到顶端</a></section> -->
+<!-- 网站计数器 -->
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <div style="margin: auto;width: auto;">
+      <span id="site_pv_count" title="总点击量"><img src="/assets/vendor/octicons/svg/eye.svg" width=16 height=16 > <span id="busuanzi_value_site_pv"></span></span> &nbsp; &nbsp; | &nbsp; &nbsp; 
+    <span id="site_uv_count" title="总访客量"> <img src="/assets/vendor/octicons/svg/person.svg" width=10 height=16> <span id="busuanzi_value_site_uv"></span></span>
+    </div>
+<!-- 到此为止 -->
+  <section>co0ontty ©
+  
+  
+    2018
+    -
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+
+
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+  <script>
+    socialShare('.social-share', {
+      sites: [
+        
+          'wechat'
+          ,
+          
+        
+          'weibo'
+          ,
+          
+        
+          'douban'
+          ,
+          
+        
+          'twitter'
+          
+        
+      ],
+      wechatQrcodeTitle: "分享到微信朋友圈",
+      wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+    });
+  </script>
+
+  
+  
+
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?7084bb2b47ca9a611ae8225633e5caeb";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-129901756-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-129901756-1');
+</script>
+
+</body>
+
+</html>

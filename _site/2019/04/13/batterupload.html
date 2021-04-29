@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>结合CTF详解条件竞争漏洞 - co0ontty</title>
+    <meta name="author"  content="co0ontty">
+    <meta name="description" content="结合CTF详解条件竞争漏洞">
+    <meta name="keywords"  content="CTF, WEB, ALL">
+    <!-- Open Graph -->
+    <meta property="og:title" content="结合CTF详解条件竞争漏洞 - co0ontty">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2019/04/13/batterupload.html">
+    <meta property="og:description" content="Walking to Dalao。">
+    <meta property="og:site_name" content="co0ontty">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">首页</a></li>
+            
+            <li><a href="/tags.html">标签</a></li>
+            
+            <li><a href="/links.html">友链</a></li>
+            
+            <li><a href="/about.html">关于我</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+
+  <header
+    class="g-banner post-header post-pattern-circuitBoard bgcolor-default "
+    data-theme="default"
+  >
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+          
+            <a href="http://localhost:4000/tags#CTF" class="post-tag">CTF</a>
+          
+            <a href="http://localhost:4000/tags#WEB" class="post-tag">WEB</a>
+          
+            <a href="http://localhost:4000/tags#ALL" class="post-tag">ALL</a>
+          
+        
+      </div>
+      <h1>结合CTF详解条件竞争漏洞</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i class="iconfont icon-author"></i>co0ontty</span>
+        <time class="post-meta-item" datetime="19-04-13"><i class="iconfont icon-date"></i>13 Apr 2019</time>
+      </div>
+    </div>
+    
+    <div class="filter"></div>
+      <div class="post-cover" style="background: url('https://i.loli.net/2019/04/12/5cb07b9862aee.jpg') center no-repeat; background-size: cover;"></div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+
+    <article class="markdown-body">
+      <h2 id="什么是条件竞争漏洞">什么是条件竞争漏洞？</h2>
+<p>条件竞争漏洞是一种服务器端的漏洞，由于服务器端在处理不同用户的请求时是并发进行的，因此，如果并发处理不当或相关操作逻辑顺序设计的不合理时，将会导致此类问题的发生。</p>
+<h2 id="漏洞分析">漏洞分析</h2>
+<p>假设有这么一个代码，实现用户上传图片功能</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+  <span class="k">if</span><span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">'src'</span><span class="p">])){</span>
+    <span class="nb">copy</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">'src'</span><span class="p">],</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">'dst'</span><span class="p">]);</span>
+    <span class="c1">//...</span>
+    <span class="c1">//check file</span>
+    <span class="nb">unlink</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">'dst'</span><span class="p">]);</span>
+    <span class="c1">//...</span>
+ <span class="p">}</span>
+<span class="cp">?&gt;</span>
+</code></pre></div></div>
+<p>该代码中通过</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">copy</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">'src'</span><span class="p">],</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">'dst'</span><span class="p">])</span>
+</code></pre></div></div>
+<p>将上传的文件从源地址转换到目的地址进行储存。<br />
+然后通过中间一系列check file代码，检查文件的安全性，如果发现该文件为不安全文件则使用unlink删除该文件。
+但是如果判断时间过长，在该不安全文件被判定性质并且删除之前执行了该文件则会导致系统漏洞的形成。</p>
+<h2 id="漏洞利用思路">漏洞利用思路</h2>
+<p>攻击者上传了一个用来生成恶意shell的文件，在上传完成和安全检查完成并删除它的间隙，攻击者通过不断地发起访问请求的方法访问了该文件，该文件就会被执行，并且在服务器上生成一个恶意shell的文件。至此，该文件的任务就已全部完成，至于后面发现它是一个不安全的文件并把它删除的问题都已经不重要了，因为攻击者已经成功的在服务器中植入了一个shell文件，后续的一切就都不是问题了。</p>
+<h2 id="漏洞利用详细步骤">漏洞利用详细步骤</h2>
+<p>1.抓包并根据过滤条件修改后发送到Intruder模块开多线程不断发包,使WEB服务不断接受该文件。
+<img src="https://img-blog.csdn.net/201803102006224?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMTM3Nzk5Ng==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="屏幕快照 2019-04-12 18.26.16.png" />
+2.然后写一个python脚本不断去访问那个文件，如果在WEB服务判定并删除不安全文件之前成功的访问则会达到效果。</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s">'你的文件路径'</span>
+<span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">'moctf'</span> <span class="ow">in</span>  <span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">:</span>
+        <span class="k">print</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span>
+
+
+</code></pre></div></div>
+<h2 id="相关ctf题目">相关CTF题目</h2>
+<h3 id="moctf-web-没时间解释了">moctf web-没时间解释了</h3>
+
+<p>进入题目发现URL为index2.php,尝试访问index.php发现存在短暂跳转。抓包后发现
+<a href="https://i.loli.net/2019/04/12/5cb082e3c7046.png"><img src="https://i.loli.net/2019/04/12/5cb082e3c7046.png" alt="屏幕快照 2019-04-12 20.21.27.png" /></a>
+访问这个网页，发现为上传界面，随便输入两个值
+<a href="https://i.loli.net/2019/04/12/5cb0849537251.png"><img src="https://i.loli.net/2019/04/12/5cb0849537251.png" alt="屏幕快照 2019-04-12 20.28.44.png" /></a>
+访问这个网址后被告知太慢了，猜测可能为时间竞争类型。
+使用burp多线程并发提交</p>
+<h3 id="抓取输入界面的包">抓取输入界面的包</h3>
+<p><a href="https://i.loli.net/2019/04/12/5cb08929ce64a.png"><img src="https://i.loli.net/2019/04/12/5cb08929ce64a.png" alt="屏幕快照 2019-04-12 20.41.41.png" /></a>
+sent to Intruder 
+<a href="https://i.loli.net/2019/04/12/5cb089af69160.png"><img src="https://i.loli.net/2019/04/12/5cb089af69160.png" alt="屏幕快照 2019-04-12 20.41.41.png" /></a></p>
+<h3 id="访问too-slow-的页面并抓包">访问Too slow 的页面并抓包</h3>
+<p><a href="https://i.loli.net/2019/04/12/5cb08a119212e.png"><img src="https://i.loli.net/2019/04/12/5cb08a119212e.png" alt="屏幕快照 2019-04-12 20.41.48.png" /></a></p>
+<h3 id="配置intruder">配置Intruder</h3>
+<p><a href="https://i.loli.net/2019/04/12/5cb08a7b2801b.png"><img src="https://i.loli.net/2019/04/12/5cb08a7b2801b.png" alt="屏幕快照 2019-04-12 20.42.08.png" /></a>
+<a href="https://i.loli.net/2019/04/12/5cb08a7b2cdd8.png"><img src="https://i.loli.net/2019/04/12/5cb08a7b2cdd8.png" alt="屏幕快照 2019-04-12 20.41.55.png" /></a>
+两个配置相同<br />
+同时启动两个Attack进程，在Too slow页面发现flag  <br />
+<a href="https://i.loli.net/2019/04/12/5cb08a35088ab.png"><img src="https://i.loli.net/2019/04/12/5cb08a35088ab.png" alt="屏幕快照 2019-04-12 20.40.57.png" /></a></p>
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <img src="http://localhost:4000/assets/img/profile.png" alt="">
+      </div>
+      <div class="author-name" rel="author">co0ontty</div>
+      <div class="bio">
+        <p>知道创宇实习生</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/5792988237" target="_blank">
+                    <i class="iconfont icon-weibo"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="mailto:co0ontty@gmail.com" target="_blank">
+                    <i class="iconfont icon-email"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//facebook.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-facebook"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-github"></i>
+                </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+      <div class="read-next-item">
+        <a href="/2019/05/07/resttudy.html" class="read-next-link"></a>
+        <section>
+          <span>WEB安全面试复习笔记</span>
+          <p>对Web安全的理解我觉得 Web 安全首先得懂 Web、第三方内容、Web 前端框架、Web 服务器语言、Web ...</p>
+        </section>
+        
+     </div>
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2019/04/09/uplodelabs.html" class="read-next-link"></a>
+          <section>
+            <span>Uplode-Labs通关笔记</span>
+            <p>漏洞类型分析漏洞类型判断简单shell制作shell.php&lt;?php assert($_GET["cmd"...</p>
+          </section>
+          
+          <div class="filter"></div>
+          <img src="https://i.loli.net/2019/04/08/5cab11a102167.png" alt="">
+          
+      </div>
+      
+    </section>
+    
+  </section>
+<div id="lv-container" data-id="city" data-uid="MTAyMC80MTI3My8xNzgyMQ==">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+  <footer class="g-footer">
+  <!-- <section><a href="javascript:scroll(50,50)">回到顶端</a></section> -->
+<!-- 网站计数器 -->
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <div style="margin: auto;width: auto;">
+      <span id="site_pv_count" title="总点击量"><img src="/assets/vendor/octicons/svg/eye.svg" width=16 height=16 > <span id="busuanzi_value_site_pv"></span></span> &nbsp; &nbsp; | &nbsp; &nbsp; 
+    <span id="site_uv_count" title="总访客量"> <img src="/assets/vendor/octicons/svg/person.svg" width=10 height=16> <span id="busuanzi_value_site_uv"></span></span>
+    </div>
+<!-- 到此为止 -->
+  <section>co0ontty ©
+  
+  
+    2018
+    -
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+
+
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+  <script>
+    socialShare('.social-share', {
+      sites: [
+        
+          'wechat'
+          ,
+          
+        
+          'weibo'
+          ,
+          
+        
+          'douban'
+          ,
+          
+        
+          'twitter'
+          
+        
+      ],
+      wechatQrcodeTitle: "分享到微信朋友圈",
+      wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+    });
+  </script>
+
+  
+  
+
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?7084bb2b47ca9a611ae8225633e5caeb";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-129901756-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-129901756-1');
+</script>
+
+</body>
+
+</html>

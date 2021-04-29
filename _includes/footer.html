@@ -1,0 +1,21 @@
+<footer class="g-footer">
+  <!-- <section><a href="javascript:scroll(50,50)">回到顶端</a></section> -->
+<!-- 网站计数器 -->
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <div style="margin: auto;width: auto;">
+      <span id="site_pv_count" title="总点击量"><img src="/assets/vendor/octicons/svg/eye.svg" width=16 height=16 > <span id="busuanzi_value_site_pv"></span></span> &nbsp; &nbsp; | &nbsp; &nbsp; 
+    <span id="site_uv_count" title="总访客量"> <img src="/assets/vendor/octicons/svg/person.svg" width=10 height=16> <span id="busuanzi_value_site_uv"></span></span>
+    </div>
+<!-- 到此为止 -->
+  <section>{{ site.title }} ©
+  {% assign current = "now" | date: "%Y" | plus: 0%}
+  {% unless site.footer.since and site.footer.since == current %}
+    {{ site.footer.since }}
+    -
+  {% endunless %}
+  {{ current }}
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+
+
+</footer>

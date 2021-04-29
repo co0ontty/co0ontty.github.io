@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>内网渗透总结（持续更新） - co0ontty</title>
+    <meta name="author"  content="co0ontty">
+    <meta name="description" content="内网渗透总结（持续更新）">
+    <meta name="keywords"  content="渗透, ALL">
+    <!-- Open Graph -->
+    <meta property="og:title" content="内网渗透总结（持续更新） - co0ontty">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2019/05/24/localhost.html">
+    <meta property="og:description" content="Walking to Dalao。">
+    <meta property="og:site_name" content="co0ontty">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">首页</a></li>
+            
+            <li><a href="/tags.html">标签</a></li>
+            
+            <li><a href="/links.html">友链</a></li>
+            
+            <li><a href="/about.html">关于我</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+
+  <header
+    class="g-banner post-header post-pattern-circuitBoard bgcolor-default post-no-cover"
+    data-theme="default"
+  >
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+          
+            <a href="http://localhost:4000/tags#%E6%B8%97%E9%80%8F" class="post-tag">渗透</a>
+          
+            <a href="http://localhost:4000/tags#ALL" class="post-tag">ALL</a>
+          
+        
+      </div>
+      <h1>内网渗透总结（持续更新）</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i class="iconfont icon-author"></i>co0ontty</span>
+        <time class="post-meta-item" datetime="19-05-24"><i class="iconfont icon-date"></i>24 May 2019</time>
+      </div>
+    </div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+
+    <article class="markdown-body">
+      <h2 id="获得cs连接">获得cs连接：</h2>
+<p>通过各种技术手段获得shell以后，制作cs的连接程序。
+<img src="https://i.loli.net/2019/05/28/5cecfeed4ba9298900.png" alt="屏幕快照 2019-05-28 17.26.39.png" /><br />
+使用shell运行该程序，建立cs连接。</p>
+<h2 id="公网反弹meterpreter">公网反弹meterpreter：</h2>
+<p>生成cs的listener的时候，将msf的端口设置为公网服务器的某个端口，再将该端口通过frp映射到本地的msf中。
+<img src="https://i.loli.net/2019/05/28/5cecfcc20e98925613.png" alt="屏幕快照 2019-05-28 17.17.00.png" />
+使用cs的spawn将目标的meterpreter反弹到msf中，进行下一步操作</p>
+<h2 id="添加路由">添加路由：</h2>
+<h3 id="获取内网网段地址">获取内网网段地址：</h3>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>meterpreter <span class="o">&gt;</span> run get_local_subnets
+</code></pre></div></div>
+<h3 id="添加去往目标网段的转发路由">添加去往目标网段的转发路由：</h3>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>meterpreter <span class="o">&gt;</span> run autoroute <span class="nt">-s</span> 172.17.0.0/24
+</code></pre></div></div>
+<h3 id="查看路由添加状况">查看路由添加状况：</h3>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>meterpreter <span class="o">&gt;</span> run autoroute <span class="nt">-p</span>
+</code></pre></div></div>
+<h3 id="使用">使用：</h3>
+<p>将添加路由完成的meterpreter进程添加到backgroup，让回话在后台持续运行 <br />
+使用相应的脚本对目标内网进行探测</p>
+<h2 id="内网扫描">内网扫描：</h2>
+<h3 id="主机发现">主机发现：</h3>
+<p>1、使用cs中的netview <br />
+2、将路由切换到后台，使用use auxiliary/scanner/discovery/arp_sweep   对内网中的设备进行arpscan，发现内网存活的主机，并根据返回的信息对内网的主机进行进一步的渗透。</p>
+<h3 id="端口扫描">端口扫描：</h3>
+<p>1、使用cs中的portscan<br />
+2、使用msf中的use auxiliary/scanner/portscan/中的模块对目标内网中主机的端口进行扫描<br />
+<img src="https://i.loli.net/2019/05/28/5ced0ceeb792189976.png" alt="屏幕快照 2019-05-28 18.26.34.png" />
+详细的使用说明可以参考：</p>
+<blockquote>
+  <p>https://blog.csdn.net/qq_34841823/article/details/54016723</p>
+</blockquote>
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <img src="http://localhost:4000/assets/img/profile.png" alt="">
+      </div>
+      <div class="author-name" rel="author">co0ontty</div>
+      <div class="bio">
+        <p>知道创宇实习生</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/5792988237" target="_blank">
+                    <i class="iconfont icon-weibo"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="mailto:co0ontty@gmail.com" target="_blank">
+                    <i class="iconfont icon-email"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//facebook.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-facebook"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-github"></i>
+                </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+      <div class="read-next-item">
+        <a href="/2019/05/27/hotel.html" class="read-next-link"></a>
+        <section>
+          <span>内网渗透某酒店后台管理系统</span>
+          <p>起因：</p>
+        </section>
+        
+        <div class="filter"></div>
+        <img src="https://i.loli.net/2019/05/27/5ceb3196290be92366.png" alt="">
+        
+     </div>
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2019/05/18/knownsec.html" class="read-next-link"></a>
+          <section>
+            <span>知道创宇面试总结</span>
+            <p>渗透测试岗：过程：在Boss直聘上创宇的HR联系我要了份简历，学长之前在那里工作也给我内推过，所以至于是哪个方式让...</p>
+          </section>
+          
+      </div>
+      
+    </section>
+    
+  </section>
+<div id="lv-container" data-id="city" data-uid="MTAyMC80MTI3My8xNzgyMQ==">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+  <footer class="g-footer">
+  <!-- <section><a href="javascript:scroll(50,50)">回到顶端</a></section> -->
+<!-- 网站计数器 -->
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <div style="margin: auto;width: auto;">
+      <span id="site_pv_count" title="总点击量"><img src="/assets/vendor/octicons/svg/eye.svg" width=16 height=16 > <span id="busuanzi_value_site_pv"></span></span> &nbsp; &nbsp; | &nbsp; &nbsp; 
+    <span id="site_uv_count" title="总访客量"> <img src="/assets/vendor/octicons/svg/person.svg" width=10 height=16> <span id="busuanzi_value_site_uv"></span></span>
+    </div>
+<!-- 到此为止 -->
+  <section>co0ontty ©
+  
+  
+    2018
+    -
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+
+
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+  <script>
+    socialShare('.social-share', {
+      sites: [
+        
+          'wechat'
+          ,
+          
+        
+          'weibo'
+          ,
+          
+        
+          'douban'
+          ,
+          
+        
+          'twitter'
+          
+        
+      ],
+      wechatQrcodeTitle: "分享到微信朋友圈",
+      wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+    });
+  </script>
+
+  
+  
+
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?7084bb2b47ca9a611ae8225633e5caeb";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-129901756-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-129901756-1');
+</script>
+
+</body>
+
+</html>

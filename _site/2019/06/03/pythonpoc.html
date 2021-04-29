@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python编写扫描器 - co0ontty</title>
+    <meta name="author"  content="co0ontty">
+    <meta name="description" content="Python编写扫描器">
+    <meta name="keywords"  content="安全开发, python, ALL">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Python编写扫描器 - co0ontty">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2019/06/03/pythonpoc.html">
+    <meta property="og:description" content="Walking to Dalao。">
+    <meta property="og:site_name" content="co0ontty">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">首页</a></li>
+            
+            <li><a href="/tags.html">标签</a></li>
+            
+            <li><a href="/links.html">友链</a></li>
+            
+            <li><a href="/about.html">关于我</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+
+  <header
+    class="g-banner post-header post-pattern-circuitBoard bgcolor-default "
+    data-theme="default"
+  >
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+          
+            <a href="http://localhost:4000/tags#%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91" class="post-tag">安全开发</a>
+          
+            <a href="http://localhost:4000/tags#python" class="post-tag">python</a>
+          
+            <a href="http://localhost:4000/tags#ALL" class="post-tag">ALL</a>
+          
+        
+      </div>
+      <h1>Python编写扫描器</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i class="iconfont icon-author"></i>co0ontty</span>
+        <time class="post-meta-item" datetime="19-06-03"><i class="iconfont icon-date"></i>03 Jun 2019</time>
+      </div>
+    </div>
+    
+    <div class="filter"></div>
+      <div class="post-cover" style="background: url('https://i.loli.net/2019/06/03/5cf52433822b260662.png') center no-repeat; background-size: cover;"></div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+
+    <article class="markdown-body">
+      <h2 id="介绍">介绍：</h2>
+<p>本篇学习笔记将记录使用python编写scan的学习路线，记录整个python扫描器的编写过程，记录从第一行代码到最新版本，对每个版本更新用到的技术进行详解</p>
+<h2 id="version-10socket库">Version 1.0（socket库）</h2>
+<h3 id="使用socket库进行端口扫描">使用socket库进行端口扫描：</h3>
+<p>更新日志：<br />
+调用socket中的库对目标进行扫描，并统计目标端口的开放情况</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+</span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">socket</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="c1"># import socket
+</span>
+<span class="c1"># 端口扫描模块
+</span><span class="k">def</span> <span class="nf">portScan</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span><span class="n">portStart</span><span class="p">,</span><span class="n">portEnd</span><span class="p">):</span>
+	<span class="n">open_ports</span><span class="o">=</span><span class="p">[]</span>
+	<span class="k">for</span> <span class="n">port</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">portStart</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">portEnd</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+		<span class="c1"># 显示扫描百分比
+</span>		<span class="n">percent</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">port</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">portEnd</span><span class="p">))</span>
+		<span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">"</span><span class="si">%.2</span><span class="s">f"</span><span class="o">%</span><span class="n">percent</span><span class="p">)</span>
+		<span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">"</span><span class="si">%</span><span class="se">\r</span><span class="s">"</span><span class="p">)</span>
+		<span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+		<span class="c1"># 发送数据，尝试建立连接
+</span>		<span class="n">sock</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">SOCK_STREAM</span><span class="p">)</span>
+		<span class="c1"># sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+</span>		<span class="n">sock</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+		<span class="n">result</span> <span class="o">=</span> <span class="n">sock</span><span class="o">.</span><span class="n">connect_ex</span><span class="p">((</span><span class="n">ip</span><span class="p">,</span><span class="n">port</span><span class="p">))</span>
+		<span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="n">open_ports</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">port</span><span class="p">)</span>
+		<span class="k">pass</span>
+	<span class="k">print</span> <span class="n">open_ports</span>
+	<span class="k">pass</span>
+
+<span class="c1"># 获取ip和端口扫描范围
+</span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+	<span class="n">ip</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+	<span class="n">port</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">"-"</span><span class="p">)</span>
+	<span class="n">portStart</span> <span class="o">=</span> <span class="n">port</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+	<span class="n">portEnd</span> <span class="o">=</span> <span class="n">port</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+	<span class="n">portScan</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span><span class="n">portStart</span><span class="p">,</span><span class="n">portEnd</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+	<span class="n">main</span><span class="p">()</span>
+</code></pre></div></div>
+<h2 id="version-11threadpool-多线程">Version 1.1（Threadpool 多线程）</h2>
+<h3 id="使用threadpool进行多线程端口扫描">使用Threadpool进行多线程端口扫描：</h3>
+<p>更新日志：<br />
+调用python中的Threadpool模块，设置多线程多目标的端口进行扫描，增加扫描的效率</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+</span><span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">multiprocessing.dummy</span> <span class="kn">import</span> <span class="n">Pool</span> <span class="k">as</span> <span class="n">ThreadPool</span>
+ 
+<span class="n">remote_server</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">targetport</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">"-"</span><span class="p">)</span>
+<span class="n">startPort</span> <span class="o">=</span> <span class="n">targetport</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">endPort</span> <span class="o">=</span> <span class="n">targetport</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">remote_server_ip</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostbyname</span><span class="p">(</span><span class="n">remote_server</span><span class="p">)</span>
+<span class="n">ports</span> <span class="o">=</span> <span class="p">[]</span>
+ 
+<span class="k">print</span> <span class="s">'-'</span> <span class="o">*</span> <span class="mi">60</span>
+<span class="k">print</span> <span class="s">'正在对目标： '</span><span class="p">,</span> <span class="n">remote_server_ip</span> <span class="o">+</span> <span class="s">'进行扫描'</span>
+<span class="k">print</span> <span class="s">'-'</span> <span class="o">*</span> <span class="mi">60</span>
+ 
+ 
+<span class="n">socket</span><span class="o">.</span><span class="n">setdefaulttimeout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+ 
+<span class="k">def</span> <span class="nf">scan_port</span><span class="p">(</span><span class="n">port</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">connect_ex</span><span class="p">((</span><span class="n">remote_server_ip</span><span class="p">,</span><span class="n">port</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">res</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># 如果端口开启 发送 hello 获取banner
+</span>            <span class="k">print</span> <span class="s">'Port {}: OPEN'</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">port</span><span class="p">)</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">,</span><span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+ 
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">startPort</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">endPort</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">ports</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+ 
+<span class="c1"># Check what time the scan started
+</span><span class="n">t1</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+ 
+<span class="c1"># 创建线程
+</span><span class="n">pool</span> <span class="o">=</span> <span class="n">ThreadPool</span><span class="p">(</span><span class="n">processes</span> <span class="o">=</span> <span class="mi">32</span><span class="p">)</span> <span class="c1"># 设置线程数
+</span><span class="n">results</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="n">scan_port</span><span class="p">,</span><span class="n">ports</span><span class="p">)</span> <span class="c1"># 设置需要使用多线程的函数名称，传递参数的集合，该函数会将传递参数的集合分条传递到函数中使用
+</span><span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+ 
+<span class="k">print</span> <span class="s">'本次端口扫描共用时 '</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">t1</span>
+</code></pre></div></div>
+<p>演示：
+<img src="https://i.loli.net/2019/06/03/5cf4c2ba33b1e88447.gif" alt="portscan.gif" /></p>
+<h2 id="version-12-optparse库">Version 1.2 (optparse库)</h2>
+<h3 id="使用optparse对python使用过程的命令进行解析">使用optparse对python使用过程的命令进行解析</h3>
+<p>更新日志： <br />
+调用python的optparse库，实现在运行该脚本的过程中使用“–host”等方式指定参数名称</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+</span><span class="kn">import</span> <span class="nn">optparse</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">multiprocessing.dummy</span> <span class="kn">import</span> <span class="n">Pool</span> <span class="k">as</span> <span class="n">ThreadPool</span>
+
+<span class="k">print</span> <span class="s">"------------------------------------------------------------------------------------------"</span>
+<span class="k">print</span> <span class="s">"|             ___              _   _                            _                        |"</span>
+<span class="k">print</span> <span class="s">"|   ___ ___  / _ </span><span class="err">\</span><span class="s">  ___  _ __ | |_| |_ _   _   _ __   ___  _ __| |_ ___  ___ __ _ _ __   |"</span>
+<span class="k">print</span> <span class="s">"|  / __/ _ </span><span class="err">\</span><span class="s">| | | |/ _ </span><span class="err">\</span><span class="s">| '_ </span><span class="err">\</span><span class="s">| __| __| | | | | '_ </span><span class="err">\</span><span class="s"> / _ </span><span class="err">\</span><span class="s">| '__| __/ __|/ __/ _` | '_ </span><span class="err">\</span><span class="s">  |"</span>
+<span class="k">print</span> <span class="s">"| | (_| (_) | |_| | (_) | | | | |_| |_| |_| | | |_) | (_) | |  | |_</span><span class="err">\</span><span class="s">__ </span><span class="err">\</span><span class="s"> (_| (_| | | | | |"</span>
+<span class="k">print</span> <span class="s">"|  </span><span class="err">\</span><span class="s">___</span><span class="err">\</span><span class="s">___/ </span><span class="err">\</span><span class="s">___/ </span><span class="err">\</span><span class="s">___/|_| |_|</span><span class="err">\</span><span class="s">__|</span><span class="err">\</span><span class="s">__|</span><span class="err">\</span><span class="s">__, | | .__/ </span><span class="err">\</span><span class="s">___/|_|   </span><span class="err">\</span><span class="s">__|___/</span><span class="err">\</span><span class="s">___</span><span class="err">\</span><span class="s">__,_|_| |_| |"</span>
+<span class="k">print</span> <span class="s">"|                                      |___/  |_|                                        |"</span>
+<span class="k">print</span> <span class="s">"------------------------------------------------------------------------------------------"</span>
+
+<span class="n">parse</span><span class="o">=</span><span class="n">optparse</span><span class="o">.</span><span class="n">OptionParser</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="s">'python portscan.py -H 127.0.0.1 -P 60,90 -T 32'</span><span class="p">,</span><span class="n">version</span><span class="o">=</span><span class="s">"co0ontty portscan version:1.2"</span><span class="p">)</span>
+<span class="n">parse</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'-H'</span><span class="p">,</span><span class="s">'--Host'</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s">'host'</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s">'store'</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span><span class="n">metavar</span><span class="o">=</span><span class="s">'host'</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s">'Enter Host!!'</span><span class="p">)</span>
+<span class="n">parse</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'-P'</span><span class="p">,</span><span class="s">'--Port'</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s">'port'</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span><span class="n">metavar</span><span class="o">=</span><span class="s">'port'</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="s">'1,10000'</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s">'Enter Port!!'</span><span class="p">)</span>
+<span class="n">parse</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'-T'</span><span class="p">,</span><span class="s">'--Thread'</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s">'thread'</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span><span class="n">metavar</span><span class="o">=</span><span class="s">'thread'</span><span class="p">)</span>
+<span class="n">parse</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">thread</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>  
+<span class="n">options</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="n">parse</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+<span class="c1"># optparse.OptionParser usage=''介绍使用方式
+# dest='host',传递参数到名为host的变量
+# type='str',传递参数的类型
+# metavar='host', help中参数后的名称
+# help=''，help中的语句
+# parse.set_defaults(thread=32)  设置参数默认值的另一种方式
+# 当你将所有的命令行参数都定义好了的时候，我们需要调用parse_args()方法add_option()函数依次传入的参数： options,args=parse.parse_args()
+</span>
+<span class="n">portList</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">","</span><span class="p">)</span>
+<span class="n">startPort</span> <span class="o">=</span> <span class="n">portList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">endPort</span> <span class="o">=</span> <span class="n">portList</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">remote_server_ip</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostbyname</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+<span class="c1"># remote_server_info = socket.gethostbyname_ex(host)
+</span><span class="n">ports</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">openPort</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">print</span> <span class="s">'正在对目标： '</span><span class="o">+</span><span class="n">remote_server_ip</span> <span class="o">+</span> <span class="s">'  进行  '</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">thread</span><span class="p">)</span><span class="o">+</span><span class="s">'  线程扫描'</span>
+<span class="n">socket</span><span class="o">.</span><span class="n">setdefaulttimeout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">scan_port</span><span class="p">(</span><span class="n">port</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">connect_ex</span><span class="p">((</span><span class="n">remote_server_ip</span><span class="p">,</span><span class="n">port</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">res</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> 
+            <span class="n">openPort</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">port</span><span class="p">)</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">,</span><span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+ 
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">startPort</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">endPort</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">ports</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+ 
+<span class="c1"># 扫描开始
+</span><span class="n">t1</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+<span class="c1"># 创建线程
+</span><span class="n">pool</span> <span class="o">=</span> <span class="n">ThreadPool</span><span class="p">(</span><span class="n">processes</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">thread</span><span class="p">))</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="n">scan_port</span><span class="p">,</span><span class="n">ports</span><span class="p">)</span>
+<span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+<span class="k">print</span> <span class="n">openPort</span>
+<span class="k">print</span> <span class="s">'本次端口扫描共用时 '</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">t1</span>
+</code></pre></div></div>
+<h2 id="version-13-gethostbyname_ex">Version 1.3 （gethostbyname_ex）</h2>
+<h3 id="使用gethostbyname_ex函数获取目标的域名ip等信息">使用gethostbyname_ex函数获取目标的域名、ip等信息</h3>
+<p>更新日志：<br />
+1、使用gethostbyname_ex 函数实现对输入的域名进行解析<br />
+2、使用-D 参数传递域名，扫描器将对域名相关的ip进行端口扫描 <br />
+3、对代码进行了模块化操作</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+</span><span class="kn">import</span> <span class="nn">socket</span><span class="p">,</span><span class="n">sys</span><span class="p">,</span><span class="n">optparse</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">multiprocessing.dummy</span> <span class="kn">import</span> <span class="n">Pool</span> <span class="k">as</span> <span class="n">ThreadPool</span>
+
+<span class="k">print</span> <span class="s">"------------------------------------------------------------------------------------------"</span>
+<span class="k">print</span> <span class="s">"|             ___              _   _                            _                        |"</span>
+<span class="k">print</span> <span class="s">"|   ___ ___  / _ </span><span class="err">\</span><span class="s">  ___  _ __ | |_| |_ _   _   _ __   ___  _ __| |_ ___  ___ __ _ _ __   |"</span>
+<span class="k">print</span> <span class="s">"|  / __/ _ </span><span class="err">\</span><span class="s">| | | |/ _ </span><span class="err">\</span><span class="s">| '_ </span><span class="err">\</span><span class="s">| __| __| | | | | '_ </span><span class="err">\</span><span class="s"> / _ </span><span class="err">\</span><span class="s">| '__| __/ __|/ __/ _` | '_ </span><span class="err">\</span><span class="s">  |"</span>
+<span class="k">print</span> <span class="s">"| | (_| (_) | |_| | (_) | | | | |_| |_| |_| | | |_) | (_) | |  | |_</span><span class="err">\</span><span class="s">__ </span><span class="err">\</span><span class="s"> (_| (_| | | | | |"</span>
+<span class="k">print</span> <span class="s">"|  </span><span class="err">\</span><span class="s">___</span><span class="err">\</span><span class="s">___/ </span><span class="err">\</span><span class="s">___/ </span><span class="err">\</span><span class="s">___/|_| |_|</span><span class="err">\</span><span class="s">__|</span><span class="err">\</span><span class="s">__|</span><span class="err">\</span><span class="s">__, | | .__/ </span><span class="err">\</span><span class="s">___/|_|   </span><span class="err">\</span><span class="s">__|___/</span><span class="err">\</span><span class="s">___</span><span class="err">\</span><span class="s">__,_|_| |_| |"</span>
+<span class="k">print</span> <span class="s">"|                                      |___/  |_|                                        |"</span>
+<span class="k">print</span> <span class="s">"|                             Blog: https://co0ontty.github.io                           |"</span>
+<span class="k">print</span> <span class="s">"------------------------------------------------------------------------------------------"</span>
+
+<span class="k">def</span> <span class="nf">Ip_scan_port</span><span class="p">(</span><span class="n">port</span><span class="p">):</span>
+	<span class="n">socket</span><span class="o">.</span><span class="n">setdefaulttimeout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+	<span class="n">remote_server_ip</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostbyname</span><span class="p">(</span><span class="n">Ip_target</span><span class="p">)</span>
+	<span class="k">try</span><span class="p">:</span>
+		<span class="n">s</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+		<span class="n">res</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">connect_ex</span><span class="p">((</span><span class="n">remote_server_ip</span><span class="p">,</span><span class="n">port</span><span class="p">))</span>
+		<span class="k">if</span> <span class="n">res</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> 
+			<span class="n">openPort</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">port</span><span class="p">)</span>
+		<span class="n">s</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+	<span class="k">except</span> <span class="nb">Exception</span><span class="p">,</span><span class="n">e</span><span class="p">:</span>
+		<span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">Domain_scan_port</span><span class="p">(</span><span class="n">port</span><span class="p">):</span>
+	<span class="n">socket</span><span class="o">.</span><span class="n">setdefaulttimeout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">remote_server_ip</span> <span class="ow">in</span> <span class="n">Ip_from_domain</span><span class="p">:</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="n">s</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+			<span class="n">res</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">connect_ex</span><span class="p">((</span><span class="n">remote_server_ip</span><span class="p">,</span><span class="n">port</span><span class="p">))</span>
+
+			<span class="k">if</span> <span class="n">res</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+				<span class="c1"># Domain_res = str(remote_server_ip)+":"+str(port)
+</span>				<span class="n">Domain_result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">remote_server_ip</span><span class="p">)</span><span class="o">+</span><span class="s">":"</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">port</span><span class="p">))</span>
+			<span class="n">s</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+			<span class="k">pass</span>
+		<span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+			<span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>		
+
+<span class="k">def</span> <span class="nf">moreInfo</span><span class="p">(</span><span class="n">domainName</span><span class="p">):</span>
+	<span class="k">global</span> <span class="n">Ip_from_domain</span>
+	<span class="n">Ip_from_domain</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="n">domainNames</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostbyname_ex</span><span class="p">(</span><span class="n">domainName</span><span class="p">)</span>
+	<span class="k">print</span> <span class="s">"[+]Start domain Scan"</span>
+	<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">domainNames</span><span class="p">:</span>
+		<span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
+			<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
+				<span class="k">print</span> <span class="s">"Find : "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="o">+</span><span class="s">" IP :"</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">gethostbyname</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+				<span class="n">Ip_from_domain</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">gethostbyname</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">Ip_from_domain</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">gethostbyname</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+	<span class="n">Ip_from_domain</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">Ip_from_domain</span><span class="p">))</span> <span class="c1">#去重
+</span>	<span class="n">start_domain_pool</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">start_IP_Pool</span><span class="p">():</span>
+	<span class="n">pool</span> <span class="o">=</span> <span class="n">ThreadPool</span><span class="p">(</span><span class="n">processes</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">thread</span><span class="p">))</span>
+	<span class="n">results</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="n">Ip_scan_port</span><span class="p">,</span><span class="n">ports</span><span class="p">)</span>
+	<span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+	<span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+	<span class="k">print</span> <span class="n">openPort</span>
+
+<span class="k">def</span> <span class="nf">start_domain_pool</span><span class="p">():</span>
+	<span class="k">print</span> <span class="s">"[+] Start portscan on those IP from "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">startPort</span><span class="p">)</span><span class="o">+</span><span class="s">" to "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">endPort</span><span class="p">)</span>
+	<span class="n">pool</span> <span class="o">=</span> <span class="n">ThreadPool</span><span class="p">(</span><span class="n">processes</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">thread</span><span class="p">))</span>
+	<span class="n">results</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="n">Domain_scan_port</span><span class="p">,</span><span class="n">ports</span><span class="p">)</span>
+	<span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+	<span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+	<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">Domain_result</span><span class="p">:</span>
+		<span class="k">print</span> <span class="s">"Find open port :"</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+		<span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+	<span class="n">parse</span><span class="o">=</span><span class="n">optparse</span><span class="o">.</span><span class="n">OptionParser</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="s">'python portscan.py -H 127.0.0.1 -P 60,90 -T 32 or python portscan.py -D www.baidu.com -P 60,90 -T 32 '</span><span class="p">,</span><span class="n">version</span><span class="o">=</span><span class="s">"co0ontty portscan version:1.0"</span><span class="p">)</span>
+	<span class="n">parse</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'-H'</span><span class="p">,</span><span class="s">'--Host'</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s">'host'</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s">'store'</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="s">"0"</span><span class="p">)</span>
+	<span class="n">parse</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'-P'</span><span class="p">,</span><span class="s">'--Port'</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s">'port'</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="s">'1,10000'</span><span class="p">)</span>
+	<span class="n">parse</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'-T'</span><span class="p">,</span><span class="s">'--Thread'</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s">'thread'</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+	<span class="n">parse</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'-D'</span><span class="p">,</span><span class="s">'--Domain'</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s">'domainName'</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="s">"0"</span><span class="p">)</span>
+	<span class="n">parse</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">thread</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>  
+	<span class="n">options</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="n">parse</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+	<span class="k">global</span> <span class="n">remote_server_ip</span><span class="p">,</span><span class="n">openPort</span><span class="p">,</span><span class="n">domainName</span><span class="p">,</span><span class="n">Ip_target</span><span class="p">,</span><span class="n">thread</span><span class="p">,</span><span class="n">openPort</span><span class="p">,</span><span class="n">ports</span><span class="p">,</span><span class="n">Domain_result</span><span class="p">,</span><span class="n">startPort</span><span class="p">,</span><span class="n">endPort</span>
+	<span class="n">Ip_target</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">host</span>
+	<span class="n">domainName</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">domainName</span>
+	<span class="n">portList</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">","</span><span class="p">)</span>
+	<span class="n">thread</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">thread</span>
+	<span class="n">startPort</span> <span class="o">=</span> <span class="n">portList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+	<span class="n">endPort</span> <span class="o">=</span> <span class="n">portList</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+	<span class="n">ports</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="n">openPort</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="n">Domain_result</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">startPort</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">endPort</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+	    <span class="n">ports</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+	<span class="k">if</span> <span class="n">domainName</span> <span class="o">==</span> <span class="s">"0"</span><span class="p">:</span>
+		<span class="k">print</span> <span class="s">"[+]port scan :"</span><span class="o">+</span><span class="n">Ip_target</span>
+		<span class="n">start_IP_Pool</span><span class="p">()</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">moreInfo</span><span class="p">(</span><span class="n">domainName</span><span class="p">)</span>
+		<span class="k">pass</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+	<span class="n">main</span><span class="p">()</span>
+</code></pre></div></div>
+<p><img src="https://i.loli.net/2019/06/04/5cf5dd613aa6446867.png" alt="屏幕快照 2019-06-04 10.54.03.png" /></p>
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <img src="http://localhost:4000/assets/img/profile.png" alt="">
+      </div>
+      <div class="author-name" rel="author">co0ontty</div>
+      <div class="bio">
+        <p>知道创宇实习生</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/5792988237" target="_blank">
+                    <i class="iconfont icon-weibo"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="mailto:co0ontty@gmail.com" target="_blank">
+                    <i class="iconfont icon-email"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//facebook.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-facebook"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-github"></i>
+                </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+      <div class="read-next-item">
+        <a href="/2019/06/16/vulhub.html" class="read-next-link"></a>
+        <section>
+          <span>vulhub漏洞复现</span>
+          <p>Couchdb 垂直权限绕过漏洞（CVE-2017-12635）</p>
+        </section>
+        
+        <div class="filter"></div>
+        <img src="/assets/img/posts/5cfe32a6be6cf32080.png" alt="">
+        
+     </div>
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2019/05/27/hotel.html" class="read-next-link"></a>
+          <section>
+            <span>内网渗透某酒店后台管理系统</span>
+            <p>起因：</p>
+          </section>
+          
+          <div class="filter"></div>
+          <img src="https://i.loli.net/2019/05/27/5ceb3196290be92366.png" alt="">
+          
+      </div>
+      
+    </section>
+    
+  </section>
+<div id="lv-container" data-id="city" data-uid="MTAyMC80MTI3My8xNzgyMQ==">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+  <footer class="g-footer">
+  <!-- <section><a href="javascript:scroll(50,50)">回到顶端</a></section> -->
+<!-- 网站计数器 -->
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <div style="margin: auto;width: auto;">
+      <span id="site_pv_count" title="总点击量"><img src="/assets/vendor/octicons/svg/eye.svg" width=16 height=16 > <span id="busuanzi_value_site_pv"></span></span> &nbsp; &nbsp; | &nbsp; &nbsp; 
+    <span id="site_uv_count" title="总访客量"> <img src="/assets/vendor/octicons/svg/person.svg" width=10 height=16> <span id="busuanzi_value_site_uv"></span></span>
+    </div>
+<!-- 到此为止 -->
+  <section>co0ontty ©
+  
+  
+    2018
+    -
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+
+
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+  <script>
+    socialShare('.social-share', {
+      sites: [
+        
+          'wechat'
+          ,
+          
+        
+          'weibo'
+          ,
+          
+        
+          'douban'
+          ,
+          
+        
+          'twitter'
+          
+        
+      ],
+      wechatQrcodeTitle: "分享到微信朋友圈",
+      wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+    });
+  </script>
+
+  
+  
+
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?7084bb2b47ca9a611ae8225633e5caeb";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-129901756-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-129901756-1');
+</script>
+
+</body>
+
+</html>

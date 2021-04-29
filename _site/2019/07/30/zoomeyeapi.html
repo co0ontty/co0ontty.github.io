@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>钟馗之眼python调用框架 - co0ontty</title>
+    <meta name="author"  content="co0ontty">
+    <meta name="description" content="钟馗之眼python调用框架">
+    <meta name="keywords"  content="安全开发, ALL">
+    <!-- Open Graph -->
+    <meta property="og:title" content="钟馗之眼python调用框架 - co0ontty">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2019/07/30/zoomeyeapi.html">
+    <meta property="og:description" content="Walking to Dalao。">
+    <meta property="og:site_name" content="co0ontty">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">首页</a></li>
+            
+            <li><a href="/tags.html">标签</a></li>
+            
+            <li><a href="/links.html">友链</a></li>
+            
+            <li><a href="/about.html">关于我</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+
+  <header
+    class="g-banner post-header post-pattern-circuitBoard bgcolor-default "
+    data-theme="default"
+  >
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+          
+            <a href="http://localhost:4000/tags#%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91" class="post-tag">安全开发</a>
+          
+            <a href="http://localhost:4000/tags#ALL" class="post-tag">ALL</a>
+          
+        
+      </div>
+      <h1>钟馗之眼python调用框架</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i class="iconfont icon-author"></i>co0ontty</span>
+        <time class="post-meta-item" datetime="19-07-30"><i class="iconfont icon-date"></i>30 Jul 2019</time>
+      </div>
+    </div>
+    
+    <div class="filter"></div>
+      <div class="post-cover" style="background: url('/assets/img/posts/zoomeye.jpg') center no-repeat; background-size: cover;"></div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+
+    <article class="markdown-body">
+      <h2 id="python调用zoomeye-api">python调用zoomeye-api</h2>
+<p>编写原因：使用pocsuite框架调用zoomeye测试poc的过程中发现pocsuite中的dork参数要求很严格，所以打算写一个调用zoomeye的python程序，将查询结果写入文件然后使用pocsuite读文件测试</p>
+<h3 id="源码">源码</h3>
+<p><strong>下载zoomeye目标到txt</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># coding=UTF-8
+</span><span class="kn">import</span> <span class="nn">optparse</span>
+<span class="kn">import</span> <span class="nn">os</span>  
+<span class="kn">import</span> <span class="nn">sys</span>  
+<span class="kn">import</span> <span class="nn">requests</span>   
+<span class="n">parse</span><span class="o">=</span><span class="n">optparse</span><span class="o">.</span><span class="n">OptionParser</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="s">'python zoomeye-api.py -K gitstack -P 4 '</span><span class="p">,</span><span class="n">version</span><span class="o">=</span><span class="s">"phoenix zoomeye-api version:1.0"</span><span class="p">)</span>
+<span class="n">parse</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'-U'</span><span class="p">,</span><span class="s">'--user'</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s">'user'</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span><span class="n">metavar</span><span class="o">=</span><span class="s">'user'</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s">'Enter zoomeye username!!'</span><span class="p">)</span>
+<span class="n">parse</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'-P'</span><span class="p">,</span><span class="s">'--passwd'</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s">'passwd'</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span><span class="n">metavar</span><span class="o">=</span><span class="s">'passwd'</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s">'Enter zoomeye password!!'</span><span class="p">)</span>
+<span class="n">parse</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'-K'</span><span class="p">,</span><span class="s">'--key'</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s">'key'</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span><span class="n">metavar</span><span class="o">=</span><span class="s">'key'</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s">'Enter search key!!'</span><span class="p">)</span>
+<span class="n">parse</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'-L'</span><span class="p">,</span><span class="s">'--limit'</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s">'limit'</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span><span class="n">metavar</span><span class="o">=</span><span class="s">'limit'</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="s">'4'</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s">'Enter limit pages!!'</span><span class="p">)</span>
+<span class="n">options</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="n">parse</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="c1">#输入个人账号密码  
+</span><span class="n">user</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">user</span>
+<span class="n">passwd</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">passwd</span>
+<span class="n">page</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="c1">#验证用户名密码，返回access_token     
+</span><span class="k">def</span> <span class="nf">Check</span><span class="p">():</span>
+    <span class="n">data_info</span> <span class="o">=</span> <span class="p">{</span><span class="s">'username'</span> <span class="p">:</span> <span class="n">user</span><span class="p">,</span><span class="s">'password'</span> <span class="p">:</span> <span class="n">passwd</span><span class="p">}</span> 
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">respond</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span> <span class="o">=</span> <span class="s">'https://api.zoomeye.org/user/login'</span><span class="p">,</span><span class="n">json</span> <span class="o">=</span> <span class="n">data_info</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"[-] </span><span class="si">%</span><span class="s">s"</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"[-] 连接失败!"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">respond</span><span class="o">.</span><span class="n">status_code</span><span class="o">==</span><span class="mi">200</span><span class="p">:</span>
+            <span class="n">access_token</span><span class="o">=</span><span class="n">respond</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">access_token</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"[-] </span><span class="si">%</span><span class="s">s </span><span class="si">%</span><span class="s">s </span><span class="se">\n</span><span class="s">[-] </span><span class="si">%</span><span class="s">s"</span> <span class="o">%</span> <span class="p">(</span><span class="n">respond</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="n">respond</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s">"error"</span><span class="p">],</span> <span class="n">respond</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s">"message"</span><span class="p">]))</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"[-] 连接失败!"</span><span class="p">)</span>
+      
+          
+<span class="k">def</span> <span class="nf">search</span><span class="p">():</span>  
+    <span class="k">global</span> <span class="n">mode</span><span class="p">,</span><span class="n">query</span>
+    <span class="n">mode</span> <span class="o">=</span> <span class="s">"host"</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">key</span>
+ 
+<span class="k">def</span> <span class="nf">getRespose</span><span class="p">(</span><span class="n">access_token</span><span class="p">):</span>   
+    <span class="n">authorization</span> <span class="o">=</span> <span class="p">{</span><span class="s">'Authorization'</span> <span class="p">:</span> <span class="s">'JWT '</span> <span class="o">+</span> <span class="n">access_token</span><span class="p">[</span><span class="s">"access_token"</span><span class="p">]}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">respond</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span> <span class="o">=</span> <span class="s">'https://api.zoomeye.org/'</span><span class="o">+</span><span class="n">mode</span><span class="o">+</span><span class="s">'/search?query='</span> <span class="o">+</span> <span class="n">query</span><span class="o">+</span><span class="s">"&amp;page="</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">page</span><span class="p">),</span><span class="n">headers</span> <span class="o">=</span> <span class="n">authorization</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"[-] </span><span class="si">%</span><span class="s">s"</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"[-] </span><span class="si">%</span><span class="s">s 检索失败!"</span> <span class="o">%</span> <span class="n">mode</span><span class="o">.</span><span class="n">capitalize</span><span class="p">())</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">respond</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">respond</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>  
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"[-] </span><span class="si">%</span><span class="s">s </span><span class="si">%</span><span class="s">s </span><span class="se">\n</span><span class="s">[-] </span><span class="si">%</span><span class="s">s"</span> <span class="o">%</span> <span class="p">(</span><span class="n">respond</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="n">respond</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s">"error"</span><span class="p">],</span> <span class="n">respond</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s">"message"</span><span class="p">]))</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"[-] </span><span class="si">%</span><span class="s">s 检索失败!"</span> <span class="o">%</span> <span class="n">mode</span><span class="o">.</span><span class="n">capitalize</span><span class="p">())</span>
+              
+<span class="k">def</span> <span class="nf">output_data</span><span class="p">(</span><span class="n">temp</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">"host"</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">temp</span><span class="p">[</span><span class="s">"matches"</span><span class="p">]:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="s">"ip"</span><span class="p">]</span> <span class="o">+</span> <span class="s">":"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="s">"portinfo"</span><span class="p">][</span><span class="s">"port"</span><span class="p">])</span> <span class="o">+</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">temp</span><span class="p">[</span><span class="s">"matches"</span><span class="p">]:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="s">"site"</span><span class="p">]</span> <span class="o">+</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+          
+<span class="k">def</span> <span class="nf">mian</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">page</span>
+    <span class="n">access_token</span> <span class="o">=</span> <span class="n">Check</span><span class="p">()</span>
+    <span class="n">search</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">access_token</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="nb">exit</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">search</span><span class="p">:</span>
+        <span class="n">max_page</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">limit</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">page</span><span class="o">&lt;=</span><span class="n">max_page</span><span class="p">:</span>
+            <span class="n">temp</span><span class="o">=</span><span class="n">getRespose</span><span class="p">(</span><span class="n">access_token</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">temp</span><span class="p">:</span>
+                <span class="k">print</span><span class="p">(</span><span class="s">'[-]检索完成!'</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">temp</span><span class="p">[</span><span class="s">"matches"</span><span class="p">]:</span>
+                    <span class="k">print</span> <span class="p">(</span><span class="s">'[-]没有数据!'</span><span class="p">)</span>
+                    <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">output_data</span><span class="p">(</span><span class="n">temp</span><span class="p">))</span>
+                    <span class="k">print</span><span class="p">(</span><span class="s">'[-]开始下载第 </span><span class="si">%</span><span class="s">s 页'</span><span class="o">%</span> <span class="n">page</span><span class="p">)</span>
+            <span class="n">page</span> <span class="o">+=</span><span class="mi">1</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'ZoomEyes.txt'</span><span class="p">,</span> <span class="s">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">mian</span><span class="p">()</span>
+</code></pre></div></div>
+<p><strong>下载zoomeye目标到txt，并调用pocsuite框架</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># coding=UTF-8
+</span><span class="kn">import</span> <span class="nn">optparse</span>
+<span class="kn">import</span> <span class="nn">os</span>  
+<span class="kn">import</span> <span class="nn">sys</span>  
+<span class="kn">import</span> <span class="nn">requests</span>   
+<span class="n">parse</span><span class="o">=</span><span class="n">optparse</span><span class="o">.</span><span class="n">OptionParser</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="s">'python phoenix-pocsuite.py -K gitstack -P 4 '</span><span class="p">,</span><span class="n">version</span><span class="o">=</span><span class="s">"phoenix zoomeye-api version:1.0"</span><span class="p">)</span>
+<span class="n">parse</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'-U'</span><span class="p">,</span><span class="s">'--user'</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s">'user'</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span><span class="n">metavar</span><span class="o">=</span><span class="s">'user'</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s">'Enter zoomeye username!!'</span><span class="p">)</span>
+<span class="n">parse</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'-P'</span><span class="p">,</span><span class="s">'--passwd'</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s">'passwd'</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span><span class="n">metavar</span><span class="o">=</span><span class="s">'passwd'</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s">'Enter zoomeye password!!'</span><span class="p">)</span>
+<span class="n">parse</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'-K'</span><span class="p">,</span><span class="s">'--key'</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s">'key'</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span><span class="n">metavar</span><span class="o">=</span><span class="s">'key'</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s">'Enter search key!!'</span><span class="p">)</span>
+<span class="n">parse</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'-L'</span><span class="p">,</span><span class="s">'--limit'</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s">'limit'</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span><span class="n">metavar</span><span class="o">=</span><span class="s">'limit'</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="s">'4'</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s">'Enter limit pages!!'</span><span class="p">)</span>
+<span class="n">parse</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'-F'</span><span class="p">,</span><span class="s">'--file'</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s">'pocname'</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span><span class="n">metavar</span><span class="o">=</span><span class="s">'pocname'</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s">'Enter pocname!!'</span><span class="p">)</span>
+<span class="n">options</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="n">parse</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="c1">#输入个人账号密码  
+</span><span class="n">user</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">user</span>
+<span class="n">passwd</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">passwd</span>
+<span class="n">pocname</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">pocname</span>
+<span class="n">page</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="c1">#验证用户名密码，返回access_token     
+</span><span class="k">def</span> <span class="nf">Check</span><span class="p">():</span>
+    <span class="n">data_info</span> <span class="o">=</span> <span class="p">{</span><span class="s">'username'</span> <span class="p">:</span> <span class="n">user</span><span class="p">,</span><span class="s">'password'</span> <span class="p">:</span> <span class="n">passwd</span><span class="p">}</span> 
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">respond</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span> <span class="o">=</span> <span class="s">'https://api.zoomeye.org/user/login'</span><span class="p">,</span><span class="n">json</span> <span class="o">=</span> <span class="n">data_info</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"[-] </span><span class="si">%</span><span class="s">s"</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"[-] 连接失败!"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">respond</span><span class="o">.</span><span class="n">status_code</span><span class="o">==</span><span class="mi">200</span><span class="p">:</span>
+            <span class="n">access_token</span><span class="o">=</span><span class="n">respond</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">access_token</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"[-] </span><span class="si">%</span><span class="s">s </span><span class="si">%</span><span class="s">s </span><span class="se">\n</span><span class="s">[-] </span><span class="si">%</span><span class="s">s"</span> <span class="o">%</span> <span class="p">(</span><span class="n">respond</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="n">respond</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s">"error"</span><span class="p">],</span> <span class="n">respond</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s">"message"</span><span class="p">]))</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"[-] 连接失败!"</span><span class="p">)</span>
+      
+          
+<span class="k">def</span> <span class="nf">search</span><span class="p">():</span>  
+    <span class="k">global</span> <span class="n">mode</span><span class="p">,</span><span class="n">query</span>
+    <span class="n">mode</span> <span class="o">=</span> <span class="s">"host"</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">key</span>
+ 
+<span class="k">def</span> <span class="nf">getRespose</span><span class="p">(</span><span class="n">access_token</span><span class="p">):</span>   
+    <span class="n">authorization</span> <span class="o">=</span> <span class="p">{</span><span class="s">'Authorization'</span> <span class="p">:</span> <span class="s">'JWT '</span> <span class="o">+</span> <span class="n">access_token</span><span class="p">[</span><span class="s">"access_token"</span><span class="p">]}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">respond</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span> <span class="o">=</span> <span class="s">'https://api.zoomeye.org/'</span><span class="o">+</span><span class="n">mode</span><span class="o">+</span><span class="s">'/search?query='</span> <span class="o">+</span> <span class="n">query</span><span class="o">+</span><span class="s">"&amp;page="</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">page</span><span class="p">),</span><span class="n">headers</span> <span class="o">=</span> <span class="n">authorization</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"[-] </span><span class="si">%</span><span class="s">s"</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"[-] </span><span class="si">%</span><span class="s">s 检索失败!"</span> <span class="o">%</span> <span class="n">mode</span><span class="o">.</span><span class="n">capitalize</span><span class="p">())</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">respond</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">respond</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>  
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"[-] </span><span class="si">%</span><span class="s">s </span><span class="si">%</span><span class="s">s </span><span class="se">\n</span><span class="s">[-] </span><span class="si">%</span><span class="s">s"</span> <span class="o">%</span> <span class="p">(</span><span class="n">respond</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="n">respond</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s">"error"</span><span class="p">],</span> <span class="n">respond</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s">"message"</span><span class="p">]))</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"[-] </span><span class="si">%</span><span class="s">s 检索失败!"</span> <span class="o">%</span> <span class="n">mode</span><span class="o">.</span><span class="n">capitalize</span><span class="p">())</span>
+              
+<span class="k">def</span> <span class="nf">output_data</span><span class="p">(</span><span class="n">temp</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">"host"</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">temp</span><span class="p">[</span><span class="s">"matches"</span><span class="p">]:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="s">"ip"</span><span class="p">]</span> <span class="o">+</span> <span class="s">":"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="s">"portinfo"</span><span class="p">][</span><span class="s">"port"</span><span class="p">])</span> <span class="o">+</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">temp</span><span class="p">[</span><span class="s">"matches"</span><span class="p">]:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="s">"site"</span><span class="p">]</span> <span class="o">+</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+          
+<span class="k">def</span> <span class="nf">mian</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">page</span>
+    <span class="n">access_token</span> <span class="o">=</span> <span class="n">Check</span><span class="p">()</span>
+    <span class="n">search</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">access_token</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="nb">exit</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">search</span><span class="p">:</span>
+        <span class="n">max_page</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">limit</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">page</span><span class="o">&lt;=</span><span class="n">max_page</span><span class="p">:</span>
+            <span class="n">temp</span><span class="o">=</span><span class="n">getRespose</span><span class="p">(</span><span class="n">access_token</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">temp</span><span class="p">:</span>
+                <span class="k">print</span><span class="p">(</span><span class="s">'[-]检索完成!'</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">temp</span><span class="p">[</span><span class="s">"matches"</span><span class="p">]:</span>
+                    <span class="k">print</span> <span class="p">(</span><span class="s">'[-]没有数据!'</span><span class="p">)</span>
+                    <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">output_data</span><span class="p">(</span><span class="n">temp</span><span class="p">))</span>
+                    <span class="k">print</span><span class="p">(</span><span class="s">'[-]开始下载第 </span><span class="si">%</span><span class="s">s 页'</span><span class="o">%</span> <span class="n">page</span><span class="p">)</span>
+            <span class="n">page</span> <span class="o">+=</span><span class="mi">1</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'ZoomEyes.txt'</span><span class="p">,</span> <span class="s">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="c1">#传递参数调用pocsuite进行测试
+</span>    <span class="n">coomand</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s">"pocsuite -r {} -f {} --thread 20"</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">pocname</span><span class="p">,</span><span class="s">"ZoomEyes.txt"</span><span class="p">))</span>
+    <span class="k">print</span> <span class="n">coomand</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">mian</span><span class="p">()</span>
+</code></pre></div></div>
+<h3 id="使用方法">使用方法：</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python phoenix-pocsuite.py <span class="nt">-U</span> zoomeye_username <span class="nt">-P</span> zoomeye_password <span class="nt">-K</span> search_keyword <span class="nt">-L</span> search_max_pages <span class="nt">-F</span> poc.py
+</code></pre></div></div>
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <img src="http://localhost:4000/assets/img/profile.png" alt="">
+      </div>
+      <div class="author-name" rel="author">co0ontty</div>
+      <div class="bio">
+        <p>知道创宇实习生</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/5792988237" target="_blank">
+                    <i class="iconfont icon-weibo"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="mailto:co0ontty@gmail.com" target="_blank">
+                    <i class="iconfont icon-email"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//facebook.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-facebook"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-github"></i>
+                </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+      <div class="read-next-item">
+        <a href="/2019/07/31/Suricata.html" class="read-next-link"></a>
+        <section>
+          <span>Suricata学习笔记</span>
+          <p>Suricata学习笔记</p>
+        </section>
+        
+        <div class="filter"></div>
+        <img src="/assets/img/posts/suricata-cover.jpg" alt="">
+        
+     </div>
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2019/07/29/pocsuit.html" class="read-next-link"></a>
+          <section>
+            <span>PocSuite编写及使用笔记</span>
+            <p>关于PocSuitePocSuite是由知道创宇404实验室编写的一款基于python的开源漏洞利用框架。PocS...</p>
+          </section>
+          
+          <div class="filter"></div>
+          <img src="/assets/img/posts/pocsuitecover.png" alt="">
+          
+      </div>
+      
+    </section>
+    
+  </section>
+<div id="lv-container" data-id="city" data-uid="MTAyMC80MTI3My8xNzgyMQ==">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+  <footer class="g-footer">
+  <!-- <section><a href="javascript:scroll(50,50)">回到顶端</a></section> -->
+<!-- 网站计数器 -->
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <div style="margin: auto;width: auto;">
+      <span id="site_pv_count" title="总点击量"><img src="/assets/vendor/octicons/svg/eye.svg" width=16 height=16 > <span id="busuanzi_value_site_pv"></span></span> &nbsp; &nbsp; | &nbsp; &nbsp; 
+    <span id="site_uv_count" title="总访客量"> <img src="/assets/vendor/octicons/svg/person.svg" width=10 height=16> <span id="busuanzi_value_site_uv"></span></span>
+    </div>
+<!-- 到此为止 -->
+  <section>co0ontty ©
+  
+  
+    2018
+    -
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+
+
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+  <script>
+    socialShare('.social-share', {
+      sites: [
+        
+          'wechat'
+          ,
+          
+        
+          'weibo'
+          ,
+          
+        
+          'douban'
+          ,
+          
+        
+          'twitter'
+          
+        
+      ],
+      wechatQrcodeTitle: "分享到微信朋友圈",
+      wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+    });
+  </script>
+
+  
+  
+
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?7084bb2b47ca9a611ae8225633e5caeb";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-129901756-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-129901756-1');
+</script>
+
+</body>
+
+</html>

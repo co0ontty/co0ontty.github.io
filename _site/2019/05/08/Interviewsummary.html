@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>360企业安全观星实验室渗透测试（web）面试总结 - co0ontty</title>
+    <meta name="author"  content="co0ontty">
+    <meta name="description" content="360企业安全观星实验室渗透测试（web）面试总结">
+    <meta name="keywords"  content="面试, WEB, ALL">
+    <!-- Open Graph -->
+    <meta property="og:title" content="360企业安全观星实验室渗透测试（web）面试总结 - co0ontty">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2019/05/08/Interviewsummary.html">
+    <meta property="og:description" content="Walking to Dalao。">
+    <meta property="og:site_name" content="co0ontty">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">首页</a></li>
+            
+            <li><a href="/tags.html">标签</a></li>
+            
+            <li><a href="/links.html">友链</a></li>
+            
+            <li><a href="/about.html">关于我</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+
+  <header
+    class="g-banner post-header post-pattern-circuitBoard bgcolor-default post-no-cover"
+    data-theme="default"
+  >
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+          
+            <a href="http://localhost:4000/tags#%E9%9D%A2%E8%AF%95" class="post-tag">面试</a>
+          
+            <a href="http://localhost:4000/tags#WEB" class="post-tag">WEB</a>
+          
+            <a href="http://localhost:4000/tags#ALL" class="post-tag">ALL</a>
+          
+        
+      </div>
+      <h1>360企业安全观星实验室渗透测试（web）面试总结</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i class="iconfont icon-author"></i>co0ontty</span>
+        <time class="post-meta-item" datetime="19-05-08"><i class="iconfont icon-date"></i>08 May 2019</time>
+      </div>
+    </div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+
+    <article class="markdown-body">
+      <h2 id="简历">简历：</h2>
+<p>投递简历的时候详细描述了参加过的比赛及在校期间参加的一些项目情况，顺利的通过了简历的筛选。</p>
+<h2 id="一面技术面试">一面（技术面试）：</h2>
+<p>面试官-黎健欣（观星实验室web）</p>
+<h3 id="问题一简单的描述一下信息安全学习经历">问题一：简单的描述一下信息安全学习经历</h3>
+<p>从大一入学开始接触和学习信息安全，期间一直以打CTF比赛为主，近半年跟着指导老师一直做产品。</p>
+<h3 id="问题二简单描述一下渗透测试一个网站的步骤主要问题">问题二：简单描述一下渗透测试一个网站的步骤（主要问题）</h3>
+<h4 id="1信息收集">1.信息收集：</h4>
+<p>① 对目标的IP，系统，端口，WAF，安全狗等基本信息进行识别<br />
+② 查询网站的whois，子域名，旁站，C段等信息</p>
+<h4 id="2漏洞挖掘">2.漏洞挖掘：</h4>
+<p>① 对网站的中间件进行识别，根据中间件的版本判断是否存在响应的漏洞；弱口令爆破相关的界面。<br />
+② 对网站的目录及敏感文件进行扫描，判断是否存在文件泄露类型漏洞<br />
+③ XSS SQL CSRF SSRF 文件上传 任意文件下载 等技术细节： 
+·利用XSS可以做什么：<br />
+弹窗、植入webshell、窃取用户cookie等秘密信息、诱导管理员增加或删除相关的信息。  <br />
+·如何防止窃取cookie：  <br />
+将session的过期时间设置短一些；<br />
+监控referrer与userAgent的值；<br />
+使用HttpOnly禁止脚本读取Cookie。<br />
+·SQL注入可以做什么：<br />
+读取数据库中未经授权访问的内容<br />
+获取webshell（这个很重要）<br />
+·SQL注入获取webshell的方法：<br />
+详见另一篇博客中的mysql提权方法（https://co0ontty.github.io/2019/05/06/resttudy.html）  <br />
+·怎么判断网站是否存在SSRF漏洞：<br />
+详见另一篇博客中SSRF漏洞的解析（https://co0ontty.github.io/2019/05/06/resttudy.html）</p>
+<h4 id="3漏洞利用">3.漏洞利用</h4>
+<h4 id="4清除测试记录">4.清除测试记录</h4>
+<h4 id="5复测提交报告">5.复测，提交报告</h4>
+<h2 id="二面技术面试">二面（技术面试）：</h2>
+<p>面试官-田跃</p>
+<h3 id="问题一arp欺骗的过程">问题一：ARP欺骗的过程</h3>
+<h3 id="问题二iis可以解析的文件后缀">问题二：IIS可以解析的文件后缀</h3>
+<h3 id="问题三sqlserver如何提权">问题三：sqlserver如何提权</h3>
+<h3 id="问题四上传绕过除了对后缀进行处理以外可以怎么操作">问题四：上传绕过除了对后缀进行处理以外可以怎么操作</h3>
+<h3 id="问题五都用过python的什么第三方库">问题五：都用过Python的什么第三方库</h3>
+<h3 id="问题六python的request库怎么设置代理">问题六：python的request库怎么设置代理</h3>
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <img src="http://localhost:4000/assets/img/profile.png" alt="">
+      </div>
+      <div class="author-name" rel="author">co0ontty</div>
+      <div class="bio">
+        <p>知道创宇实习生</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/5792988237" target="_blank">
+                    <i class="iconfont icon-weibo"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="mailto:co0ontty@gmail.com" target="_blank">
+                    <i class="iconfont icon-email"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//facebook.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-facebook"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-github"></i>
+                </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+      <div class="read-next-item">
+        <a href="/2019/05/18/knownsec.html" class="read-next-link"></a>
+        <section>
+          <span>知道创宇面试总结</span>
+          <p>渗透测试岗：过程：在Boss直聘上创宇的HR联系我要了份简历，学长之前在那里工作也给我内推过，所以至于是哪个方式让...</p>
+        </section>
+        
+     </div>
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2019/05/07/resttudy.html" class="read-next-link"></a>
+          <section>
+            <span>WEB安全面试复习笔记</span>
+            <p>对Web安全的理解我觉得 Web 安全首先得懂 Web、第三方内容、Web 前端框架、Web 服务器语言、Web ...</p>
+          </section>
+          
+      </div>
+      
+    </section>
+    
+  </section>
+<div id="lv-container" data-id="city" data-uid="MTAyMC80MTI3My8xNzgyMQ==">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+  <footer class="g-footer">
+  <!-- <section><a href="javascript:scroll(50,50)">回到顶端</a></section> -->
+<!-- 网站计数器 -->
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <div style="margin: auto;width: auto;">
+      <span id="site_pv_count" title="总点击量"><img src="/assets/vendor/octicons/svg/eye.svg" width=16 height=16 > <span id="busuanzi_value_site_pv"></span></span> &nbsp; &nbsp; | &nbsp; &nbsp; 
+    <span id="site_uv_count" title="总访客量"> <img src="/assets/vendor/octicons/svg/person.svg" width=10 height=16> <span id="busuanzi_value_site_uv"></span></span>
+    </div>
+<!-- 到此为止 -->
+  <section>co0ontty ©
+  
+  
+    2018
+    -
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+
+
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+  <script>
+    socialShare('.social-share', {
+      sites: [
+        
+          'wechat'
+          ,
+          
+        
+          'weibo'
+          ,
+          
+        
+          'douban'
+          ,
+          
+        
+          'twitter'
+          
+        
+      ],
+      wechatQrcodeTitle: "分享到微信朋友圈",
+      wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+    });
+  </script>
+
+  
+  
+
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?7084bb2b47ca9a611ae8225633e5caeb";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-129901756-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-129901756-1');
+</script>
+
+</body>
+
+</html>

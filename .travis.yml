@@ -1,0 +1,12 @@
+language: node_js
+node_js: 6
+before_install:
+  - npm i -g lint-md-cli
+script: 
+  - sh .codestyle.sh
+notifications:
+  email:
+    recipients:
+      - co0ontty@gmail.com
+    on_success: never # default: change
+    on_failure: always # default: always
