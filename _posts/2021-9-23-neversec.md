@@ -1,11 +1,11 @@
 ---
 layout: post
 title:  "网络战必胜-检测产品"
-date:   2021-04-29 17:18:43
+date:   2021-09-23 17:18:43
 categories: Development
 author: co0ontty
-categories: 安全研究 ALL
-tags: 安全研究 ALL
+categories: ALL
+tags: ALL
 describe: 网络战必胜-检测产品
 cover: '/assets/img/posts/neversec-1.png'
 ---
