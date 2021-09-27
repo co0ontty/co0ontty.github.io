@@ -147,6 +147,7 @@ cover: '/assets/img/posts/neversec-1.png'
   ​	如果甲方说你检测率过低且你们产品的各项功能都是精益求精，那你可能被控标了（跟甲方关系好的厂商自己出题自己做），有的流量根本不是正常攻击或违背协议原理却被判定为攻击(smtp 插入sql 注入 payload、修改原本漏洞的攻击路径)
 
   ![/assets/img/posts/neversec-1.png](/assets/img/posts/neversec-1.png)
+  ![/assets/img/posts/neversec-2.png](/assets/img/posts/neversec-2.png)
 
   反套路：
 
