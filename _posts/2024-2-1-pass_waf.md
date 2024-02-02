@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "盘点 2023 公开的攻击面发现平台"
+title:  "绕过 WAF 的八种方式"
 date:   2024-2-1 17:18:43
 categories: Development
 author: co0ontty
 categories: ALL
 tags: ALL
-describe: 盘点 2023 公开的攻击面发现平台
+describe: 绕过 WAF 的八种方式
 cover: '/assets/img/posts/atlantis-1.png'
 ---
 ## 一、目录遍历漏洞
